@@ -16,12 +16,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import blue from "@material-ui/core/colors/blue";
 
 import Modal from "./Modal";
 import Signin from "../components/Auth/Signin";
 
-const primary = blue[900];
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1
@@ -39,7 +37,7 @@ const useStyles = makeStyles(theme => ({
         width: "auto"
     },
     paper: {
-        background: primary
+        background: theme.palette.primary
     },
     logo: {
         textDecoration: "none",
@@ -54,7 +52,7 @@ export default function ButtonAppBar(props) {
     });
     //modal
     const [open, setOpen] = React.useState(false);
-    const loginHandleOpen = () => {
+    const modalHandler = () => {
         setOpen(!open);
     };
 
@@ -119,8 +117,13 @@ export default function ButtonAppBar(props) {
                             Kanba
                         </Link>
                     </Typography>
-                    <Button color="inherit" onClick={loginHandleOpen}>
-                        Login
+                    <Button color="inherit" onClick={modalHandler}>
+                        Sign in
+                    </Button>
+                    <Button variant="outlined" color="inherit">
+                        <Link className={classes.logo} to="/signup">
+                            Sign up
+                        </Link>
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -132,8 +135,8 @@ export default function ButtonAppBar(props) {
                 {sideList("left")}
             </Drawer>
             {props.children}
-            <Modal loginHandleOpen={loginHandleOpen} openProps={open}>
-                <Signin />
+            <Modal modalHandler={modalHandler} openProps={open}>
+                <Signin modalHandler={modalHandler} />
             </Modal>
         </div>
     );

@@ -16,18 +16,12 @@ import Box from "@material-ui/core/Box";
 import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles(theme => ({
-    // button: {
-    //     // margin: theme.spacing(1),
-    //     // display: "flex"
-    // }
     button: {
-        // margin: theme.spacing(1),
-        // display: "flex",
         marginRight: "10px"
     }
 }));
 
-export default function Home() {
+export default function Signin(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [values, setValues] = useState({
@@ -50,7 +44,7 @@ export default function Home() {
         event.preventDefault();
     };
 
-    const login = e => {
+    const signInHandler = e => {
         e.preventDefault();
         setSuccess(false);
         axios({
@@ -79,13 +73,15 @@ export default function Home() {
     };
 
     return (
-        <form onSubmit={e => login(e)}>
+        <form onSubmit={e => signInHandler(e)} autoComplete="off">
             <h2 style={{ textAlign: "center" }}>Sign in to Kanba</h2>
             <FormControl fullWidth>
-                <InputLabel htmlFor="email-adress">Email address</InputLabel>
+                <InputLabel htmlFor="standard-adornment-email">
+                    Email address
+                </InputLabel>
                 <Input
-                    id="email-adress"
-                    aria-describedby="email-adress-helper-text"
+                    id="email"
+                    aria-describedby="email-helper-text"
                     type="email"
                     value={values.email}
                     onChange={handleChange("email")}
@@ -134,9 +130,13 @@ export default function Home() {
                     type="submit"
                     className={classes.button}
                 >
-                    Login
+                    Sign in
                 </Button>
-                <Button variant="outlined" color="secondary">
+                <Button
+                    onClick={props.modalHandler}
+                    variant="outlined"
+                    color="secondary"
+                >
                     Cancel
                 </Button>
             </Box>

@@ -5,6 +5,7 @@ import Homepage from "./components/Homepage/Home";
 import Drawer from "./components/Drawer";
 import { useSelector } from "react-redux";
 import AppBar from "./components/AppBar";
+import Signup from "./components/Auth/Signup";
 import CssBaseline from "@material-ui/core/CssBaseline";
 function App() {
     const isAuth = useSelector(state => state.authReducer.isAuth);
@@ -29,6 +30,7 @@ function App() {
                             exact
                             render={render => <Homepage {...render} />}
                         />
+                        <Route path="/signup" component={Signup} />
                     </Switch>
                 </AppBar>
             )}

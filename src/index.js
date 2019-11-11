@@ -3,6 +3,10 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
+import { createMuiTheme } from "@material-ui/core/styles";
+import blue from "@material-ui/core/colors/blue";
+import { ThemeProvider } from "@material-ui/styles";
+
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { applyMiddleware, createStore } from "redux";
@@ -11,24 +15,42 @@ import storage from "redux-persist/lib/storage";
 import rootReducer from "./reducers";
 import logger from "redux-logger";
 
+const primary = blue[800];
+const hover = blue[900];
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: primary
+        },
+        hover: {
+            main: hover
+        }
+    },
+    status: {
+        danger: "orange"
+    }
+});
+
 const persistConfig = {
     key: "root",
     storage
 };
-let middleware = [];
-    if (window.location.hostname === "localhost") {
-        middleware = [...middleware, logger];
-    } else {
-        middleware = [...middleware];
-    }
+let middleware = [];
+if (window.location.hostname === "localhost") {
+    middleware = [...middleware, logger];
+} else {
+    middleware = [...middleware];
+}
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-const store = createStore(persistedReducer, applyMiddleware(...middleware));
+const store = createStore(persistedReducer, applyMiddleware(...middleware));
 
 let persistor = persistStore(store);
 ReactDOM.render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-            <App />
+            <ThemeProvider theme={theme}>
+                <App />
+            </ThemeProvider>
         </PersistGate>
     </Provider>,
     document.getElementById("root")

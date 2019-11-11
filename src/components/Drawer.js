@@ -21,10 +21,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Button from "@material-ui/core/Button";
-import blue from "@material-ui/core/colors/blue";
 
 const drawerWidth = 200;
-const primary = blue[900];
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -86,7 +84,7 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(3)
     },
     paper: {
-        background: primary,
+        background: theme.palette.primary,
         color: "white"
     },
     title: {

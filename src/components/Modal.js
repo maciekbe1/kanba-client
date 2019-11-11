@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 
@@ -24,23 +24,17 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function SimpleModal({ openProps, loginHandleOpen, children }) {
+export default function SimpleModal({ openProps, modalHandler, children }) {
     const classes = useStyles();
     const [modalStyle] = React.useState(getModalStyle);
-    const [open, setOpen] = React.useState(false);
-
-    useEffect(() => {
-        setOpen(openProps);
-    }, [openProps]);
 
     const handleClose = () => {
-        setOpen(!openProps);
-        loginHandleOpen();
+        modalHandler();
     };
 
     return (
         <div>
-            <Modal open={open} onClose={handleClose}>
+            <Modal open={openProps} onClose={handleClose}>
                 <div style={modalStyle} className={classes.paper}>
                     {children}
                 </div>
