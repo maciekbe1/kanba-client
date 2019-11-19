@@ -22,33 +22,34 @@ import Signin from "../components/Auth/Signin";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
     },
     menuButton: {
-        marginRight: theme.spacing(2)
+        marginRight: theme.spacing(2),
     },
     title: {
-        flexGrow: 1
+        flexGrow: 1,
     },
     list: {
-        width: 250
+        width: 250,
     },
     fullList: {
-        width: "auto"
+        width: "auto",
     },
     paper: {
-        background: theme.palette.primary
+        background: theme.palette.primary,
     },
     logo: {
         textDecoration: "none",
-        color: "white"
-    }
+        color: "white",
+    },
+    offset: theme.mixins.toolbar,
 }));
 
 export default function ButtonAppBar(props) {
     const classes = useStyles();
     const [state, setState] = React.useState({
-        left: false
+        left: false,
     });
     //modal
     const [open, setOpen] = React.useState(false);
@@ -101,7 +102,7 @@ export default function ButtonAppBar(props) {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" className={classes.paper}>
+            <AppBar position="fixed" className={classes.paper}>
                 <Toolbar>
                     <IconButton
                         edge="start"
@@ -127,6 +128,7 @@ export default function ButtonAppBar(props) {
                     </Button>
                 </Toolbar>
             </AppBar>
+            <div className={classes.offset} />
             <Drawer
                 anchor="left"
                 open={state.left}
