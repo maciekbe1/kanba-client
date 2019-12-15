@@ -17,39 +17,39 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 
-import Modal from "./Modal";
-import Signin from "../components/Auth/Signin";
+import Modal from "../Modal";
+import Signin from "../Auth/Signin";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     menuButton: {
-        marginRight: theme.spacing(2),
+        marginRight: theme.spacing(2)
     },
     title: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     list: {
-        width: 250,
+        width: 250
     },
     fullList: {
-        width: "auto",
+        width: "auto"
     },
     paper: {
-        background: theme.palette.primary,
+        background: theme.palette.primary
     },
     logo: {
         textDecoration: "none",
-        color: "white",
+        color: "white"
     },
-    offset: theme.mixins.toolbar,
+    offset: theme.mixins.toolbar
 }));
 
-export default function ButtonAppBar(props) {
+export default function PublicAppBar(props) {
     const classes = useStyles();
     const [state, setState] = React.useState({
-        left: false,
+        left: false
     });
     //modal
     const [open, setOpen] = React.useState(false);
@@ -121,10 +121,8 @@ export default function ButtonAppBar(props) {
                     <Button color="inherit" onClick={modalHandler}>
                         Sign in
                     </Button>
-                    <Button variant="outlined" color="inherit">
-                        <Link className={classes.logo} to="/signup">
-                            Sign up
-                        </Link>
+                    <Button variant="outlined" color="inherit" href="/signup">
+                        Sign up
                     </Button>
                 </Toolbar>
             </AppBar>

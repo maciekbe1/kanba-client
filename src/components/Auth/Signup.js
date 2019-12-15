@@ -19,8 +19,8 @@ import Mail from "@material-ui/icons/Mail";
 import Grid from "@material-ui/core/Grid";
 const useStyles = makeStyles(theme => ({
     button: {
-        marginRight: "10px"
-    }
+        marginRight: "10px",
+    },
 }));
 export default function Signup() {
     const classes = useStyles();
@@ -28,7 +28,7 @@ export default function Signup() {
         email: "",
         password: "",
         name: "",
-        showPassword: false
+        showPassword: false,
     });
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
@@ -48,13 +48,13 @@ export default function Signup() {
             method: "post",
             url: "http://localhost:4000/api/users/signUp",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             data: {
                 name: values.name,
                 password: values.password,
-                email: values.email
-            }
+                email: values.email,
+            },
         })
             .then(res => {
                 setSuccess(true);
@@ -67,14 +67,14 @@ export default function Signup() {
         <Container maxWidth="lg">
             {/* <Box display="flex" flexDirection="column" alignItems="center"> */}
             {!success ? (
-                <Grid container spacing={1} display="flex" justify="center">
-                    <Grid item lg={6}>
+                <Grid container display="flex" justify="center">
+                    <Grid item lg={6} xs={8}>
                         <form
                             align="center"
                             autoComplete="off"
                             onSubmit={e => signUpHandler(e)}
                         >
-                            <h6>Join Kanba</h6>
+                            <h5>Join Kanba</h5>
                             <h1>Create your account</h1>
                             <Box display="flex" alignItems="center">
                                 <Mail

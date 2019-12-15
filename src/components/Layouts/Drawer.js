@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signOut } from "../actions";
+import { signOut } from "../../actions";
 import { Link } from "react-router-dom";
 
 import clsx from "clsx";
@@ -18,9 +18,11 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
+import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import MailIcon from "@material-ui/icons/Mail";
+import SettingsIcon from "@material-ui/icons/Settings";
 import Button from "@material-ui/core/Button";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 const drawerWidth = 200;
 
@@ -93,7 +95,8 @@ const useStyles = makeStyles(theme => ({
     logo: {
         textDecoration: "none",
         color: "white"
-    }
+    },
+    gutters: theme.mixins.gutters()
 }));
 
 export default function MiniDrawer(props) {
@@ -172,27 +175,44 @@ export default function MiniDrawer(props) {
                 </div>
                 <Divider />
                 <List>
-                    {["Inbox", "Starred", "Send email", "Drafts"].map(
-                        (text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        )
-                    )}
+                    {["Inbox", "Create", "Calendar"].map((text, index) => (
+                        <ListItem
+                            button
+                            key={text}
+                            classes={{
+                                gutters: classes.gutters
+                            }}
+                        >
+                            <ListItemIcon>
+                                {(() => {
+                                    switch (text) {
+                                        case "Inbox":
+                                            return <MailIcon />;
+                                        case "Create":
+                                            return <AddCircleOutlineIcon />;
+                                        case "Calendar":
+                                            return <CalendarTodayIcon />;
+                                        default:
+                                            return null;
+                                    }
+                                })()}
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItem>
+                    ))}
                 </List>
                 <Divider />
                 <List>
-                    {["All mail", "Trash", "Spam"].map((text, index) => (
-                        <ListItem button key={text}>
+                    {["Settings"].map((text, index) => (
+                        <ListItem
+                            button
+                            key={text}
+                            classes={{
+                                gutters: classes.gutters
+                            }}
+                        >
                             <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                <SettingsIcon />
                             </ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItem>

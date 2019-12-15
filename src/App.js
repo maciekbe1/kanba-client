@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./assets/styles/Global.scss";
-import HomePage from "./components/Home/HomePage";
-import Drawer from "./components/Drawer";
+import HomePage from "./components/HomePage";
+import Drawer from "./components/Layouts/Drawer";
 import { useSelector } from "react-redux";
-import AppBar from "./components/AppBar";
+import AppBar from "./components/Layouts/AppBar";
 import Signup from "./components/Auth/Signup";
-import PanelPage from "./components/Panel/PanelPage";
+import Dashboard from "./components/Dashboard";
 import VerifyPage from "./components/Verify/VerifyPage";
 import CssBaseline from "@material-ui/core/CssBaseline";
 function App() {
@@ -20,7 +20,7 @@ function App() {
                         <Route
                             path="/"
                             exact
-                            render={render => <PanelPage {...render} />}
+                            render={render => <Dashboard {...render} />}
                         />
                     </Switch>
                 </Drawer>
