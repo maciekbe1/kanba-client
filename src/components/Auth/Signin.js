@@ -3,7 +3,7 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../actions";
-import { FormControl } from "@material-ui/core";
+import { FormControl, Link } from "@material-ui/core";
 import { Input } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -114,6 +115,11 @@ export default function Signin(props) {
                     }
                 />
             </FormControl>
+            <Link href="/reset-password">
+                <Typography variant="caption" display="block" gutterBottom>
+                    Forget password?
+                </Typography>
+            </Link>
             {success ? (
                 <FormControl style={{ marginBottom: "20px" }}>
                     <FormHelperText id="my-helper-text">{error}</FormHelperText>

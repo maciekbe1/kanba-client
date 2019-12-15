@@ -19,8 +19,8 @@ import Mail from "@material-ui/icons/Mail";
 import Grid from "@material-ui/core/Grid";
 const useStyles = makeStyles(theme => ({
     button: {
-        marginRight: "10px",
-    },
+        marginRight: "10px"
+    }
 }));
 export default function Signup() {
     const classes = useStyles();
@@ -28,7 +28,7 @@ export default function Signup() {
         email: "",
         password: "",
         name: "",
-        showPassword: false,
+        showPassword: false
     });
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
@@ -48,15 +48,15 @@ export default function Signup() {
             method: "post",
             url: "http://localhost:4000/api/users/signUp",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
             },
             data: {
                 name: values.name,
                 password: values.password,
-                email: values.email,
-            },
+                email: values.email
+            }
         })
-            .then(res => {
+            .then(() => {
                 setSuccess(true);
             })
             .catch(err => {

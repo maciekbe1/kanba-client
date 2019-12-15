@@ -7,7 +7,9 @@ import { useSelector } from "react-redux";
 import AppBar from "./components/Layouts/AppBar";
 import Signup from "./components/Auth/Signup";
 import Dashboard from "./components/Dashboard";
-import VerifyPage from "./components/Verify/VerifyPage";
+import AccountConf from "./components/AccountConf";
+import EmailVerify from "./components/ResetPassword/EmailVerify";
+import SetPassword from "./components/ResetPassword/SetPassword";
 import CssBaseline from "@material-ui/core/CssBaseline";
 function App() {
     const isAuth = useSelector(state => state.authReducer.isAuth);
@@ -33,7 +35,12 @@ function App() {
                             render={render => <HomePage {...render} />}
                         />
                         <Route path="/signup" component={Signup} />
-                        <Route path="/verify/:hash" component={VerifyPage} />
+                        <Route path="/verify/:hash" component={AccountConf} />
+                        <Route path="/reset-password" component={EmailVerify} />
+                        <Route
+                            path="/set-password/:id"
+                            component={SetPassword}
+                        />
                     </Switch>
                 </AppBar>
             )}
