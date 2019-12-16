@@ -17,9 +17,19 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import Lock from "@material-ui/icons/Lock";
 import Mail from "@material-ui/icons/Mail";
 import Grid from "@material-ui/core/Grid";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import Typography from "@material-ui/core/Typography";
+
 const useStyles = makeStyles(theme => ({
     button: {
         marginRight: "10px"
+    },
+    icon: {
+        fontSize: 100,
+        color: theme.palette.success.main
+    },
+    bold: {
+        fontWeight: "bold"
     }
 }));
 export default function Signup() {
@@ -182,7 +192,39 @@ export default function Signup() {
                     </Grid>
                 </Grid>
             ) : (
-                <div>Success</div>
+                <Container maxWidth="sm">
+                    <Box
+                        mt={2}
+                        display="flex"
+                        boxShadow={3}
+                        justifyContent="center"
+                        flexDirection="column"
+                        alignItems="center"
+                    >
+                        <CheckCircleOutlineIcon className={classes.icon} />
+                        <Typography
+                            align="center"
+                            color="textSecondary"
+                            variant="h2"
+                            gutterBottom
+                        >
+                            Account Created
+                        </Typography>
+                        <Typography align="center" variant="subtitle1">
+                            Thank you for registering. Check your email for
+                            verification link.
+                        </Typography>
+                        <Typography
+                            align="center"
+                            variant="subtitle1"
+                            gutterBottom
+                            className={classes.bold}
+                        >
+                            After verify you will successful login to
+                            application.
+                        </Typography>
+                    </Box>
+                </Container>
             )}
             {/* </Box> */}
         </Container>

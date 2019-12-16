@@ -5,6 +5,8 @@ import * as serviceWorker from "./serviceWorker";
 
 import { createMuiTheme } from "@material-ui/core/styles";
 import blue from "@material-ui/core/colors/blue";
+import green from "@material-ui/core/colors/green";
+
 import { ThemeProvider } from "@material-ui/styles";
 
 import { Provider } from "react-redux";
@@ -17,10 +19,14 @@ import logger from "redux-logger";
 
 const primary = blue[800];
 const hover = blue[900];
+const success = green[500];
 const theme = createMuiTheme({
     palette: {
         primary: {
             main: primary
+        },
+        success: {
+            main: success
         },
         hover: {
             main: hover
