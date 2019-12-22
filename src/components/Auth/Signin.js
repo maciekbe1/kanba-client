@@ -66,6 +66,7 @@ export default function Signin(props) {
                         isAuth: true
                     })
                 );
+                window.location.assign(`/`);
             })
             .catch(err => {
                 setSuccess(true);

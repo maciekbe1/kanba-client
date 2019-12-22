@@ -75,7 +75,6 @@ export default function Signup() {
     };
     return (
         <Container maxWidth="lg">
-            {/* <Box display="flex" flexDirection="column" alignItems="center"> */}
             {!success ? (
                 <Grid container display="flex" justify="center">
                     <Grid item lg={6} xs={8}>
@@ -226,7 +225,6 @@ export default function Signup() {
                     </Box>
                 </Container>
             )}
-            {/* </Box> */}
         </Container>
     );
 }
