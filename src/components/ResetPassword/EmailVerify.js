@@ -3,7 +3,7 @@ import Container from "@material-ui/core/Container";
 import { FormControl } from "@material-ui/core";
 import { Input } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
-import axios from "axios";
+import * as API from "../../api/API";
 import Button from "@material-ui/core/Button";
 
 export default function ResetPassword() {
@@ -13,18 +13,10 @@ export default function ResetPassword() {
 
     const emailHandler = e => {
         e.preventDefault();
-        axios({
-            method: "post",
-            url: "http://localhost:4000/api/users/reset-password",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {
-                email: email
-            }
+        API.request("http://localhost:4000/api/users/reset-password", {
+            email: email
         })
             .then(res => {
-                console.log(res);
                 setSuccess(true);
                 setError(res.data.message);
             })

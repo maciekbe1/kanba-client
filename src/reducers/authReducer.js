@@ -1,16 +1,23 @@
-export default (state = { isAuth: false }, action) => {
+const INITIAL_DATA = {
+    isAuth: false,
+    token: null,
+    data: null
+};
+export default (state = INITIAL_DATA, action) => {
     switch (action.type) {
         case "SIGNIN_USER":
             return {
                 ...state,
-                userID: action.userID,
-                isAuth: action.isAuth
+                token: action.token,
+                isAuth: action.isAuth,
+                data: action.data
             };
         case "SIGNOUT_USER":
             return {
                 ...state,
-                userID: null,
-                isAuth: false
+                token: null,
+                isAuth: false,
+                data: null
             };
         default:
             return state;

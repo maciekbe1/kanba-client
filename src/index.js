@@ -16,6 +16,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import rootReducer from "./reducers";
 import logger from "redux-logger";
+import thunk from "redux-thunk";
 
 const primary = blue[800];
 const hover = blue[900];
@@ -43,9 +44,9 @@ const persistConfig = {
 };
 let middleware = [];
 if (window.location.hostname === "localhost") {
-    middleware = [...middleware, logger];
+    middleware = [...middleware, logger, thunk];
 } else {
-    middleware = [...middleware];
+    middleware = [...middleware, thunk];
 }
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = createStore(persistedReducer, applyMiddleware(...middleware));

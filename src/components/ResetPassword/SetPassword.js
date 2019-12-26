@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import * as API from "../../api/API";
 import { FormControl } from "@material-ui/core";
 import { Input } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
@@ -8,27 +8,18 @@ import Container from "@material-ui/core/Container";
 
 export default function SetPassword(props) {
     const [password, setPassword] = useState("");
-    const [repeadPassword, setRepeadPassword] = useState("");
+    // const [repeadPassword, setRepeadPassword] = useState("");
     const [error, setError] = useState("");
     const setPasswordHandler = e => {
         e.preventDefault();
-        axios({
-            method: "post",
-            url: "http://localhost:4000/api/users/set-password",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {
-                password: password,
-                hash: props.match.params.id
-            }
+        API.request("http://localhost:4000/api/users/set-password", {
+            password: password,
+            hash: props.match.params.id
         })
             .then(res => {
-                console.log(res);
                 setError(res.data.message);
             })
             .catch(err => {
-                console.log(err.response.data);
                 setError(err.response.data);
             });
     };

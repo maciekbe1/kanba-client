@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
-import jwt from "jsonwebtoken";
+import * as API from "../../api/API";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../actions";
 import { FormControl, Link } from "@material-ui/core";
@@ -30,8 +29,8 @@ export default function Signin(props) {
         password: "",
         showPassword: false
     });
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState("");
+    const [error, setError] = useState(false);
+    const [message, setMessage] = useState("");
 
     const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
@@ -47,30 +46,22 @@ export default function Signin(props) {
 
     const signInHandler = e => {
         e.preventDefault();
-        setSuccess(false);
-        axios({
-            method: "post",
-            url: "http://localhost:4000/api/auth",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {
-                email: values.email,
-                password: values.password
-            }
+        setError(false);
+        API.request("http://localhost:4000/api/auth", {
+            email: values.email,
+            password: values.password
         })
             .then(res => {
                 dispatch(
                     signIn({
-                        userID: jwt.decode(res.data)._id,
+                        token: res.data,
                         isAuth: true
                     })
                 );
-                window.location.assign(`/`);
             })
             .catch(err => {
-                setSuccess(true);
-                setError(err.response.data);
+                setError(true);
+                setMessage(err.response.data);
             });
     };
 
@@ -121,9 +112,11 @@ export default function Signin(props) {
                     Forget password?
                 </Typography>
             </Link>
-            {success ? (
+            {error ? (
                 <FormControl style={{ marginBottom: "20px" }}>
-                    <FormHelperText id="my-helper-text">{error}</FormHelperText>
+                    <FormHelperText id="my-helper-text">
+                        {message}
+                    </FormHelperText>
                 </FormControl>
             ) : null}
 

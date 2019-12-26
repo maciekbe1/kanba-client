@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import * as API from "../../api/API";
 
-export default function VerifyPage(props) {
+export default function AccountVerify(props) {
     const [message, setMessage] = useState("");
     useEffect(() => {
-        axios({
-            method: "post",
-            url: `http://localhost:4000/api/users/verify/${props.match.params.hash}`,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+        API.request(
+            `http://localhost:4000/api/users/verify/${props.match.params.hash}`
+        )
             .then(res => {
                 setMessage(res.data.message);
             })

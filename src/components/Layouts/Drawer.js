@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signOut } from "../../actions";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -23,6 +24,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Button from "@material-ui/core/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 const drawerWidth = 200;
 
@@ -103,7 +105,7 @@ export default function MiniDrawer(props) {
     const classes = useStyles();
     const theme = useTheme();
     const dispatch = useDispatch();
-
+    const photo = useSelector(state => state.authReducer.photo);
     const [open, setOpen] = useState(false);
     const logoutHandler = () => {
         dispatch(signOut());
@@ -145,6 +147,11 @@ export default function MiniDrawer(props) {
                             Kanba
                         </Link>
                     </Typography>
+                    {photo ? (
+                        <img src={photo} alt="avatar" />
+                    ) : (
+                        <AccountCircleIcon fontSize="large" />
+                    )}
                     <Button color="inherit" onClick={logoutHandler}>
                         Logout
                     </Button>

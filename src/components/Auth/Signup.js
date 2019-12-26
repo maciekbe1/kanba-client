@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import * as API from "../../api/API";
 
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -54,17 +54,10 @@ export default function Signup() {
     };
     const signUpHandler = e => {
         e.preventDefault();
-        axios({
-            method: "post",
-            url: "http://localhost:4000/api/users/signUp",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {
-                name: values.name,
-                password: values.password,
-                email: values.email
-            }
+        API.request("http://localhost:4000/api/users/signUp", {
+            name: values.name,
+            password: values.password,
+            email: values.email
         })
             .then(() => {
                 setSuccess(true);
