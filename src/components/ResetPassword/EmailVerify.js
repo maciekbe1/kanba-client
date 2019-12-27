@@ -1,49 +1,131 @@
 import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
-import { FormControl } from "@material-ui/core";
-import { Input } from "@material-ui/core";
-import { InputLabel } from "@material-ui/core";
 import * as API from "../../api/API";
-import Button from "@material-ui/core/Button";
+import SendIcon from "@material-ui/icons/Send";
 
+import Paper from "@material-ui/core/Paper";
+import Divider from "@material-ui/core/Divider";
+import InputBase from "@material-ui/core/InputBase";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        padding: "2px 4px",
+        display: "flex",
+        alignItems: "center",
+        width: "100%"
+    },
+    input: {
+        marginLeft: theme.spacing(1),
+        flex: 1
+    },
+    divider: {
+        height: 28,
+        margin: 4
+    },
+    success: {
+        color: theme.palette.success.main
+    },
+    error: {
+        color: theme.palette.error.main
+    }
+}));
 export default function ResetPassword() {
+    const classes = useStyles();
     const [email, setEmail] = useState("");
     const [success, setSuccess] = useState(false);
-    const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState(false);
 
     const emailHandler = e => {
         e.preventDefault();
+        setError(false);
+        setSuccess(false);
+
         API.request("http://localhost:4000/api/users/reset-password", {
             email: email
         })
             .then(res => {
                 setSuccess(true);
-                setError(res.data.message);
+                setMessage(res.data.message);
             })
             .catch(err => {
-                setError(err.response.data);
+                setError(true);
+                setMessage(err.response.data);
             });
     };
     return (
         <Container>
-            <form onSubmit={e => emailHandler(e)}>
-                <FormControl style={{ marginBottom: "20px" }}>
-                    <InputLabel htmlFor="standard-adornment-email">
-                        Email address
-                    </InputLabel>
-                    <Input
-                        id="email"
-                        aria-describedby="email-helper-text"
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                    <Button type="submit" color="primary" variant="contained">
-                        Send
-                    </Button>
-                </FormControl>
-            </form>
-            <div>{error}</div>
+            <Grid container display="flex" justify="center">
+                <Grid item lg={6} xs={10} sm={6}>
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        flexDirection="column"
+                    >
+                        <Typography
+                            align="center"
+                            color="textSecondary"
+                            variant="h2"
+                            gutterBottom
+                        >
+                            Forget Password?
+                        </Typography>
+                        <Typography
+                            align="center"
+                            variant="subtitle1"
+                            paragraph
+                        >
+                            Enter the email adress you used to register and
+                            we'll email you the link and password reset
+                            instruction.
+                        </Typography>
+                        <Paper
+                            component="form"
+                            onSubmit={e => emailHandler(e)}
+                            className={classes.root}
+                        >
+                            {error ? <ErrorOutlineIcon color="error" /> : null}
+                            {success ? (
+                                <CheckCircleOutlineIcon
+                                    className={classes.success}
+                                />
+                            ) : null}
+
+                            <InputBase
+                                className={classes.input}
+                                id="email"
+                                placeholder="Email address"
+                                type="email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                            />
+                            <Divider
+                                className={classes.divider}
+                                orientation="vertical"
+                            />
+                            <Button
+                                type="submit"
+                                color="primary"
+                                className={classes.iconButton}
+                            >
+                                <SendIcon />
+                            </Button>
+                        </Paper>
+                    </Box>
+                    <Typography
+                        className={success ? classes.success : classes.error}
+                    >
+                        {message}
+                    </Typography>
+                </Grid>
+            </Grid>
         </Container>
     );
 }
