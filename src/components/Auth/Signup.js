@@ -164,7 +164,12 @@ export default function Signup() {
                                 </FormControl>
                             </Box>
                             {!success ? (
-                                <FormControl style={{ marginBottom: "20px" }}>
+                                <FormControl
+                                    style={{
+                                        marginBottom: "20px",
+                                        color: "red"
+                                    }}
+                                >
                                     <FormHelperText id="my-helper-text">
                                         {error}
                                     </FormHelperText>

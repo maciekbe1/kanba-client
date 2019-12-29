@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signOut } from "../../actions";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { setTabValue } from "../../actions";
+import { setDarkTheme } from "../../actions";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { findIndex } from "lodash";
 
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -10,7 +14,6 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -22,12 +25,18 @@ import ListItemText from "@material-ui/core/ListItemText";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import MailIcon from "@material-ui/icons/Mail";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Button from "@material-ui/core/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
+import AlarmIcon from "@material-ui/icons/Alarm";
+import AlarmOnIcon from "@material-ui/icons/AlarmOn";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import Switch from "@material-ui/core/Switch";
 
 const drawerWidth = 200;
-
 const useStyles = makeStyles(theme => ({
     root: {
         display: "flex"
@@ -87,16 +96,12 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         padding: theme.spacing(3)
     },
-    paper: {
-        background: theme.palette.primary,
-        color: "white"
-    },
     title: {
         flexGrow: 1
     },
-    logo: {
-        textDecoration: "none",
-        color: "white"
+    avatar: {
+        marginInlineStart: "auto",
+        padding: "0px"
     },
     gutters: theme.mixins.gutters()
 }));
@@ -105,9 +110,20 @@ export default function MiniDrawer(props) {
     const classes = useStyles();
     const theme = useTheme();
     const dispatch = useDispatch();
-    const photo = useSelector(state => state.authReducer.photo);
+    const { pathname } = useLocation();
+    const darkTheme = useSelector(state => state.layoutReducer.darkTheme);
+    const tabs = [
+        { icon: <HomeIcon />, label: "Home", to: "/" },
+        { icon: <AlarmIcon />, label: "Today", to: "/today" },
+        { icon: <AlarmOnIcon />, label: "Done", to: "/done" }
+    ];
+    const tabValue = findIndex(tabs, function(item) {
+        return item.to === pathname;
+    });
     const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
     const logoutHandler = () => {
+        setAnchorEl(null);
         dispatch(signOut());
     };
     const handleDrawerOpen = () => {
@@ -117,18 +133,30 @@ export default function MiniDrawer(props) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    const handleChange = (event, newValue) => {
+        dispatch(setTabValue(newValue));
+    };
+    const handleMenu = event => {
+        setAnchorEl(event.currentTarget);
+    };
 
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleThemeChange = () => {
+        dispatch(setDarkTheme(!darkTheme));
+    };
+
+    const menuOpen = Boolean(anchorEl);
     return (
         <div className={classes.root}>
             <AppBar
                 position="fixed"
-                className={clsx(
-                    classes.appBar,
-                    {
-                        [classes.appBarShift]: open
-                    },
-                    classes.paper
-                )}
+                color={theme.palette.type === "dark" ? "default" : "primary"}
+                className={clsx(classes.appBar, {
+                    [classes.appBarShift]: open
+                })}
             >
                 <Toolbar>
                     <IconButton
@@ -142,19 +170,58 @@ export default function MiniDrawer(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        <Link className={classes.logo} to="/">
-                            Kanba
-                        </Link>
-                    </Typography>
-                    {photo ? (
-                        <img src={photo} alt="avatar" />
-                    ) : (
+                    <Tabs
+                        value={tabValue === -1 ? false : tabValue}
+                        onChange={handleChange}
+                        variant="fullWidth"
+                        indicatorColor="secondary"
+                        textColor="secondary"
+                        aria-label="icon label tabs example"
+                    >
+                        {tabs.map((item, index) => {
+                            return (
+                                <Tab
+                                    key={index}
+                                    icon={item.icon}
+                                    label={item.label}
+                                    to={item.to}
+                                    component={Link}
+                                />
+                            );
+                        })}
+                    </Tabs>
+                    <IconButton
+                        aria-owns={menuOpen ? "menu-appbar" : undefined}
+                        aria-haspopup="true"
+                        onClick={handleMenu}
+                        color="inherit"
+                        className={classes.avatar}
+                    >
                         <AccountCircleIcon fontSize="large" />
-                    )}
-                    <Button color="inherit" onClick={logoutHandler}>
-                        Logout
-                    </Button>
+                    </IconButton>
+                    <Menu
+                        id="menu-appbar"
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                            vertical: "top",
+                            horizontal: "right"
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right"
+                        }}
+                        open={menuOpen}
+                        onClose={handleClose}
+                    >
+                        <MenuItem>
+                            Dark theme{" "}
+                            <Switch
+                                checked={darkTheme}
+                                onChange={handleThemeChange}
+                            />
+                        </MenuItem>
+                        <MenuItem onClick={logoutHandler}>Log out</MenuItem>
+                    </Menu>
                 </Toolbar>
             </AppBar>
             <Drawer

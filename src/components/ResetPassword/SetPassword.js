@@ -23,8 +23,9 @@ export default function SetPassword(props) {
                 .catch(err => {
                     setMessage(err.response.data);
                 });
+        } else {
+            setMessage("Passwords not compare");
         }
-        setMessage("passwords not compare");
     };
     return (
         <Container>
