@@ -13,10 +13,13 @@ export default function SetPassword(props) {
     const setPasswordHandler = e => {
         e.preventDefault();
         if (password === repeatPassword) {
-            API.request("http://localhost:4000/api/users/set-password", {
-                password: password,
-                hash: props.match.params.id
-            })
+            API.request(
+                "https://kanba-app.herokuapp.com/api/users/set-password",
+                {
+                    password: password,
+                    hash: props.match.params.id
+                }
+            )
                 .then(res => {
                     setMessage(res.data.message);
                 })

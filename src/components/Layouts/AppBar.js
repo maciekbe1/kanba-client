@@ -17,7 +17,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 
-import Modal from "../Modal";
+import Modal from "../Utils/Modal";
 import Signin from "../Auth/Signin";
 
 const useStyles = makeStyles(theme => ({

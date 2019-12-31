@@ -5,7 +5,7 @@ export default function AccountVerify(props) {
     const [message, setMessage] = useState("");
     useEffect(() => {
         API.request(
-            `http://localhost:4000/api/users/verify/${props.match.params.hash}`
+            `https://kanba-app.herokuapp.com/api/users/verify/${props.match.params.hash}`
         )
             .then(res => {
                 setMessage(res.data.message);

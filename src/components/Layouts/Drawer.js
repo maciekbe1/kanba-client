@@ -256,6 +256,8 @@ export default function MiniDrawer(props) {
                             classes={{
                                 gutters: classes.gutters
                             }}
+                            component={Link}
+                            to={text.toLowerCase()}
                         >
                             <ListItemIcon>
                                 {(() => {

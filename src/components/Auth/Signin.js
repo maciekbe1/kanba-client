@@ -47,7 +47,7 @@ export default function Signin(props) {
     const signInHandler = e => {
         e.preventDefault();
         setError(false);
-        API.request("http://localhost:4000/api/auth", {
+        API.request("https://kanba-app.herokuapp.com/api/auth", {
             email: values.email,
             password: values.password
         })

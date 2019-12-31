@@ -54,7 +54,7 @@ export default function Signup() {
     };
     const signUpHandler = e => {
         e.preventDefault();
-        API.request("http://localhost:4000/api/users/signUp", {
+        API.request("https://kanba-app.herokuapp.com/api/users/signUp", {
             name: values.name,
             password: values.password,
             email: values.email

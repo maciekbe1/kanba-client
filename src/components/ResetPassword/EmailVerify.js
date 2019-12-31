@@ -48,9 +48,12 @@ export default function ResetPassword() {
         setError(false);
         setSuccess(false);
 
-        API.request("http://localhost:4000/api/users/reset-password", {
-            email: email
-        })
+        API.request(
+            "https://kanba-app.herokuapp.com/api/users/reset-password",
+            {
+                email: email
+            }
+        )
             .then(res => {
                 setSuccess(true);
                 setMessage(res.data.message);
@@ -119,11 +122,15 @@ export default function ResetPassword() {
                             </Button>
                         </Paper>
                     </Box>
-                    <Typography
-                        className={success ? classes.success : classes.error}
-                    >
-                        {message}
-                    </Typography>
+                    {success || error ? (
+                        <Typography
+                            className={
+                                success ? classes.success : classes.error
+                            }
+                        >
+                            {message}
+                        </Typography>
+                    ) : null}
                 </Grid>
             </Grid>
         </Container>
