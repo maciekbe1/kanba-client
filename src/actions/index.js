@@ -30,9 +30,9 @@ export const signIn = ({ token, isAuth }) => async dispatch => {
                 data: res.data
             });
         })
-        .then(() => {
-            window.location.assign(`/`);
-        })
+        // .then(() => {
+        //     window.location.assign(`/`);
+        // })
         .catch(err => {
             return dispatch({
                 type: "SIGNIN_USER",

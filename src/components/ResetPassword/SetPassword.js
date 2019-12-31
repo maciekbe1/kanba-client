@@ -3,15 +3,74 @@ import * as API from "../../api/API";
 import { FormControl } from "@material-ui/core";
 import { Input } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
 
+import CheckIcon from "@material-ui/icons/Check";
+import SendIcon from "@material-ui/icons/Send";
+import Container from "@material-ui/core/Container";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { green } from "@material-ui/core/colors";
+import { red } from "@material-ui/core/colors";
+
+import Fab from "@material-ui/core/Fab";
+import { makeStyles } from "@material-ui/core/styles";
+import clsx from "clsx";
+import ErrorIcon from "@material-ui/icons/Error";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: "flex",
+        alignItems: "center"
+    },
+    wrapper: {
+        margin: theme.spacing(1),
+        position: "relative"
+    },
+    buttonSuccess: {
+        backgroundColor: green[500],
+        "&:hover": {
+            backgroundColor: green[700]
+        }
+    },
+    buttonError: {
+        backgroundColor: red[500],
+        "&:hover": {
+            backgroundColor: red[700]
+        }
+    },
+    fabProgress: {
+        color: green[500],
+        position: "absolute",
+        top: -6,
+        left: -6,
+        zIndex: 1
+    },
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        width: "100%"
+    }
+}));
 export default function SetPassword(props) {
+    const classes = useStyles();
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
+
+    const buttonClassname = clsx({
+        [classes.buttonSuccess]: success,
+        [classes.buttonError]: error
+    });
     const setPasswordHandler = e => {
         e.preventDefault();
+        setError(false);
+        setSuccess(false);
+        setLoading(true);
         if (password === repeatPassword) {
             API.request(
                 "https://kanba-app.herokuapp.com/api/users/set-password",
@@ -22,9 +81,15 @@ export default function SetPassword(props) {
             )
                 .then(res => {
                     setMessage(res.data.message);
+                    setSuccess(true);
+                    setLoading(false);
+                    setPassword("");
+                    setRepeatPassword("");
                 })
                 .catch(err => {
                     setMessage(err.response.data);
+                    setError(true);
+                    setLoading(false);
                 });
         } else {
             setMessage("Passwords not compare");
@@ -32,36 +97,89 @@ export default function SetPassword(props) {
     };
     return (
         <Container>
-            <form onSubmit={e => setPasswordHandler(e)}>
-                <FormControl style={{ marginBottom: "20px" }}>
-                    <InputLabel htmlFor="standard-adornment-email">
-                        Password
-                    </InputLabel>
-                    <Input
-                        id="password"
-                        aria-describedby="email-helper-text"
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                </FormControl>
-                <FormControl>
-                    <InputLabel htmlFor="standard-adornment-email">
-                        Repeat password
-                    </InputLabel>
-                    <Input
-                        id="repeat-password"
-                        aria-describedby="email-helper-text"
-                        type="password"
-                        value={repeatPassword}
-                        onChange={e => setRepeatPassword(e.target.value)}
-                    />
-                </FormControl>
-                <Button type="submit" color="primary" variant="contained">
-                    Send
-                </Button>
-            </form>
-            <div>{message}</div>
+            <Grid container display="flex" justify="center">
+                <Grid item lg={6} xs={10} sm={6}>
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        flexDirection="column"
+                    >
+                        <Typography
+                            align="center"
+                            color="textSecondary"
+                            variant="h2"
+                            gutterBottom
+                        >
+                            Set New Password
+                        </Typography>
+                        <form
+                            className={classes.form}
+                            onSubmit={e => setPasswordHandler(e)}
+                        >
+                            <FormControl
+                                fullWidth
+                                style={{ marginBottom: "20px" }}
+                            >
+                                <InputLabel htmlFor="standard-adornment-email">
+                                    Password
+                                </InputLabel>
+                                <Input
+                                    id="password"
+                                    aria-describedby="email-helper-text"
+                                    type="password"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                />
+                            </FormControl>
+                            <FormControl
+                                fullWidth
+                                style={{ marginBottom: "20px" }}
+                            >
+                                <InputLabel htmlFor="standard-adornment-email">
+                                    Repeat password
+                                </InputLabel>
+                                <Input
+                                    id="repeat-password"
+                                    aria-describedby="email-helper-text"
+                                    type="password"
+                                    value={repeatPassword}
+                                    onChange={e =>
+                                        setRepeatPassword(e.target.value)
+                                    }
+                                />
+                            </FormControl>
+                            <div className={classes.wrapper}>
+                                <Fab
+                                    aria-label="save"
+                                    color="primary"
+                                    className={buttonClassname}
+                                    type="submit"
+                                    onClick={e => setPasswordHandler(e)}
+                                >
+                                    {error ? (
+                                        success ? (
+                                            <CheckIcon />
+                                        ) : (
+                                            <ErrorIcon />
+                                        )
+                                    ) : success ? (
+                                        <CheckIcon />
+                                    ) : (
+                                        <SendIcon />
+                                    )}
+                                </Fab>
+                                {loading && (
+                                    <CircularProgress
+                                        size={68}
+                                        className={classes.fabProgress}
+                                    />
+                                )}
+                            </div>
+                        </form>
+                        <Typography color="error">{message}</Typography>
+                    </Box>
+                </Grid>
+            </Grid>
         </Container>
     );
 }

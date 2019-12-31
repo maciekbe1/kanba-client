@@ -14,10 +14,13 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Typography from "@material-ui/core/Typography";
-
+import CircularProgress from "@material-ui/core/CircularProgress";
 const useStyles = makeStyles(theme => ({
     button: {
         marginRight: "10px"
+    },
+    error: {
+        color: theme.palette.secondary.main
     }
 }));
 
@@ -31,7 +34,7 @@ export default function Signin(props) {
     });
     const [error, setError] = useState(false);
     const [message, setMessage] = useState("");
-
+    const [loading, setLoading] = useState(false);
     const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
     };
@@ -47,6 +50,7 @@ export default function Signin(props) {
     const signInHandler = e => {
         e.preventDefault();
         setError(false);
+        setLoading(true);
         API.request("https://kanba-app.herokuapp.com/api/auth", {
             email: values.email,
             password: values.password
@@ -61,6 +65,7 @@ export default function Signin(props) {
             })
             .catch(err => {
                 setError(true);
+                setLoading(false);
                 setMessage(err.response.data);
             });
     };
@@ -114,7 +119,10 @@ export default function Signin(props) {
             </Link>
             {error ? (
                 <FormControl style={{ marginBottom: "20px" }}>
-                    <FormHelperText id="my-helper-text">
+                    <FormHelperText
+                        className={classes.error}
+                        id="my-helper-text"
+                    >
                         {message}
                     </FormHelperText>
                 </FormControl>
@@ -130,7 +138,7 @@ export default function Signin(props) {
                     type="submit"
                     className={classes.button}
                 >
-                    Sign in
+                    {loading ? <CircularProgress size={20} /> : "Sign in"}
                 </Button>
                 <Button
                     onClick={props.modalHandler}

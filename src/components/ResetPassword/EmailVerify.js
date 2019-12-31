@@ -13,6 +13,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,12 +43,13 @@ export default function ResetPassword() {
     const [success, setSuccess] = useState(false);
     const [message, setMessage] = useState("");
     const [error, setError] = useState(false);
+    const [loading, setloading] = useState(false);
 
     const emailHandler = e => {
         e.preventDefault();
         setError(false);
         setSuccess(false);
-
+        setloading(true);
         API.request(
             "https://kanba-app.herokuapp.com/api/users/reset-password",
             {
@@ -55,10 +57,13 @@ export default function ResetPassword() {
             }
         )
             .then(res => {
+                setloading(false);
+
                 setSuccess(true);
                 setMessage(res.data.message);
             })
             .catch(err => {
+                setloading(false);
                 setError(true);
                 setMessage(err.response.data);
             });
@@ -95,6 +100,7 @@ export default function ResetPassword() {
                             className={classes.root}
                         >
                             {error ? <ErrorOutlineIcon color="error" /> : null}
+                            {loading ? <CircularProgress size={20} /> : null}
                             {success ? (
                                 <CheckCircleOutlineIcon
                                     className={classes.success}
