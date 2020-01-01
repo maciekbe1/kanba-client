@@ -73,7 +73,7 @@ export default function SetPassword(props) {
         setLoading(true);
         if (password === repeatPassword) {
             API.request(
-                "https://kanba-app.herokuapp.com/api/users/set-password",
+                `${process.env.REACT_APP_SERVER}/api/users/set-password`,
                 {
                     password: password,
                     hash: props.match.params.id

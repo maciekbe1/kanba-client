@@ -53,7 +53,7 @@ export default function Signin(props) {
         e.preventDefault();
         setError(false);
         setLoading(true);
-        API.request("https://kanba-app.herokuapp.com/api/auth", {
+        API.request(`${process.env.REACT_APP_SERVER}/api/auth`, {
             email: values.email,
             password: values.password
         })

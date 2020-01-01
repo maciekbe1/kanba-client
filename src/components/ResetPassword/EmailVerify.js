@@ -51,7 +51,7 @@ export default function ResetPassword() {
         setSuccess(false);
         setloading(true);
         API.request(
-            "https://kanba-app.herokuapp.com/api/users/reset-password",
+            `${process.env.REACT_APP_SERVER}/api/users/reset-password`,
             {
                 email: email
             }

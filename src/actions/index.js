@@ -19,7 +19,7 @@ export const signOut = () => {
 };
 export const signIn = ({ token, isAuth }) => async dispatch => {
     return await API.requestToken(
-        "https://kanba-app.herokuapp.com/api/users/me",
+        `${process.env.REACT_APP_SERVER}/api/users/me`,
         token
     )
         .then(res => {

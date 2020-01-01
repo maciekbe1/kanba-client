@@ -54,7 +54,7 @@ export default function Signup() {
     };
     const signUpHandler = e => {
         e.preventDefault();
-        API.request("https://kanba-app.herokuapp.com/api/users/signUp", {
+        API.request(`${process.env.REACT_APP_SERVER}/api/users/signUp`, {
             name: values.name,
             password: values.password,
             email: values.email
