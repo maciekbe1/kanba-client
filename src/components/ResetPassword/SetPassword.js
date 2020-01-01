@@ -50,7 +50,10 @@ const useStyles = makeStyles(theme => ({
         width: "100%"
     },
     success: {
-        color: green[500]
+        color: theme.palette.success.main
+    },
+    error: {
+        color: theme.palette.error.main
     }
 }));
 export default function SetPassword(props) {
@@ -198,7 +201,13 @@ export default function SetPassword(props) {
                                 )}
                             </div>
                         </form>
-                        <Typography color="error">{message}</Typography>
+                        <Typography
+                            className={
+                                success ? classes.success : classes.error
+                            }
+                        >
+                            {message}
+                        </Typography>
                     </Box>
                 </Grid>
             </Grid>
