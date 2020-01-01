@@ -15,15 +15,12 @@ import Fab from "@material-ui/core/Fab";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import ErrorIcon from "@material-ui/icons/Error";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        display: "flex",
-        alignItems: "center"
-    },
     wrapper: {
         margin: theme.spacing(1),
         position: "relative"
@@ -51,6 +48,9 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         flexDirection: "column",
         width: "100%"
+    },
+    success: {
+        color: green[500]
     }
 }));
 export default function SetPassword(props) {
@@ -92,6 +92,8 @@ export default function SetPassword(props) {
                     setLoading(false);
                 });
         } else {
+            setLoading(false);
+            setError(true);
             setMessage("Passwords not compare");
         }
     };
@@ -116,6 +118,26 @@ export default function SetPassword(props) {
                             className={classes.form}
                             onSubmit={e => setPasswordHandler(e)}
                         >
+                            <Box display="flex" alignItems="center" mb={2}>
+                                <CheckCircleOutlineIcon
+                                    className={
+                                        password.length >= 5
+                                            ? classes.success
+                                            : null
+                                    }
+                                />
+                                <Typography
+                                    style={{ marginLeft: "10px" }}
+                                    className={
+                                        password.length >= 5
+                                            ? classes.success
+                                            : null
+                                    }
+                                >
+                                    Minimum 5 Characters
+                                </Typography>
+                            </Box>
+
                             <FormControl
                                 fullWidth
                                 style={{ marginBottom: "20px" }}

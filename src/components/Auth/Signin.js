@@ -20,7 +20,9 @@ const useStyles = makeStyles(theme => ({
         marginRight: "10px"
     },
     error: {
-        color: theme.palette.secondary.main
+        color: theme.palette.error.main,
+        fontWeight: "bold",
+        fontSize: "14px"
     }
 }));
 
@@ -82,6 +84,7 @@ export default function Signin(props) {
                     aria-describedby="email-helper-text"
                     type="email"
                     value={values.email}
+                    error={error}
                     onChange={handleChange("email")}
                 />
             </FormControl>
@@ -95,6 +98,7 @@ export default function Signin(props) {
                     type={values.showPassword ? "text" : "password"}
                     value={values.password}
                     onChange={handleChange("password")}
+                    error={error}
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton

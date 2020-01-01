@@ -8,7 +8,6 @@ import { ThemeProvider } from "@material-ui/styles";
 
 export default function LayoutProvider(props) {
     const primary = blue[800];
-    const hover = blue[900];
     const success = green[500];
     const error = red[500];
     const dark = useSelector(state =>
@@ -25,9 +24,6 @@ export default function LayoutProvider(props) {
             },
             error: {
                 main: error
-            },
-            hover: {
-                main: hover
             }
         },
         status: {
