@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Signin(props) {
+export default function Signin({ modalHandler }) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [values, setValues] = useState({
@@ -74,7 +74,13 @@ export default function Signin(props) {
 
     return (
         <form onSubmit={e => signInHandler(e)} autoComplete="off">
-            <h2 style={{ textAlign: "center" }}>Sign in to Kanba</h2>
+            <Typography
+                variant="h4"
+                gutterBottom
+                style={{ textAlign: "center" }}
+            >
+                Sign in to Kanba
+            </Typography>
             <FormControl fullWidth>
                 <InputLabel htmlFor="standard-adornment-email">
                     Email address
@@ -145,7 +151,7 @@ export default function Signin(props) {
                     {loading ? <CircularProgress size={20} /> : "Sign in"}
                 </Button>
                 <Button
-                    onClick={props.modalHandler}
+                    onClick={modalHandler}
                     variant="outlined"
                     color="secondary"
                 >

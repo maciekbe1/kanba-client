@@ -1,6 +1,5 @@
 const INITIAL_DATA = {
     isAuth: false,
-    token: null,
     data: null
 };
 export default (state = INITIAL_DATA, action) => {
@@ -8,14 +7,12 @@ export default (state = INITIAL_DATA, action) => {
         case "SIGNIN_USER":
             return {
                 ...state,
-                token: action.token,
                 isAuth: action.isAuth,
                 data: action.data
             };
         case "SIGNOUT_USER":
             return {
                 ...state,
-                token: null,
                 isAuth: false,
                 data: null
             };

@@ -1,4 +1,5 @@
 import * as API from "../api/API";
+import Cookies from "js-cookie";
 
 export const setTabValue = tabValue => {
     return {
@@ -13,6 +14,7 @@ export const setDarkTheme = darkTheme => {
     };
 };
 export const signOut = () => {
+    Cookies.remove("token");
     return {
         type: "SIGNOUT_USER"
     };
@@ -23,22 +25,14 @@ export const signIn = ({ token, isAuth }) => async dispatch => {
         token
     )
         .then(res => {
+            Cookies.set("token", token);
             return dispatch({
                 type: "SIGNIN_USER",
-                token: token,
                 isAuth: isAuth,
                 data: res.data
             });
         })
-        // .then(() => {
-        //     window.location.assign(`/`);
-        // })
         .catch(err => {
-            return dispatch({
-                type: "SIGNIN_USER",
-                token: null,
-                isAuth: false,
-                data: err.response.data
-            });
+            console.log(err.response.data);
         });
 };

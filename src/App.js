@@ -13,6 +13,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import LayoutProvider from "./components/Layouts/LayoutProvider";
 import Layout from "./components/Layouts/Layout";
 import Test from "./components/Private/Test";
+import Today from "./components/Private/Today/Today";
 import NotFound from "./components/Utils/NotFound";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                             />
                         )}
                         <ProtectedRoute path="/test" component={Test} />
+                        <ProtectedRoute path="/Today" component={Today} />
                         <Route path="/signup" component={Signup} />
                         <Route path="/verify/:hash" component={AccountVerify} />
                         <Route path="/reset-password" component={EmailVerify} />
