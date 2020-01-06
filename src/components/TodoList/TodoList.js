@@ -77,7 +77,6 @@ export default function TodoList() {
       })
       .catch(error => {
         console.log(error.response);
-        setDialog(false);
       });
   };
   const modalHandler = () => {
