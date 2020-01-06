@@ -71,12 +71,14 @@ export default function TodoList() {
       Cookie.get("token"),
       "delete"
     )
-      .then(() => {})
+      .then(() => {
+        getListHandler();
+        setDialog(false);
+      })
       .catch(error => {
         console.log(error.response);
+        setDialog(false);
       });
-    getListHandler();
-    setDialog(false);
   };
   const modalHandler = () => {
     setOpen(!open);
