@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { isEmpty } from "lodash";
+import { isEmpty, cloneDeep, find } from "lodash";
 import DragDropComponent from "./DragDropComponent";
-import { cloneDeep } from "lodash";
 
 import {
   Button,
@@ -70,64 +69,73 @@ export default function TodoList() {
     )
       .then(res => {
         setLoading(false);
-        setTodoList({
-          lists: {
-            ...res.data.map(item => {
-              return item.list;
-            })
-          },
-          info: {
-            ...res.data.map(item => {
-              return {
-                id: item._id,
-                title: item.title,
-                description: item.description
-              };
-            })
-          }
-        });
+        setTodoList(res.data.cards);
         setBackdrop(false);
       })
       .catch(error => {
-        console.log(error.response);
+        console.log(error);
       });
   }, [userID]);
 
   const modalHandler = () => {
     setOpen(!open);
   };
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
 
-  const onDragEnd = ({ destination, source, type }) => {
-    if (type === "list") {
-      setTodoList(prevState => {
-        const newData = cloneDeep(prevState);
-        console.log(newData.lists[source.droppableId]);
-        newData.lists[destination.droppableId].splice(
-          destination.index,
-          0,
-          ...newData.lists[source.droppableId].splice(source.index, 1)
+    return result;
+  };
+  const onDragEnd = result => {
+    setTodoList(prevState => {
+      let newData = cloneDeep(prevState);
+      if (!result.destination) {
+        return newData;
+      } else if (
+        result.type === "LIST" &&
+        result.destination.droppableId === result.source.droppableId
+      ) {
+        newData.map(card => {
+          const data = reorder(
+            card.list,
+            result.source.index,
+            result.destination.index
+          );
+          if (card.id === result.source.droppableId) {
+            card.list = data;
+          }
+          return data;
+        });
+      } else if (
+        result.type === "LIST" &&
+        result.destination.droppableId !== result.source.droppableId
+      ) {
+        const itemId = JSON.parse(result.draggableId).nodeId;
+
+        let start = find(newData, o => {
+          return o.id === result.source.droppableId;
+        });
+        let end = find(newData, o => {
+          return o.id === result.destination.droppableId;
+        });
+        const item = find(
+          newData.map(i => {
+            return find(i.list, item => {
+              return item.id === itemId;
+            });
+          }),
+          o => o !== undefined
         );
 
-        return {
-          ...newData
-        };
-      });
-    }
-    if (destination && source) {
-      setTodoList(prevState => {
-        const newData = cloneDeep(prevState);
-
-        newData.lists[destination.droppableId].splice(
-          destination.index,
-          0,
-          ...newData.lists[source.droppableId].splice(source.index, 1)
-        );
-
-        return {
-          ...newData
-        };
-      });
-    }
+        start.list.splice(result.source.index, 1);
+        end.list.splice(result.destination.index, 0, item);
+      } else {
+        const [removed] = newData.splice(result.source.index, 1);
+        newData.splice(result.destination.index, 0, removed);
+      }
+      return newData;
+    });
   };
   return (
     <>
@@ -142,9 +150,8 @@ export default function TodoList() {
         </Typography>
       ) : (
         <DragDropComponent
-          todoLists={todoList.lists}
+          todoLists={todoList}
           onDragEnd={onDragEnd}
-          todoInfo={todoList.info}
           getListHandler={getListHandler}
         />
       )}

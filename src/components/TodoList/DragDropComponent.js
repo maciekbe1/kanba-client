@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card } from "@material-ui/core";
 import DroppableContainer from "./DroppableContainer";
 import TodoDialog from "./TodoDialog";
@@ -8,7 +8,6 @@ import { request } from "../../api/API";
 
 export default function DragDropComponent({
   todoLists,
-  todoInfo,
   onDragEnd,
   getListHandler
 }) {
@@ -40,17 +39,34 @@ export default function DragDropComponent({
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        {Object.keys(todoLists).map((container, key) => (
-          <Card key={key} style={{ margin: "5px auto" }}>
-            <DroppableContainer
-              droppableId={container}
-              lists={todoLists[container]}
-              info={todoInfo[container]}
-              key={key}
-              removeListHandler={removeListHandler}
-            />
-          </Card>
-        ))}
+        <Droppable droppableId="all-cards" direction="vertical" type="CARD">
+          {provided => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {todoLists.map((card, key) => (
+                <Draggable key={card.id} draggableId={card.id} index={key}>
+                  {provided => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <Card style={{ margin: "5px auto" }}>
+                        <DroppableContainer
+                          droppableId={card}
+                          list={todoLists[key].list}
+                          removeListHandler={removeListHandler}
+                          index={key}
+                        />
+                        {/* {provided.placeholder} */}
+                      </Card>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </DragDropContext>
       <TodoDialog
         approvedRemoveList={approvedRemoveList}

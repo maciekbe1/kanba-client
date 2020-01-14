@@ -9,30 +9,30 @@ import { applyMiddleware, createStore } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import rootReducer from "./reducers";
-import logger from "redux-logger";
+// import logger from "redux-logger";
 import thunk from "redux-thunk";
 
 const persistConfig = {
-    key: "root",
-    storage
+  key: "root",
+  storage
 };
 let middleware = [];
 if (window.location.hostname === "localhost") {
-    middleware = [...middleware, logger, thunk];
+  middleware = [...middleware, thunk];
 } else {
-    middleware = [...middleware, thunk];
+  middleware = [...middleware, thunk];
 }
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = createStore(persistedReducer, applyMiddleware(...middleware));
 
 let persistor = persistStore(store);
 ReactDOM.render(
-    <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-            <App />
-        </PersistGate>
-    </Provider>,
-    document.getElementById("root")
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
