@@ -26,6 +26,7 @@ export default function TodoList() {
   const userID = useSelector(state => state.authReducer.data._id);
   const [loading, setLoading] = useState(true);
   const [todoList, setTodoList] = useState({});
+  const [cardID, setCardID] = useState();
   const [open, setOpen] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
 
@@ -38,22 +39,7 @@ export default function TodoList() {
     )
       .then(res => {
         setLoading(false);
-        setTodoList({
-          lists: {
-            ...res.data.map(item => {
-              return item.list;
-            })
-          },
-          info: {
-            ...res.data.map(item => {
-              return {
-                id: item._id,
-                title: item.title,
-                description: item.description
-              };
-            })
-          }
-        });
+        setTodoList(res.data.cards);
         setBackdrop(false);
       })
       .catch(error => {
@@ -70,6 +56,7 @@ export default function TodoList() {
       .then(res => {
         setLoading(false);
         setTodoList(res.data.cards);
+        setCardID(res.data._id);
         setBackdrop(false);
       })
       .catch(error => {
@@ -153,6 +140,7 @@ export default function TodoList() {
           todoLists={todoList}
           onDragEnd={onDragEnd}
           getListHandler={getListHandler}
+          cardID={cardID}
         />
       )}
       <Modal modalHandler={modalHandler} openProps={open}>

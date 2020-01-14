@@ -9,7 +9,8 @@ import { request } from "../../api/API";
 export default function DragDropComponent({
   todoLists,
   onDragEnd,
-  getListHandler
+  getListHandler,
+  cardID
 }) {
   const [dialog, setDialog] = useState(false);
   const [list, setList] = useState();
@@ -20,9 +21,8 @@ export default function DragDropComponent({
   const approvedRemoveList = () => {
     request(
       `${process.env.REACT_APP_SERVER}/api/todo/remove-todo-list`,
-      { listID: list.id },
-      Cookie.get("token"),
-      "delete"
+      { cardID: list.id, listID: cardID },
+      Cookie.get("token")
     )
       .then(() => {
         getListHandler();

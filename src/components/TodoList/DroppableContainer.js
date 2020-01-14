@@ -30,7 +30,7 @@ export default function DroppableContainer({
             <Typography>{droppableId.title}</Typography>
             <IconButton
               aria-label="delete"
-              onClick={() => removeListHandler(list)}
+              onClick={() => removeListHandler(droppableId)}
             >
               <DeleteIcon />
             </IconButton>

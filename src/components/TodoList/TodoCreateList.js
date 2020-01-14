@@ -43,7 +43,10 @@ export default function TodoCreateList({ modalHandler, user, getListHandler }) {
     setLoading(true);
     request(
       `${process.env.REACT_APP_SERVER}/api/todo/create-todo-list`,
-      values,
+      {
+        user: values.user,
+        cards: { title: values.title, description: values.description }
+      },
       Cookie.get("token")
     )
       .then(() => {
