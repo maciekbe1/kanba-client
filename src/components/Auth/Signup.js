@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as API from "../../api/API";
+import * as API from "api/API";
 
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -21,208 +21,181 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
-    button: {
-        marginRight: "10px"
-    },
-    icon: {
-        fontSize: 100,
-        color: theme.palette.success.main
-    },
-    bold: {
-        fontWeight: "bold"
-    }
+  button: {
+    marginRight: "10px"
+  },
+  icon: {
+    fontSize: 100,
+    color: theme.palette.success.main
+  },
+  bold: {
+    fontWeight: "bold"
+  }
 }));
 export default function Signup() {
-    const classes = useStyles();
-    const [values, setValues] = useState({
-        email: "",
-        password: "",
-        name: "",
-        showPassword: false
-    });
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
+  const classes = useStyles();
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+    name: "",
+    showPassword: false
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
-    const handleChange = prop => event => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
-    const handleClickShowPassword = () => {
-        setValues({ ...values, showPassword: !values.showPassword });
-    };
-    const handleMouseDownPassword = event => {
-        event.preventDefault();
-    };
-    const signUpHandler = e => {
-        e.preventDefault();
-        API.request(`${process.env.REACT_APP_SERVER}/api/users/signUp`, {
-            name: values.name,
-            password: values.password,
-            email: values.email
-        })
-            .then(() => {
-                setSuccess(true);
-            })
-            .catch(err => {
-                setError(err.response.data);
-            });
-    };
-    return (
-        <Container maxWidth="lg">
-            {!success ? (
-                <Grid container display="flex" justify="center">
-                    <Grid item lg={6} xs={8}>
-                        <form
-                            align="center"
-                            autoComplete="off"
-                            onSubmit={e => signUpHandler(e)}
+  const handleChange = prop => event => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+  const handleMouseDownPassword = event => {
+    event.preventDefault();
+  };
+  const signUpHandler = e => {
+    e.preventDefault();
+    API.request(`${process.env.REACT_APP_SERVER}/api/users/signUp`, {
+      name: values.name,
+      password: values.password,
+      email: values.email
+    })
+      .then(() => {
+        setSuccess(true);
+      })
+      .catch(err => {
+        setError(err.response.data);
+      });
+  };
+  return (
+    <Container maxWidth="lg">
+      {!success ? (
+        <Grid container display="flex" justify="center">
+          <Grid item lg={6} xs={8}>
+            <form
+              align="center"
+              autoComplete="off"
+              onSubmit={e => signUpHandler(e)}
+            >
+              <h5>Join Kanba</h5>
+              <h1>Create your account</h1>
+              <Box display="flex" alignItems="center">
+                <Mail color="primary" style={{ marginRight: "10px" }} />
+                <FormControl fullWidth style={{ marginBottom: "20px" }}>
+                  <InputLabel htmlFor="standard-adornment-email">
+                    Email address
+                  </InputLabel>
+                  <Input
+                    id="email"
+                    aria-describedby="email-helper-text"
+                    type="email"
+                    value={values.email}
+                    onChange={handleChange("email")}
+                  />
+                </FormControl>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <AccountCircle
+                  color="primary"
+                  style={{ marginRight: "10px" }}
+                />
+                <FormControl fullWidth style={{ marginBottom: "20px" }}>
+                  <InputLabel htmlFor="standard-adornment-name">
+                    Name
+                  </InputLabel>
+                  <Input
+                    id="name"
+                    aria-describedby="name-helper-text"
+                    type="name"
+                    value={values.name}
+                    onChange={handleChange("name")}
+                  />
+                </FormControl>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <Lock color="primary" style={{ marginRight: "10px" }} />
+                <FormControl fullWidth style={{ marginBottom: "20px" }}>
+                  <InputLabel htmlFor="standard-adornment-password">
+                    Password
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-password"
+                    type={values.showPassword ? "text" : "password"}
+                    value={values.password}
+                    onChange={handleChange("password")}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
                         >
-                            <h5>Join Kanba</h5>
-                            <h1>Create your account</h1>
-                            <Box display="flex" alignItems="center">
-                                <Mail
-                                    color="primary"
-                                    style={{ marginRight: "10px" }}
-                                />
-                                <FormControl
-                                    fullWidth
-                                    style={{ marginBottom: "20px" }}
-                                >
-                                    <InputLabel htmlFor="standard-adornment-email">
-                                        Email address
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        aria-describedby="email-helper-text"
-                                        type="email"
-                                        value={values.email}
-                                        onChange={handleChange("email")}
-                                    />
-                                </FormControl>
-                            </Box>
-                            <Box display="flex" alignItems="center">
-                                <AccountCircle
-                                    color="primary"
-                                    style={{ marginRight: "10px" }}
-                                />
-                                <FormControl
-                                    fullWidth
-                                    style={{ marginBottom: "20px" }}
-                                >
-                                    <InputLabel htmlFor="standard-adornment-name">
-                                        Name
-                                    </InputLabel>
-                                    <Input
-                                        id="name"
-                                        aria-describedby="name-helper-text"
-                                        type="name"
-                                        value={values.name}
-                                        onChange={handleChange("name")}
-                                    />
-                                </FormControl>
-                            </Box>
-                            <Box display="flex" alignItems="center">
-                                <Lock
-                                    color="primary"
-                                    style={{ marginRight: "10px" }}
-                                />
-                                <FormControl
-                                    fullWidth
-                                    style={{ marginBottom: "20px" }}
-                                >
-                                    <InputLabel htmlFor="standard-adornment-password">
-                                        Password
-                                    </InputLabel>
-                                    <Input
-                                        id="standard-adornment-password"
-                                        type={
-                                            values.showPassword
-                                                ? "text"
-                                                : "password"
-                                        }
-                                        value={values.password}
-                                        onChange={handleChange("password")}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={
-                                                        handleClickShowPassword
-                                                    }
-                                                    onMouseDown={
-                                                        handleMouseDownPassword
-                                                    }
-                                                >
-                                                    {values.showPassword ? (
-                                                        <Visibility />
-                                                    ) : (
-                                                        <VisibilityOff />
-                                                    )}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                    />
-                                </FormControl>
-                            </Box>
-                            {!success ? (
-                                <FormControl
-                                    style={{
-                                        marginBottom: "20px",
-                                        color: "red"
-                                    }}
-                                >
-                                    <FormHelperText id="my-helper-text">
-                                        {error}
-                                    </FormHelperText>
-                                </FormControl>
-                            ) : null}
-                            <Button
-                                style={{ marginTop: "20px" }}
-                                type="submit"
-                                color="primary"
-                                variant="contained"
-                                fullWidth
-                                className={classes.button}
-                            >
-                                Sign up
-                            </Button>
-                        </form>
-                    </Grid>
-                </Grid>
-            ) : (
-                <Container maxWidth="sm">
-                    <Box
-                        mt={2}
-                        display="flex"
-                        boxShadow={3}
-                        justifyContent="center"
-                        flexDirection="column"
-                        alignItems="center"
-                    >
-                        <CheckCircleOutlineIcon className={classes.icon} />
-                        <Typography
-                            align="center"
-                            color="textSecondary"
-                            variant="h2"
-                            gutterBottom
-                        >
-                            Account Created
-                        </Typography>
-                        <Typography align="center" variant="subtitle1">
-                            Thank you for registering. Check your email for
-                            verification link.
-                        </Typography>
-                        <Typography
-                            align="center"
-                            variant="subtitle1"
-                            gutterBottom
-                            className={classes.bold}
-                        >
-                            After verify you will successful login to
-                            application.
-                        </Typography>
-                    </Box>
-                </Container>
-            )}
+                          {values.showPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </Box>
+              {!success ? (
+                <FormControl
+                  style={{
+                    marginBottom: "20px",
+                    color: "red"
+                  }}
+                >
+                  <FormHelperText id="my-helper-text">{error}</FormHelperText>
+                </FormControl>
+              ) : null}
+              <Button
+                style={{ marginTop: "20px" }}
+                type="submit"
+                color="primary"
+                variant="contained"
+                fullWidth
+                className={classes.button}
+              >
+                Sign up
+              </Button>
+            </form>
+          </Grid>
+        </Grid>
+      ) : (
+        <Container maxWidth="sm">
+          <Box
+            mt={2}
+            display="flex"
+            boxShadow={3}
+            justifyContent="center"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <CheckCircleOutlineIcon className={classes.icon} />
+            <Typography
+              align="center"
+              color="textSecondary"
+              variant="h2"
+              gutterBottom
+            >
+              Account Created
+            </Typography>
+            <Typography align="center" variant="subtitle1">
+              Thank you for registering. Check your email for verification link.
+            </Typography>
+            <Typography
+              align="center"
+              variant="subtitle1"
+              gutterBottom
+              className={classes.bold}
+            >
+              After verify you will successful login to application.
+            </Typography>
+          </Box>
         </Container>
-    );
+      )}
+    </Container>
+  );
 }

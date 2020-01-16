@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { request } from "../../api/API";
+import { request } from "api/API";
 import Cookie from "js-cookie";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -68,6 +68,7 @@ export default function TodoCreateList({ modalHandler, user, getListHandler }) {
         <TextField
           fullWidth
           required
+          error={error}
           id="standard-required"
           label="Title"
           value={values.title}

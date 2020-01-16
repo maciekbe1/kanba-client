@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { isEmpty, cloneDeep, find } from "lodash";
 import DragDropComponent from "./DragDropComponent";
+import { signOut } from "actions";
 
 import {
   Button,
@@ -9,7 +10,7 @@ import {
   LinearProgress,
   Backdrop
 } from "@material-ui/core";
-import { request } from "../../api/API";
+import { request } from "api/API";
 import Cookie from "js-cookie";
 import Modal from "../Utils/Modal";
 import TodoCreateList from "./TodoCreateList";
@@ -24,6 +25,8 @@ const useStyles = makeStyles(theme => ({
 export default function TodoList() {
   const classes = useStyles();
   const userID = useSelector(state => state.authReducer.data._id);
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(true);
   const [todoList, setTodoList] = useState({});
   const [cardID, setCardID] = useState();
@@ -60,9 +63,12 @@ export default function TodoList() {
         setBackdrop(false);
       })
       .catch(error => {
-        console.log(error);
+        if (error.response.data === "Invalid token") {
+          alert("Twoja sesja wygasła, zaloguj sie ponownie");
+          dispatch(signOut());
+        }
       });
-  }, [userID]);
+  }, [userID, dispatch]);
 
   const modalHandler = () => {
     setOpen(!open);

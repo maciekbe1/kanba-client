@@ -4,7 +4,7 @@ import { Card } from "@material-ui/core";
 import DroppableContainer from "./DroppableContainer";
 import TodoDialog from "./TodoDialog";
 import Cookie from "js-cookie";
-import { request } from "../../api/API";
+import { request } from "api/API";
 
 export default function DragDropComponent({
   todoLists,
@@ -39,7 +39,7 @@ export default function DragDropComponent({
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="all-cards" direction="vertical" type="CARD">
+        <Droppable droppableId="all-cards" type="CARD">
           {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {todoLists.map((card, key) => (
