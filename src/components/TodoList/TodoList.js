@@ -104,25 +104,15 @@ export default function TodoList() {
         result.type === "LIST" &&
         result.destination.droppableId !== result.source.droppableId
       ) {
-        const itemId = JSON.parse(result.draggableId).nodeId;
-
         let start = find(newData, o => {
           return o.id === result.source.droppableId;
         });
         let end = find(newData, o => {
           return o.id === result.destination.droppableId;
         });
-        const item = find(
-          newData.map(i => {
-            return find(i.list, item => {
-              return item.id === itemId;
-            });
-          }),
-          o => o !== undefined
-        );
 
-        start.list.splice(result.source.index, 1);
-        end.list.splice(result.destination.index, 0, item);
+        const [removed] = start.list.splice(result.source.index, 1);
+        end.list.splice(result.destination.index, 0, removed);
       } else {
         const [removed] = newData.splice(result.source.index, 1);
         newData.splice(result.destination.index, 0, removed);
@@ -133,7 +123,7 @@ export default function TodoList() {
   return (
     <>
       <Button variant="contained" color="primary" onClick={modalHandler}>
-        Create new Todo List
+        Utwórz nową kartę
       </Button>
       {loading ? (
         <LinearProgress style={{ margin: "10px 0" }} />

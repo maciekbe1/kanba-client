@@ -62,7 +62,7 @@ export default function TodoCreateList({ modalHandler, user, getListHandler }) {
   return (
     <>
       <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
-        Create To do List
+        Utwórz kartę
       </Typography>
       <form noValidate autoComplete="off" onSubmit={e => createListHandler(e)}>
         <TextField

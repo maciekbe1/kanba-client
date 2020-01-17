@@ -8,8 +8,13 @@ import {
   IconButton
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
+const useStyles = makeStyles(theme => ({
+  cardTitle: {
+    wordBreak: "break-all"
+  }
+}));
 export default function DroppableContainer({
   droppableId,
   list,
@@ -18,6 +23,7 @@ export default function DroppableContainer({
   const getListStyle = isDraggingOver => ({
     // background: isDraggingOver ? "#212121" : ""
   });
+  const classes = useStyles();
   return (
     <Droppable droppableId={droppableId.id} type="LIST">
       {(provided, snapshot) => (
@@ -27,7 +33,9 @@ export default function DroppableContainer({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography>{droppableId.title}</Typography>
+            <Typography className={classes.cardTitle}>
+              {droppableId.title}
+            </Typography>
             <IconButton
               aria-label="delete"
               onClick={() => removeListHandler(droppableId)}
