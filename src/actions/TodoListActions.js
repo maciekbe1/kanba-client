@@ -85,3 +85,10 @@ export const createCard = values => {
     payload: values
   };
 };
+
+export const createItem = payload => {
+  return {
+    type: "CREATE_ITEM",
+    payload
+  };
+};

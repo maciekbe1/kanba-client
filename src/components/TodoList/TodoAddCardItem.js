@@ -13,6 +13,8 @@ import {
   FormHelperText,
   CircularProgress
 } from "@material-ui/core";
+import { createItem } from "actions/TodoListActions";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -24,8 +26,10 @@ const useStyles = makeStyles(theme => ({
     fontSize: "14px"
   }
 }));
-export default function TodoAddCardItem({ modalHandler, listID, cardItem }) {
+export default function TodoAddCardItem({ modalHandler, todoID, cardItem }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const [values, setValues] = useState({
     id: cuid(),
     title: "",
@@ -46,10 +50,16 @@ export default function TodoAddCardItem({ modalHandler, listID, cardItem }) {
     setLoading(true);
     request(
       `${process.env.REACT_APP_SERVER}/api/todo/add-todo-item`,
-      { listID: listID, cardID: cardItem.id, item: values },
+      { todoID: todoID, cardID: cardItem.id, item: values },
       Cookie.get("token")
     )
       .then(() => {
+        dispatch(
+          createItem({
+            cardID: cardItem.id,
+            values
+          })
+        );
         modalHandler();
       })
       .catch(error => {

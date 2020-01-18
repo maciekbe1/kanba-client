@@ -1,4 +1,4 @@
-import { remove } from "lodash";
+import { remove, find } from "lodash";
 
 const INITIAL_DATA = {
   todoState: []
@@ -27,6 +27,17 @@ export default (state = INITIAL_DATA, action) => {
         ...state,
         todoState: {
           cards: [action.payload.values, ...state.todoState.cards],
+          _id: state.todoState._id
+        }
+      };
+    case "CREATE_ITEM":
+      find(state.todoState.cards, { id: action.payload.cardID }).list.push(
+        action.payload.values
+      );
+      return {
+        ...state,
+        todoState: {
+          cards: state.todoState.cards,
           _id: state.todoState._id
         }
       };
