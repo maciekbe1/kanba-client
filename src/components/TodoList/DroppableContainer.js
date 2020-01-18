@@ -8,6 +8,7 @@ import {
   IconButton
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 const useStyles = makeStyles(theme => ({
@@ -18,7 +19,8 @@ const useStyles = makeStyles(theme => ({
 export default function DroppableContainer({
   droppableId,
   list,
-  removeListHandler
+  removeListHandler,
+  modalHandler
 }) {
   const getListStyle = isDraggingOver => ({
     // background: isDraggingOver ? "#212121" : ""
@@ -36,12 +38,20 @@ export default function DroppableContainer({
             <Typography className={classes.cardTitle}>
               {droppableId.title}
             </Typography>
-            <IconButton
-              aria-label="delete"
-              onClick={() => removeListHandler(droppableId)}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <Box>
+              <IconButton
+                aria-label="add"
+                onClick={() => modalHandler(droppableId)}
+              >
+                <AddIcon />
+              </IconButton>
+              <IconButton
+                aria-label="delete"
+                onClick={() => removeListHandler(droppableId)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
           </Box>
           <List style={getListStyle(snapshot.isDraggingOver)}>
             {list && list.length > 0 ? (

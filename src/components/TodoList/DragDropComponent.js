@@ -5,23 +5,31 @@ import DroppableContainer from "./DroppableContainer";
 import TodoDialog from "./TodoDialog";
 import Cookie from "js-cookie";
 import { request } from "api/API";
-
+import Modal from "../Utils/Modal";
+import TodoAddItem from "./TodoAddItem";
 export default function DragDropComponent({
   todoLists,
   onDragEnd,
   getListHandler,
-  cardID
+  listID
 }) {
   const [dialog, setDialog] = useState(false);
-  const [list, setList] = useState();
+  const [cardItem, setCardItem] = useState();
+  const [open, setOpen] = useState(false);
+
+  const modalHandler = card => {
+    setCardItem(card);
+    setOpen(!open);
+  };
 
   const dialogHandler = () => {
     setDialog(!dialog);
   };
+
   const approvedRemoveList = () => {
     request(
       `${process.env.REACT_APP_SERVER}/api/todo/remove-todo-list`,
-      { cardID: list.id, listID: cardID },
+      { listID: listID, cardID: cardItem.id },
       Cookie.get("token")
     )
       .then(() => {
@@ -32,10 +40,12 @@ export default function DragDropComponent({
         console.log(error.response);
       });
   };
-  const removeListHandler = list => {
-    setList(list);
+
+  const removeListHandler = card => {
+    setCardItem(card);
     setDialog(true);
   };
+
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -56,6 +66,7 @@ export default function DragDropComponent({
                           list={todoLists[key].list}
                           removeListHandler={removeListHandler}
                           index={key}
+                          modalHandler={modalHandler}
                         />
                         {/* {provided.placeholder} */}
                       </Card>
@@ -72,8 +83,16 @@ export default function DragDropComponent({
         approvedRemoveList={approvedRemoveList}
         dialog={dialog}
         dialogHandler={dialogHandler}
-        list={list}
+        cardItem={cardItem}
       />
+      <Modal modalHandler={modalHandler} openProps={open}>
+        <TodoAddItem
+          modalHandler={modalHandler}
+          listID={listID}
+          cardItem={cardItem}
+          getListHandler={getListHandler}
+        />
+      </Modal>
     </>
   );
 }

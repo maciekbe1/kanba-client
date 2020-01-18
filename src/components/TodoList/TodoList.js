@@ -29,7 +29,7 @@ export default function TodoList() {
 
   const [loading, setLoading] = useState(true);
   const [todoList, setTodoList] = useState({});
-  const [cardID, setCardID] = useState();
+  const [listID, setListID] = useState();
   const [open, setOpen] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
 
@@ -59,7 +59,7 @@ export default function TodoList() {
       .then(res => {
         setLoading(false);
         setTodoList(res.data.cards);
-        setCardID(res.data._id);
+        setListID(res.data._id);
         setBackdrop(false);
       })
       .catch(error => {
@@ -73,6 +73,7 @@ export default function TodoList() {
   const modalHandler = () => {
     setOpen(!open);
   };
+
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -80,6 +81,7 @@ export default function TodoList() {
 
     return result;
   };
+
   const onDragEnd = result => {
     setTodoList(prevState => {
       let newData = cloneDeep(prevState);
@@ -110,7 +112,6 @@ export default function TodoList() {
         let end = find(newData, o => {
           return o.id === result.destination.droppableId;
         });
-
         const [removed] = start.list.splice(result.source.index, 1);
         end.list.splice(result.destination.index, 0, removed);
       } else {
@@ -120,6 +121,7 @@ export default function TodoList() {
       return newData;
     });
   };
+
   return (
     <>
       <Button variant="contained" color="primary" onClick={modalHandler}>
@@ -136,7 +138,7 @@ export default function TodoList() {
           todoLists={todoList}
           onDragEnd={onDragEnd}
           getListHandler={getListHandler}
-          cardID={cardID}
+          listID={listID}
         />
       )}
       <Modal modalHandler={modalHandler} openProps={open}>
