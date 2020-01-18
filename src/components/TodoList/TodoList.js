@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { isEmpty, cloneDeep, find } from "lodash";
+import { isEmpty, cloneDeep } from "lodash";
+import {
+  setTodo,
+  cardItemChange,
+  cardItemShared,
+  cardChange
+} from "actions/TodoListActions";
+import TodoCreateCard from "./TodoCreateCard";
 import DragDropComponent from "./DragDropComponent";
-import { signOut } from "actions";
-
+import Modal from "../Utils/Modal";
 import {
   Button,
   Typography,
-  LinearProgress,
-  Backdrop
+  Backdrop,
+  CircularProgress
 } from "@material-ui/core";
-import { request } from "api/API";
-import Cookie from "js-cookie";
-import Modal from "../Utils/Modal";
-import TodoCreateList from "./TodoCreateList";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -25,101 +26,68 @@ const useStyles = makeStyles(theme => ({
 export default function TodoList() {
   const classes = useStyles();
   const userID = useSelector(state => state.authReducer.data._id);
+  const todo = useSelector(state => state.todoStateReducer.todoState);
   const dispatch = useDispatch();
-
   const [loading, setLoading] = useState(true);
-  const [todoList, setTodoList] = useState({});
-  const [listID, setListID] = useState();
   const [open, setOpen] = useState(false);
-  const [backdrop, setBackdrop] = useState(false);
-
-  const getListHandler = () => {
-    setBackdrop(true);
-    request(
-      `${process.env.REACT_APP_SERVER}/api/todo/get-user-todo-lists`,
-      { userID },
-      Cookie.get("token")
-    )
-      .then(res => {
-        setLoading(false);
-        setTodoList(res.data.cards);
-        setBackdrop(false);
-      })
-      .catch(error => {
-        console.log(error.response);
-      });
-  };
+  const [backdrop, setBackdrop] = useState(true);
 
   useEffect(() => {
-    request(
-      `${process.env.REACT_APP_SERVER}/api/todo/get-user-todo-lists`,
-      { userID },
-      Cookie.get("token")
-    )
-      .then(res => {
-        setLoading(false);
-        setTodoList(res.data.cards);
-        setListID(res.data._id);
-        setBackdrop(false);
-      })
-      .catch(error => {
-        if (error.response.data === "Invalid token") {
-          alert("Twoja sesja wygasła, zaloguj sie ponownie");
-          dispatch(signOut());
-        }
-      });
+    let didCancel = false;
+    async function fetchData() {
+      !didCancel && setLoading(true) && setBackdrop(true);
+      try {
+        !didCancel &&
+          (await dispatch(
+            setTodo({
+              userID: userID
+            })
+          ));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        !didCancel && setLoading(false) && setBackdrop(false);
+      }
+    }
+    fetchData();
   }, [userID, dispatch]);
 
   const modalHandler = () => {
     setOpen(!open);
   };
 
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-
-    return result;
-  };
-
   const onDragEnd = result => {
-    setTodoList(prevState => {
-      let newData = cloneDeep(prevState);
-      if (!result.destination) {
-        return newData;
-      } else if (
-        result.type === "LIST" &&
-        result.destination.droppableId === result.source.droppableId
-      ) {
-        newData.map(card => {
-          const data = reorder(
-            card.list,
-            result.source.index,
-            result.destination.index
-          );
-          if (card.id === result.source.droppableId) {
-            card.list = data;
-          }
-          return data;
-        });
-      } else if (
-        result.type === "LIST" &&
-        result.destination.droppableId !== result.source.droppableId
-      ) {
-        let start = find(newData, o => {
-          return o.id === result.source.droppableId;
-        });
-        let end = find(newData, o => {
-          return o.id === result.destination.droppableId;
-        });
-        const [removed] = start.list.splice(result.source.index, 1);
-        end.list.splice(result.destination.index, 0, removed);
-      } else {
-        const [removed] = newData.splice(result.source.index, 1);
-        newData.splice(result.destination.index, 0, removed);
-      }
-      return newData;
-    });
+    let newData = cloneDeep(todo);
+    if (!result.destination) {
+      return todo.cards;
+    } else if (
+      result.type === "LIST" &&
+      result.destination.droppableId === result.source.droppableId
+    ) {
+      dispatch(
+        cardItemChange({
+          todo: newData,
+          result
+        })
+      );
+    } else if (
+      result.type === "LIST" &&
+      result.destination.droppableId !== result.source.droppableId
+    ) {
+      dispatch(
+        cardItemShared({
+          todo,
+          result
+        })
+      );
+    } else {
+      dispatch(
+        cardChange({
+          todo,
+          result
+        })
+      );
+    }
   };
 
   return (
@@ -128,29 +96,23 @@ export default function TodoList() {
         Utwórz nową kartę
       </Button>
       {loading ? (
-        <LinearProgress style={{ margin: "10px 0" }} />
-      ) : isEmpty(todoList) ? (
+        <Backdrop className={classes.backdrop} open={backdrop}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : isEmpty(todo.cards) ? (
         <Typography variant="subtitle1" style={{ margin: "10px 0" }}>
-          You do not have any list currently
+          nie masz list
         </Typography>
       ) : (
         <DragDropComponent
-          todoLists={todoList}
+          cards={todo.cards}
           onDragEnd={onDragEnd}
-          getListHandler={getListHandler}
-          listID={listID}
+          todoID={todo._id}
         />
       )}
       <Modal modalHandler={modalHandler} openProps={open}>
-        <TodoCreateList
-          modalHandler={modalHandler}
-          user={userID}
-          getListHandler={getListHandler}
-        />
+        <TodoCreateCard modalHandler={modalHandler} user={userID} />
       </Modal>
-      <Backdrop className={classes.backdrop} open={backdrop}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </>
   );
 }

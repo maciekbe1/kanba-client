@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signOut } from "actions";
+import { signOut } from "actions/UserActions";
 import { useSelector } from "react-redux";
 import { setTabValue } from "actions";
 import { setDarkTheme } from "actions";

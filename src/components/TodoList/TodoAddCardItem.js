@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { request } from "api/API";
 import Cookie from "js-cookie";
+import cuid from "cuid";
 
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -9,9 +10,9 @@ import {
   Box,
   Button,
   FormControl,
-  FormHelperText
+  FormHelperText,
+  CircularProgress
 } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -23,13 +24,14 @@ const useStyles = makeStyles(theme => ({
     fontSize: "14px"
   }
 }));
-export default function TodoCreateList({ modalHandler, user, getListHandler }) {
+export default function TodoAddCardItem({ modalHandler, listID, cardItem }) {
   const classes = useStyles();
   const [values, setValues] = useState({
-    user: user,
+    id: cuid(),
     title: "",
     description: ""
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -37,21 +39,18 @@ export default function TodoCreateList({ modalHandler, user, getListHandler }) {
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
-  const createListHandler = e => {
+
+  const addItemHandler = e => {
     e.preventDefault();
     setError(false);
     setLoading(true);
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/create-todo-list`,
-      {
-        user: values.user,
-        cards: { title: values.title, description: values.description }
-      },
+      `${process.env.REACT_APP_SERVER}/api/todo/add-todo-item`,
+      { listID: listID, cardID: cardItem.id, item: values },
       Cookie.get("token")
     )
       .then(() => {
         modalHandler();
-        getListHandler();
       })
       .catch(error => {
         setError(true);
@@ -62,9 +61,9 @@ export default function TodoCreateList({ modalHandler, user, getListHandler }) {
   return (
     <>
       <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
-        Utwórz kartę
+        Utwórz zadanie
       </Typography>
-      <form noValidate autoComplete="off" onSubmit={e => createListHandler(e)}>
+      <form noValidate autoComplete="off" onSubmit={e => addItemHandler(e)}>
         <TextField
           fullWidth
           required

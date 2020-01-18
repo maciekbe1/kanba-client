@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as API from "api/API";
 import { useDispatch } from "react-redux";
-import { signIn } from "actions";
+import { signIn } from "actions/UserActions";
 import { FormControl, Link } from "@material-ui/core";
 import { Input } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";

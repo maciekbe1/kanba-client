@@ -2,17 +2,11 @@ import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card } from "@material-ui/core";
 import DroppableContainer from "./DroppableContainer";
-import TodoDialog from "./TodoDialog";
-import Cookie from "js-cookie";
-import { request } from "api/API";
+import TodoCardRemove from "./TodoCardRemove";
+
 import Modal from "../Utils/Modal";
-import TodoAddItem from "./TodoAddItem";
-export default function DragDropComponent({
-  todoLists,
-  onDragEnd,
-  getListHandler,
-  listID
-}) {
+import TodoAddCardItem from "./TodoAddCardItem";
+export default function DragDropComponent({ cards, onDragEnd, todoID }) {
   const [dialog, setDialog] = useState(false);
   const [cardItem, setCardItem] = useState();
   const [open, setOpen] = useState(false);
@@ -26,21 +20,6 @@ export default function DragDropComponent({
     setDialog(!dialog);
   };
 
-  const approvedRemoveList = () => {
-    request(
-      `${process.env.REACT_APP_SERVER}/api/todo/remove-todo-list`,
-      { listID: listID, cardID: cardItem.id },
-      Cookie.get("token")
-    )
-      .then(() => {
-        getListHandler();
-        setDialog(false);
-      })
-      .catch(error => {
-        console.log(error.response);
-      });
-  };
-
   const removeListHandler = card => {
     setCardItem(card);
     setDialog(true);
@@ -52,7 +31,7 @@ export default function DragDropComponent({
         <Droppable droppableId="all-cards" type="CARD">
           {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {todoLists.map((card, key) => (
+              {cards.map((card, key) => (
                 <Draggable key={card.id} draggableId={card.id} index={key}>
                   {provided => (
                     <div
@@ -63,7 +42,7 @@ export default function DragDropComponent({
                       <Card style={{ margin: "5px auto" }}>
                         <DroppableContainer
                           droppableId={card}
-                          list={todoLists[key].list}
+                          list={cards[key].list}
                           removeListHandler={removeListHandler}
                           index={key}
                           modalHandler={modalHandler}
@@ -79,18 +58,17 @@ export default function DragDropComponent({
           )}
         </Droppable>
       </DragDropContext>
-      <TodoDialog
-        approvedRemoveList={approvedRemoveList}
+      <TodoCardRemove
         dialog={dialog}
         dialogHandler={dialogHandler}
         cardItem={cardItem}
+        todoID={todoID}
       />
       <Modal modalHandler={modalHandler} openProps={open}>
-        <TodoAddItem
+        <TodoAddCardItem
           modalHandler={modalHandler}
-          listID={listID}
+          todoID={todoID}
           cardItem={cardItem}
-          getListHandler={getListHandler}
         />
       </Modal>
     </>

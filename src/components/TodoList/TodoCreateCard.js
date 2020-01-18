@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { request } from "api/API";
 import Cookie from "js-cookie";
 import cuid from "cuid";
-
 import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
@@ -13,6 +12,8 @@ import {
   FormHelperText
 } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { createCard } from "actions/TodoListActions";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -24,41 +25,43 @@ const useStyles = makeStyles(theme => ({
     fontSize: "14px"
   }
 }));
-export default function TodoAdditem({
-  modalHandler,
-  listID,
-  cardItem,
-  getListHandler
-}) {
+export default function TodoCreateList({ modalHandler, user }) {
   const classes = useStyles();
   const [values, setValues] = useState({
     id: cuid(),
     title: "",
     description: ""
   });
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
-
-  const addItemHandler = e => {
+  const createListHandler = e => {
     e.preventDefault();
     setError(false);
     setLoading(true);
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/add-todo-item`,
-      { listID: listID, cardID: cardItem.id, item: values },
+      `${process.env.REACT_APP_SERVER}/api/todo/create-todo-list`,
+      {
+        user,
+        cards: {
+          id: values.id,
+          title: values.title,
+          description: values.description
+        }
+      },
       Cookie.get("token")
     )
       .then(() => {
+        dispatch(createCard({ values }));
         modalHandler();
-        getListHandler();
       })
       .catch(error => {
+        console.log(error);
         setError(true);
         setLoading(false);
         setMessage(error.response.data);
@@ -69,7 +72,7 @@ export default function TodoAdditem({
       <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
         Utwórz kartę
       </Typography>
-      <form noValidate autoComplete="off" onSubmit={e => addItemHandler(e)}>
+      <form noValidate autoComplete="off" onSubmit={e => createListHandler(e)}>
         <TextField
           fullWidth
           required
