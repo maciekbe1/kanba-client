@@ -5,7 +5,7 @@ import { find } from "lodash";
 
 export const setTodo = ({ userID }) => async dispatch => {
   return request(
-    `${process.env.REACT_APP_SERVER}/api/todo/get-user-todo-lists`,
+    `${process.env.REACT_APP_SERVER}/api/todo/get-user-todo-cards`,
     { userID },
     Cookie.get("token")
   )

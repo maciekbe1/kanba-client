@@ -25,7 +25,7 @@ export default function TodoDialog({
   const dispatch = useDispatch();
   const approvedRemoveList = () => {
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/remove-todo-list`,
+      `${process.env.REACT_APP_SERVER}/api/todo/remove-todo-card`,
       { todoID: todoID, cardID: cardItem.id },
       Cookie.get("token")
     )

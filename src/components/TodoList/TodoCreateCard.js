@@ -45,7 +45,7 @@ export default function TodoCreateList({ modalHandler, user }) {
     setError(false);
     setLoading(true);
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/create-todo-list`,
+      `${process.env.REACT_APP_SERVER}/api/todo/create-todo-card`,
       {
         user,
         cards: {

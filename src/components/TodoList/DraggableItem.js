@@ -1,7 +1,8 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Typography, ListItem } from "@material-ui/core";
-const styles = {
+import { Typography, ListItem, Box, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles(theme => ({
   columnStyles: {
     flex: " 0 0 100%",
     maxWidth: "100%",
@@ -10,19 +11,25 @@ const styles = {
   },
   rowStyles: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    "&:hover": {
+      background: "#b3b1b1",
+      borderRadius: "5px"
+    }
   }
-};
+}));
 const getItemStyle = (isDragging, draggableStyle) => ({
   // styles we need to apply on draggables
   ...draggableStyle,
 
-  ...(isDragging &&
-    {
-      // background: "rgb(235,235,235)"
-    })
+  ...(isDragging && {
+    borderRadius: "5px",
+    background: "#9a9797"
+  })
 });
 export default function DraggableItem({ item, index }) {
+  const classes = useStyles();
+
   return (
     <Draggable
       key={item.id}
@@ -41,10 +48,17 @@ export default function DraggableItem({ item, index }) {
             snapshot.isDragging,
             provided.draggableProps.style
           )}
+          className={classes.rowStyles}
         >
-          <div style={styles.columnStyles}>
+          <Box
+            className={classes.columnStyles}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Typography>{item.title}</Typography>
-          </div>
+            <Button variant="outlined">Usuń</Button>
+          </Box>
         </ListItem>
       )}
     </Draggable>
