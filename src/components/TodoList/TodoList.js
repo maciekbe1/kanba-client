@@ -84,7 +84,7 @@ export default function TodoList() {
         Utwórz nową kartę
       </Button>
       {loading ? (
-        <Skeleton variant="rect" height={118} />
+        <Skeleton variant="rect" height={118} animation="wave" />
       ) : isEmpty(todo.cards) ? (
         <Typography variant="subtitle1" style={{ margin: "10px 0" }}>
           nie masz list
