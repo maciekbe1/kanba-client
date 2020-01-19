@@ -41,6 +41,18 @@ export default (state = INITIAL_DATA, action) => {
           _id: state.todoState._id
         }
       };
+    case "REMOVE_ITEM":
+      remove(
+        find(state.todoState.cards, { id: action.payload.cardID }).list,
+        item => item.id === action.payload.itemID
+      );
+      return {
+        ...state,
+        todoState: {
+          cards: state.todoState.cards,
+          _id: state.todoState._id
+        }
+      };
     default:
       return state;
   }

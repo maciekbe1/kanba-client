@@ -2,18 +2,22 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Typography, ListItem, Box, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch } from "react-redux";
+import { removeItem } from "actions/TodoActions";
+import { setBackdrop } from "actions";
+import { request } from "api/API";
+import Cookie from "js-cookie";
 const useStyles = makeStyles(theme => ({
   columnStyles: {
     flex: " 0 0 100%",
     maxWidth: "100%",
-    position: "relative",
-    padding: "0 15px"
+    position: "relative"
   },
   rowStyles: {
     display: "flex",
     flexWrap: "wrap",
     "&:hover": {
-      background: "#b3b1b1",
+      background: "#e5e5e5",
       borderRadius: "5px"
     }
   }
@@ -24,12 +28,32 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 
   ...(isDragging && {
     borderRadius: "5px",
-    background: "#9a9797"
+    background: "#807e7e"
   })
 });
-export default function DraggableItem({ item, index }) {
+export default function DraggableItem({ item, index, cardID, todoID }) {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
+  const removeItemFromCard = () => {
+    dispatch(setBackdrop(true));
+    request(
+      `${process.env.REACT_APP_SERVER}/api/todo/remove-todo-item`,
+      {
+        todoID,
+        cardID,
+        itemID: item.id
+      },
+      Cookie.get("token")
+    ).then(() => {
+      dispatch(
+        removeItem({
+          itemID: item.id,
+          cardID: cardID
+        })
+      );
+      dispatch(setBackdrop(false));
+    });
+  };
   return (
     <Draggable
       key={item.id}
@@ -57,7 +81,13 @@ export default function DraggableItem({ item, index }) {
             alignItems="center"
           >
             <Typography>{item.title}</Typography>
-            <Button variant="outlined">Usuń</Button>
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={removeItemFromCard}
+            >
+              Usuń
+            </Button>
           </Box>
         </ListItem>
       )}

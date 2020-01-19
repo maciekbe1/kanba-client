@@ -46,6 +46,7 @@ export default function DragDropComponent({ cards, onDragEnd, todoID }) {
                           removeListHandler={removeListHandler}
                           index={key}
                           modalHandler={modalHandler}
+                          todoID={todoID}
                         />
                         {/* {provided.placeholder} */}
                       </Card>

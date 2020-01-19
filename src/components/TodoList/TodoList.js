@@ -6,36 +6,24 @@ import {
   cardItemChange,
   cardItemShared,
   cardChange
-} from "actions/TodoListActions";
+} from "actions/TodoActions";
 import TodoCreateCard from "./TodoCreateCard";
 import DragDropComponent from "./DragDropComponent";
 import Modal from "../Utils/Modal";
-import {
-  Button,
-  Typography,
-  Backdrop,
-  CircularProgress
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-const useStyles = makeStyles(theme => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff"
-  }
-}));
+import { Button, Typography } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
+
 export default function TodoList() {
-  const classes = useStyles();
   const userID = useSelector(state => state.authReducer.data._id);
   const todo = useSelector(state => state.todoStateReducer.todoState);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const [backdrop, setBackdrop] = useState(true);
 
   useEffect(() => {
     let didCancel = false;
     async function fetchData() {
-      !didCancel && setLoading(true) && setBackdrop(true);
+      !didCancel && setLoading(true);
       try {
         !didCancel &&
           (await dispatch(
@@ -46,7 +34,7 @@ export default function TodoList() {
       } catch (error) {
         console.log(error);
       } finally {
-        !didCancel && setLoading(false) && setBackdrop(false);
+        !didCancel && setLoading(false);
       }
     }
     fetchData();
@@ -96,9 +84,7 @@ export default function TodoList() {
         Utwórz nową kartę
       </Button>
       {loading ? (
-        <Backdrop className={classes.backdrop} open={backdrop}>
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <Skeleton variant="rect" height={118} />
       ) : isEmpty(todo.cards) ? (
         <Typography variant="subtitle1" style={{ margin: "10px 0" }}>
           nie masz list

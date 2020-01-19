@@ -10,3 +10,9 @@ export const setDarkTheme = darkTheme => {
     darkTheme: darkTheme
   };
 };
+export const setBackdrop = backdrop => {
+  return {
+    type: "BACKDROP",
+    backdrop
+  };
+};

@@ -92,3 +92,10 @@ export const createItem = payload => {
     payload
   };
 };
+
+export const removeItem = payload => {
+  return {
+    type: "REMOVE_ITEM",
+    payload
+  };
+};

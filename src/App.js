@@ -15,43 +15,53 @@ import Layout from "./components/Layouts/Layout";
 import Test from "./components/Private/Test";
 import Today from "./components/Private/Today/Today";
 import NotFound from "./components/Utils/NotFound";
+import { Backdrop, CircularProgress } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
+const useStyles = makeStyles(theme => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff"
+  }
+}));
 function App() {
-    const isAuth = useSelector(state => state.authReducer.isAuth);
-    return (
-        <LayoutProvider>
-            <BrowserRouter>
-                <CssBaseline />
-                <Layout isAuth={isAuth}>
-                    <Switch>
-                        {isAuth ? (
-                            <ProtectedRoute
-                                path="/"
-                                exact
-                                render={render => <Dashboard {...render} />}
-                            />
-                        ) : (
-                            <Route
-                                path="/"
-                                exact
-                                render={render => <HomePage {...render} />}
-                            />
-                        )}
-                        <ProtectedRoute path="/test" component={Test} />
-                        <ProtectedRoute path="/Today" component={Today} />
-                        <Route path="/signup" component={Signup} />
-                        <Route path="/verify/:hash" component={AccountVerify} />
-                        <Route path="/reset-password" component={EmailVerify} />
-                        <Route
-                            path="/set-password/:id"
-                            component={SetPassword}
-                        />
-                        <Route component={NotFound} />
-                    </Switch>
-                </Layout>
-            </BrowserRouter>
-        </LayoutProvider>
-    );
+  const classes = useStyles();
+  const backdrop = useSelector(state => state.layoutReducer.backdrop);
+  const isAuth = useSelector(state => state.authReducer.isAuth);
+  return (
+    <LayoutProvider>
+      <BrowserRouter>
+        <CssBaseline />
+        <Layout isAuth={isAuth}>
+          <Switch>
+            {isAuth ? (
+              <ProtectedRoute
+                path="/"
+                exact
+                render={render => <Dashboard {...render} />}
+              />
+            ) : (
+              <Route
+                path="/"
+                exact
+                render={render => <HomePage {...render} />}
+              />
+            )}
+            <ProtectedRoute path="/test" component={Test} />
+            <ProtectedRoute path="/Today" component={Today} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/verify/:hash" component={AccountVerify} />
+            <Route path="/reset-password" component={EmailVerify} />
+            <Route path="/set-password/:id" component={SetPassword} />
+            <Route component={NotFound} />
+          </Switch>
+          <Backdrop className={classes.backdrop} open={backdrop}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        </Layout>
+      </BrowserRouter>
+    </LayoutProvider>
+  );
 }
 
 export default App;

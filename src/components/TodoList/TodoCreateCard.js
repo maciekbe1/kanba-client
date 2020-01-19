@@ -12,7 +12,7 @@ import {
   FormHelperText
 } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { createCard } from "actions/TodoListActions";
+import { createCard } from "actions/TodoActions";
 import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles(theme => ({

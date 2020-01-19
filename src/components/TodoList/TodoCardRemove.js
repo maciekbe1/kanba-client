@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import Cookie from "js-cookie";
 import { request } from "api/API";
-import { removeCard } from "actions/TodoListActions";
+import { removeCard } from "actions/TodoActions";
 import { useDispatch } from "react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
