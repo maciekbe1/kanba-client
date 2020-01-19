@@ -18,7 +18,8 @@ const useStyles = makeStyles(theme => ({
     flexWrap: "wrap",
     "&:hover": {
       background: "#e5e5e5",
-      borderRadius: "5px"
+      borderRadius: "5px",
+      color: "#333232"
     }
   }
 }));

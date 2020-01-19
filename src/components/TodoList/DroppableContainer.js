@@ -7,15 +7,16 @@ import {
   List,
   IconButton
 } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AddIcon from "@material-ui/icons/Add";
+import { DragIndicator, Delete, Add } from "@material-ui/icons";
+
 import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles(theme => ({
   cardTitle: {
-    wordBreak: "break-all"
+    wordBreak: "break-all",
+    fontWeight: "bold"
   },
   fab: {
     margin: theme.spacing(2)
@@ -46,16 +47,20 @@ export default function DroppableContainer({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography className={classes.cardTitle}>
-              {droppableId.title}
-            </Typography>
+            <Box display="flex" alignItems="center">
+              <DragIndicator />
+              <Typography className={classes.cardTitle} variant="h6">
+                {droppableId.title}
+              </Typography>
+            </Box>
+
             <Box display="flex">
               <Tooltip title="Dodaj pozycje do karty" placement="top">
                 <IconButton
                   aria-label="add"
                   onClick={() => modalHandler(droppableId)}
                 >
-                  <AddIcon />
+                  <Add />
                 </IconButton>
               </Tooltip>
 
@@ -64,7 +69,7 @@ export default function DroppableContainer({
                   aria-label="delete"
                   onClick={() => removeListHandler(droppableId)}
                 >
-                  <DeleteIcon />
+                  <Delete />
                 </IconButton>
               </Tooltip>
             </Box>
