@@ -2,6 +2,7 @@ import { request } from "api/API";
 import Cookie from "js-cookie";
 import { signOut } from "actions/UserActions";
 import { find } from "lodash";
+import Todo from "model/Todo";
 
 export const setTodo = ({ userID }) => async dispatch => {
   return request(
@@ -28,7 +29,6 @@ export const cardItemChange = ({ todo, result }) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
-
     return result;
   };
   todo.cards.map(card => {
@@ -44,7 +44,7 @@ export const cardItemChange = ({ todo, result }) => {
   });
   return {
     type: "SET_TODO_STATE",
-    todoState: { cards: todo.cards, _id: todo._id }
+    todoState: new Todo(todo._id, todo.cards)
   };
 };
 
@@ -59,7 +59,7 @@ export const cardItemShared = ({ todo, result }) => {
   end.list.splice(result.destination.index, 0, removed);
   return {
     type: "SET_TODO_STATE",
-    todoState: { cards: todo.cards, _id: todo._id }
+    todoState: new Todo(todo._id, todo.cards)
   };
 };
 
@@ -68,7 +68,7 @@ export const cardChange = ({ todo, result }) => {
   todo.cards.splice(result.destination.index, 0, removed);
   return {
     type: "SET_TODO_STATE",
-    todoState: { cards: todo.cards, _id: todo._id }
+    todoState: new Todo(todo._id, todo.cards)
   };
 };
 
