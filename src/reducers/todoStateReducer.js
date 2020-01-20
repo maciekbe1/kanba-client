@@ -68,8 +68,8 @@ export default (state = INITIAL_DATA, action) => {
         },
         Cookie.get("token")
       )
-        .then(res => {
-          console.log(res);
+        .then(() => {
+          console.log("card updated");
         })
         .catch(error => {
           console.log(error);

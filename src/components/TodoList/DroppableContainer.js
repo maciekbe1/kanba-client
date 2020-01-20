@@ -103,7 +103,15 @@ export default function DroppableContainer({
     cardTitle.current.textContent = cloneDeep(values);
   };
   const approveContent = () => {
-    console.log("approve");
+    cardTitle.current.contentEditable = false;
+    cardTitle.current.blur();
+    setEditable(false);
+    dispatch(
+      updateCard({
+        cardID: droppableId.id,
+        title: cardTitle.current.textContent
+      })
+    );
   };
   return (
     <Droppable droppableId={droppableId.id} type="LIST">
@@ -141,7 +149,7 @@ export default function DroppableContainer({
                   >
                     <Button
                       size="small"
-                      onClick={approveContent}
+                      onMouseDown={approveContent}
                       variant="contained"
                       style={{
                         marginRight: "2px",
