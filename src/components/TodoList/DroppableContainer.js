@@ -7,13 +7,23 @@ import {
   Box,
   List,
   IconButton,
-  Button
+  Button,
+  Collapse,
+  Tooltip
 } from "@material-ui/core";
-import { DragIndicator, Delete, Add, Done, Clear } from "@material-ui/icons";
-
+import {
+  DragIndicator,
+  Delete,
+  Add,
+  Done,
+  Clear,
+  ExpandLess,
+  ExpandMore
+} from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
-import Tooltip from "@material-ui/core/Tooltip";
+import { updateCard } from "actions/TodoActions";
+import { useDispatch } from "react-redux";
 const useStyles = makeStyles(theme => ({
   cardTitle: {
     wordBreak: "break-all",
@@ -41,6 +51,8 @@ const useStyles = makeStyles(theme => ({
     color: "#676464"
   }
 }));
+const EXPAND_TEXT = "Rozwiń kartę";
+const COLLAPSED_TEXT = "Zwiń kartę";
 export default function DroppableContainer({
   droppableId,
   list,
@@ -53,9 +65,18 @@ export default function DroppableContainer({
   });
   const cardTitle = useRef();
   const [editable, setEditable] = useState(false);
-  const [value, setValue] = useState();
+  const [values, setValues] = useState();
   useOutsideEvent(cardTitle, setEditable);
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const expandClick = () => {
+    dispatch(
+      updateCard({
+        cardID: droppableId.id,
+        expand: !droppableId.expand
+      })
+    );
+  };
   const titleFocusHandler = e => {
     e.stopPropagation();
     cardTitle.current.contentEditable = true;
@@ -67,13 +88,19 @@ export default function DroppableContainer({
       cardTitle.current.contentEditable = false;
       cardTitle.current.blur();
       setEditable(false);
+      dispatch(
+        updateCard({
+          cardID: droppableId.id,
+          title: cardTitle.current.textContent
+        })
+      );
     }
   };
   useEffect(() => {
-    setValue(cardTitle.current.textContent);
+    setValues(cardTitle.current.textContent);
   }, []);
   const backContent = () => {
-    cardTitle.current.textContent = cloneDeep(value);
+    cardTitle.current.textContent = cloneDeep(values);
   };
   const approveContent = () => {
     console.log("approve");
@@ -81,7 +108,11 @@ export default function DroppableContainer({
   return (
     <Droppable droppableId={droppableId.id} type="LIST">
       {(provided, snapshot) => (
-        <CardContent ref={provided.innerRef} {...provided.droppableProps}>
+        <CardContent
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          style={{ paddingBottom: "16px" }}
+        >
           <Box
             display="flex"
             justifyContent="space-between"
@@ -136,8 +167,18 @@ export default function DroppableContainer({
                 ) : null}
               </Box>
             </Box>
-
             <Box display="flex">
+              <Tooltip
+                title={droppableId.expand ? COLLAPSED_TEXT : EXPAND_TEXT}
+                placement="top"
+              >
+                <IconButton
+                  aria-label={droppableId.expand ? "expandLess" : "expandMore"}
+                  onClick={expandClick}
+                >
+                  {droppableId.expand ? <ExpandLess /> : <ExpandMore />}
+                </IconButton>
+              </Tooltip>
               <Tooltip title="Dodaj pozycje do karty" placement="top">
                 <IconButton
                   aria-label="add"
@@ -157,25 +198,27 @@ export default function DroppableContainer({
               </Tooltip>
             </Box>
           </Box>
-          <List style={getListStyle(snapshot.isDraggingOver)}>
-            {list && list.length > 0 ? (
-              list.map((item, key) => (
-                <DraggableItem
-                  key={item.id}
-                  item={item}
-                  cardID={droppableId.id}
-                  index={key}
-                  todoID={todoID}
-                />
-              ))
-            ) : (
-              <Box>
-                <br />
-                No Items
-              </Box>
-            )}
-            {provided.placeholder}
-          </List>
+          <Collapse in={droppableId.expand} timeout="auto" unmountOnExit>
+            <List style={getListStyle(snapshot.isDraggingOver)}>
+              {list && list.length > 0 ? (
+                list.map((item, key) => (
+                  <DraggableItem
+                    key={item.id}
+                    item={item}
+                    cardID={droppableId.id}
+                    index={key}
+                    todoID={todoID}
+                  />
+                ))
+              ) : (
+                <Box>
+                  <br />
+                  No Items
+                </Box>
+              )}
+              {provided.placeholder}
+            </List>
+          </Collapse>
         </CardContent>
       )}
     </Droppable>

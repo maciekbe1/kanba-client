@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: "14px"
   }
 }));
-export default function TodoCreateList({ modalHandler, user }) {
+export default function TodoCreateCard({ modalHandler, user }) {
   const classes = useStyles();
   const [values, setValues] = useState({
     id: cuid(),

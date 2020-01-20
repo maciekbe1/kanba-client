@@ -1,7 +1,7 @@
 import { request } from "api/API";
 import Cookie from "js-cookie";
 import { signOut } from "actions/UserActions";
-import { find } from "lodash";
+import { find, isEmpty } from "lodash";
 import Todo from "model/Todo";
 
 export const setTodo = ({ userID }) => async dispatch => {
@@ -11,6 +11,12 @@ export const setTodo = ({ userID }) => async dispatch => {
     Cookie.get("token")
   )
     .then(res => {
+      if (isEmpty(res.data)) {
+        return dispatch({
+          type: "SET_TODO_STATE",
+          todoState: { cards: [] }
+        });
+      }
       return dispatch({
         type: "SET_TODO_STATE",
         todoState: res.data
@@ -69,6 +75,13 @@ export const cardChange = ({ todo, result }) => {
   return {
     type: "SET_TODO_STATE",
     todoState: new Todo(todo._id, todo.cards)
+  };
+};
+
+export const updateCard = payload => {
+  return {
+    type: "UPDATE_CARD",
+    payload
   };
 };
 
