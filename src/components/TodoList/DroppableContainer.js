@@ -22,7 +22,7 @@ import {
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
-import { updateCard } from "actions/TodoActions";
+import { updateCard } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
 const useStyles = makeStyles(theme => ({
   cardTitle: {
@@ -56,9 +56,8 @@ const COLLAPSED_TEXT = "Zwiń kartę";
 export default function DroppableContainer({
   droppableId,
   list,
-  removeListHandler,
-  modalHandler,
-  todoID
+  removeCard,
+  modalHandler
 }) {
   const getListStyle = isDraggingOver => ({
     // background: isDraggingOver ? "#212121" : ""
@@ -72,10 +71,11 @@ export default function DroppableContainer({
   const expandClick = () => {
     dispatch(
       updateCard({
-        cardID: droppableId.id,
+        cardID: droppableId._id,
         expand: !droppableId.expand
       })
     );
+    setValues(cardTitle.current.textContent);
   };
   const titleFocusHandler = e => {
     e.stopPropagation();
@@ -90,31 +90,33 @@ export default function DroppableContainer({
       setEditable(false);
       dispatch(
         updateCard({
-          cardID: droppableId.id,
+          cardID: droppableId._id,
           title: cardTitle.current.textContent
         })
       );
+      setValues(cardTitle.current.textContent);
     }
   };
   useEffect(() => {
     setValues(cardTitle.current.textContent);
   }, []);
-  const backContent = () => {
+  const onClikcDiscard = () => {
     cardTitle.current.textContent = cloneDeep(values);
   };
-  const approveContent = () => {
+  const onClikcAccept = () => {
     cardTitle.current.contentEditable = false;
     cardTitle.current.blur();
     setEditable(false);
     dispatch(
       updateCard({
-        cardID: droppableId.id,
+        cardID: droppableId._id,
         title: cardTitle.current.textContent
       })
     );
+    setValues(cardTitle.current.textContent);
   };
   return (
-    <Droppable droppableId={droppableId.id} type="LIST">
+    <Droppable droppableId={droppableId._id} type="LIST">
       {(provided, snapshot) => (
         <CardContent
           ref={provided.innerRef}
@@ -149,7 +151,7 @@ export default function DroppableContainer({
                   >
                     <Button
                       size="small"
-                      onMouseDown={approveContent}
+                      onMouseDown={onClikcAccept}
                       variant="contained"
                       style={{
                         marginRight: "2px",
@@ -162,7 +164,7 @@ export default function DroppableContainer({
                     <Button
                       variant="contained"
                       size="small"
-                      onMouseDown={backContent}
+                      onMouseDown={onClikcDiscard}
                       style={{
                         marginLeft: "2px",
                         padding: "2px",
@@ -199,7 +201,7 @@ export default function DroppableContainer({
               <Tooltip title="Usuń kartę" placement="top">
                 <IconButton
                   aria-label="delete"
-                  onClick={() => removeListHandler(droppableId)}
+                  onClick={() => removeCard(droppableId)}
                 >
                   <Delete />
                 </IconButton>
@@ -211,11 +213,10 @@ export default function DroppableContainer({
               {list && list.length > 0 ? (
                 list.map((item, key) => (
                   <DraggableItem
-                    key={item.id}
+                    key={item._id}
                     item={item}
-                    cardID={droppableId.id}
+                    cardID={droppableId._id}
                     index={key}
-                    todoID={todoID}
                   />
                 ))
               ) : (

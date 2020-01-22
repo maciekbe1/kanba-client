@@ -5,18 +5,3 @@ export default {
     }
   }
 };
-//usage
-// await AsyncSerive.asyncForEach(todoListExist.cards, async cardItem => {
-//   console.log(cardItem);
-//   if (cardItem.id === cardID) {
-//     await Todo.find({ _id: todoListID }).updateOne({
-//       $push: {
-//         list: {
-//           id: cuid(),
-//           title: newItem.title,
-//           content: newItem.content
-//         }
-//       }
-//     });
-//   }
-// });

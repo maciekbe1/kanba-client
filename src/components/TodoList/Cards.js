@@ -2,20 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { isEmpty, cloneDeep } from "lodash";
 import {
-  setTodo,
+  getCards,
   cardItemChange,
   cardItemShared,
   cardChange
-} from "actions/TodoActions";
-import TodoCreateCard from "./TodoCreateCard";
+} from "actions/cardsActions";
+import CreateCard from "./CreateCard";
 import DragDropComponent from "./DragDropComponent";
 import Modal from "../Utils/Modal";
 import { Button, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 
-export default function TodoList() {
+export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
-  const todo = useSelector(state => state.todoStateReducer.todoState);
+  const cards = useSelector(state => state.cardsReducer.todoState);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -27,7 +27,7 @@ export default function TodoList() {
       try {
         !didCancel &&
           (await dispatch(
-            setTodo({
+            getCards({
               userID: userID
             })
           ));
@@ -45,16 +45,16 @@ export default function TodoList() {
   };
 
   const onDragEnd = result => {
-    let newData = cloneDeep(todo);
+    let newData = cloneDeep(cards);
     if (!result.destination) {
-      return todo.cards;
+      return cards;
     } else if (
       result.type === "LIST" &&
       result.destination.droppableId === result.source.droppableId
     ) {
       dispatch(
         cardItemChange({
-          todo: newData,
+          cards: newData,
           result
         })
       );
@@ -64,14 +64,14 @@ export default function TodoList() {
     ) {
       dispatch(
         cardItemShared({
-          todo,
+          cards,
           result
         })
       );
     } else {
       dispatch(
         cardChange({
-          todo,
+          cards,
           result
         })
       );
@@ -85,19 +85,15 @@ export default function TodoList() {
       </Button>
       {loading ? (
         <Skeleton variant="rect" height={118} animation="wave" />
-      ) : isEmpty(todo.cards) ? (
+      ) : isEmpty(cards) ? (
         <Typography variant="subtitle1" style={{ margin: "10px 0" }}>
           nie masz list
         </Typography>
       ) : (
-        <DragDropComponent
-          cards={todo.cards}
-          onDragEnd={onDragEnd}
-          todoID={todo._id}
-        />
+        <DragDropComponent cards={cards} onDragEnd={onDragEnd} />
       )}
       <Modal modalHandler={modalHandler} openProps={open}>
-        <TodoCreateCard modalHandler={modalHandler} user={userID} />
+        <CreateCard modalHandler={modalHandler} user={userID} />
       </Modal>
     </>
   );

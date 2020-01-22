@@ -10,32 +10,23 @@ import {
 } from "@material-ui/core";
 import Cookie from "js-cookie";
 import { request } from "api/API";
-import { removeCard } from "actions/TodoActions";
+import { removeCard } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-export default function TodoDialog({
-  dialog,
-  dialogHandler,
-  cardItem,
-  todoID
-}) {
+export default function RemoveCard({ dialog, dialogHandler, cardID }) {
   const dispatch = useDispatch();
   const approvedRemoveList = () => {
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/remove-todo-card`,
-      { todoID: todoID, cardID: cardItem.id },
+      `${process.env.REACT_APP_SERVER}/api/todo/remove-card`,
+      { cardID: cardID._id },
       Cookie.get("token")
     )
       .then(() => {
         dialogHandler(false);
-        dispatch(
-          removeCard({
-            cardID: cardItem.id
-          })
-        );
+        dispatch(removeCard({ cardID: cardID._id }));
       })
       .catch(error => {
         console.log(error.response);
@@ -51,7 +42,7 @@ export default function TodoDialog({
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogTitle id="alert-dialog-slide-title">
-        Do u want to remove {cardItem ? cardItem.title : null}?
+        Do u want to remove {cardID ? cardID.title : null}?
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">

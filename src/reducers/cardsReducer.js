@@ -1,5 +1,5 @@
 import { remove, find } from "lodash";
-import Todo from "model/Todo";
+import Card from "model/Card";
 import { request } from "api/API";
 import Cookie from "js-cookie";
 
@@ -8,7 +8,7 @@ const INITIAL_DATA = {
 };
 export default (state = INITIAL_DATA, action) => {
   switch (action.type) {
-    case "SET_TODO_STATE": {
+    case "SET_CARDS_STATE": {
       return {
         ...state,
         todoState: action.todoState
@@ -16,55 +16,52 @@ export default (state = INITIAL_DATA, action) => {
     }
 
     case "REMOVE_CARD": {
-      const cards = remove(
-        state.todoState.cards,
-        item => item.id !== action.cardID
-      );
+      remove(state.todoState, item => item._id === action.cardID);
+
       return {
         ...state,
-        todoState: new Todo(state.todoState._id, cards)
+        todoState: new Card(state.todoState).cards
       };
     }
 
     case "CREATE_CARD": {
-      action.payload.values.list = [];
-      const cards = [action.payload.values, ...state.todoState.cards];
+      const cards = [action.payload, ...state.todoState];
       return {
         ...state,
-        todoState: new Todo(state.todoState._id, cards)
+        todoState: cards
       };
     }
 
     case "CREATE_ITEM": {
-      find(state.todoState.cards, { id: action.payload.cardID }).list.push(
-        action.payload.values
-      );
+      find(state.todoState, { _id: action.payload.cardID }).list.push({
+        _id: action.payload.itemID,
+        ...action.payload.values
+      });
       return {
         ...state,
-        todoState: new Todo(state.todoState._id, state.todoState.cards)
+        todoState: state.todoState
       };
     }
 
     case "REMOVE_ITEM": {
       remove(
-        find(state.todoState.cards, { id: action.payload.cardID }).list,
-        item => item.id === action.payload.itemID
+        find(state.todoState, { _id: action.payload.cardID }).list,
+        item => item._id === action.payload.itemID
       );
       return {
         ...state,
-        todoState: new Todo(state.todoState._id, state.todoState.cards)
+        todoState: new Card(state.todoState).cards
       };
     }
     case "UPDATE_CARD": {
       const name = Object.keys(action.payload)[1];
-      const o = find(state.todoState.cards, { id: action.payload.cardID });
+      const o = find(state.todoState, { _id: action.payload.cardID });
       o[name] = action.payload[name];
       request(
-        `${process.env.REACT_APP_SERVER}/api/todo/update-todo-card`,
+        `${process.env.REACT_APP_SERVER}/api/todo/update-card`,
         {
           card: { [name]: action.payload[name] },
-          cardID: action.payload.cardID,
-          todoID: state.todoState._id
+          cardID: action.payload.cardID
         },
         Cookie.get("token")
       )
@@ -74,10 +71,9 @@ export default (state = INITIAL_DATA, action) => {
         .catch(error => {
           console.log(error);
         });
-
       return {
         ...state,
-        todoState: new Todo(state.todoState._id, state.todoState.cards)
+        todoState: new Card(state.todoState).cards
       };
     }
     default:

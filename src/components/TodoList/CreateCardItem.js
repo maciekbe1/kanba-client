@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { request } from "api/API";
 import Cookie from "js-cookie";
-import cuid from "cuid";
 
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -13,7 +12,7 @@ import {
   FormHelperText,
   CircularProgress
 } from "@material-ui/core";
-import { createItem } from "actions/TodoActions";
+import { createItem } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -26,12 +25,10 @@ const useStyles = makeStyles(theme => ({
     fontSize: "14px"
   }
 }));
-export default function TodoAddCardItem({ modalHandler, todoID, cardItem }) {
+export default function CreateCardItem({ modalHandler, cardID }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-
   const [values, setValues] = useState({
-    id: cuid(),
     title: "",
     description: ""
   });
@@ -49,15 +46,16 @@ export default function TodoAddCardItem({ modalHandler, todoID, cardItem }) {
     setError(false);
     setLoading(true);
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/add-todo-item`,
-      { todoID: todoID, cardID: cardItem.id, item: values },
+      `${process.env.REACT_APP_SERVER}/api/todo/create-card-item`,
+      { cardID: cardID._id, item: values },
       Cookie.get("token")
     )
-      .then(() => {
+      .then(res => {
         dispatch(
           createItem({
-            cardID: cardItem.id,
-            values
+            cardID: cardID._id,
+            values,
+            itemID: res.data.id
           })
         );
         modalHandler();

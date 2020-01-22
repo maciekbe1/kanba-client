@@ -1,9 +1,9 @@
 import React from "react";
-import TodoList from "../../TodoList/TodoList";
+import Cards from "../../TodoList/Cards";
 export default function Today() {
-    return (
-        <div>
-            <TodoList />
-        </div>
-    );
+  return (
+    <div>
+      <Cards />
+    </div>
+  );
 }

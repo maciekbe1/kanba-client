@@ -3,7 +3,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { Typography, ListItem, Box, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import { removeItem } from "actions/TodoActions";
+import { removeItem } from "actions/cardsActions";
 import { setBackdrop } from "actions";
 import { request } from "api/API";
 import Cookie from "js-cookie";
@@ -32,23 +32,22 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     background: "#807e7e"
   })
 });
-export default function DraggableItem({ item, index, cardID, todoID }) {
+export default function DraggableItem({ item, index, cardID }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const removeItemFromCard = () => {
     dispatch(setBackdrop(true));
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/remove-todo-item`,
+      `${process.env.REACT_APP_SERVER}/api/todo/remove-card-item`,
       {
-        todoID,
         cardID,
-        itemID: item.id
+        itemID: item._id
       },
       Cookie.get("token")
     ).then(() => {
       dispatch(
         removeItem({
-          itemID: item.id,
+          itemID: item._id,
           cardID: cardID
         })
       );
@@ -57,9 +56,9 @@ export default function DraggableItem({ item, index, cardID, todoID }) {
   };
   return (
     <Draggable
-      key={item.id}
+      key={item._id}
       draggableId={JSON.stringify({
-        nodeId: item.id,
+        nodeId: item._id,
         type: "DragItem"
       })}
       index={index}

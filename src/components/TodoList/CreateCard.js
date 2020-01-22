@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { request } from "api/API";
 import Cookie from "js-cookie";
-import cuid from "cuid";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
@@ -12,7 +11,7 @@ import {
   FormHelperText
 } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { createCard } from "actions/TodoActions";
+import { createCard } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -25,10 +24,10 @@ const useStyles = makeStyles(theme => ({
     fontSize: "14px"
   }
 }));
-export default function TodoCreateCard({ modalHandler, user }) {
+export default function CreateCard({ modalHandler, user }) {
   const classes = useStyles();
   const [values, setValues] = useState({
-    id: cuid(),
+    user,
     title: "",
     description: ""
   });
@@ -40,24 +39,21 @@ export default function TodoCreateCard({ modalHandler, user }) {
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
-  const createListHandler = e => {
+  const createCardHandler = e => {
     e.preventDefault();
     setError(false);
     setLoading(true);
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/create-todo-card`,
+      `${process.env.REACT_APP_SERVER}/api/todo/create-card`,
       {
         user,
-        cards: {
-          id: values.id,
-          title: values.title,
-          description: values.description
-        }
+        title: values.title,
+        description: values.description
       },
       Cookie.get("token")
     )
-      .then(() => {
-        dispatch(createCard({ values }));
+      .then(res => {
+        dispatch(createCard(res.data));
         modalHandler();
       })
       .catch(error => {
@@ -72,7 +68,7 @@ export default function TodoCreateCard({ modalHandler, user }) {
       <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
         Utwórz kartę
       </Typography>
-      <form noValidate autoComplete="off" onSubmit={e => createListHandler(e)}>
+      <form noValidate autoComplete="off" onSubmit={e => createCardHandler(e)}>
         <TextField
           fullWidth
           required

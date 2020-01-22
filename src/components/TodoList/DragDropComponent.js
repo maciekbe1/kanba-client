@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card } from "@material-ui/core";
 import DroppableContainer from "./DroppableContainer";
-import TodoCardRemove from "./TodoCardRemove";
-
+import RemoveCard from "./RemoveCard";
 import Modal from "../Utils/Modal";
-import TodoAddCardItem from "./TodoAddCardItem";
-export default function DragDropComponent({ cards, onDragEnd, todoID }) {
+import CreateCardItem from "./CreateCardItem";
+
+export default function DragDropComponent({ cards, onDragEnd }) {
   const [dialog, setDialog] = useState(false);
-  const [cardItem, setCardItem] = useState();
+  const [cardID, setCardID] = useState();
   const [open, setOpen] = useState(false);
 
   const modalHandler = card => {
-    setCardItem(card);
+    setCardID(card);
     setOpen(!open);
   };
 
@@ -20,8 +20,8 @@ export default function DragDropComponent({ cards, onDragEnd, todoID }) {
     setDialog(!dialog);
   };
 
-  const removeListHandler = card => {
-    setCardItem(card);
+  const removeCard = card => {
+    setCardID(card);
     setDialog(true);
   };
 
@@ -32,21 +32,20 @@ export default function DragDropComponent({ cards, onDragEnd, todoID }) {
           {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {cards.map((card, key) => (
-                <Draggable key={card.id} draggableId={card.id} index={key}>
+                <Draggable key={card._id} draggableId={card._id} index={key}>
                   {provided => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <Card style={{ margin: "5px auto" }}>
+                      <Card style={{ margin: "5px auto", overflow: "visible" }}>
                         <DroppableContainer
                           droppableId={card}
                           list={cards[key].list}
-                          removeListHandler={removeListHandler}
+                          removeCard={removeCard}
                           index={key}
                           modalHandler={modalHandler}
-                          todoID={todoID}
                         />
                         {/* {provided.placeholder} */}
                       </Card>
@@ -59,18 +58,13 @@ export default function DragDropComponent({ cards, onDragEnd, todoID }) {
           )}
         </Droppable>
       </DragDropContext>
-      <TodoCardRemove
+      <RemoveCard
         dialog={dialog}
         dialogHandler={dialogHandler}
-        cardItem={cardItem}
-        todoID={todoID}
+        cardID={cardID}
       />
       <Modal modalHandler={modalHandler} openProps={open}>
-        <TodoAddCardItem
-          modalHandler={modalHandler}
-          todoID={todoID}
-          cardItem={cardItem}
-        />
+        <CreateCardItem modalHandler={modalHandler} cardID={cardID} />
       </Modal>
     </>
   );

@@ -1,24 +1,17 @@
 import { request } from "api/API";
 import Cookie from "js-cookie";
 import { signOut } from "actions/UserActions";
-import { find, isEmpty } from "lodash";
-import Todo from "model/Todo";
+import { find } from "lodash";
 
-export const setTodo = ({ userID }) => async dispatch => {
+export const getCards = ({ userID }) => async dispatch => {
   return request(
-    `${process.env.REACT_APP_SERVER}/api/todo/get-user-todo-cards`,
+    `${process.env.REACT_APP_SERVER}/api/todo/get-user-cards`,
     { userID },
     Cookie.get("token")
   )
     .then(res => {
-      if (isEmpty(res.data)) {
-        return dispatch({
-          type: "SET_TODO_STATE",
-          todoState: { cards: [] }
-        });
-      }
       return dispatch({
-        type: "SET_TODO_STATE",
+        type: "SET_CARDS_STATE",
         todoState: res.data
       });
     })
@@ -30,51 +23,51 @@ export const setTodo = ({ userID }) => async dispatch => {
     });
 };
 
-export const cardItemChange = ({ todo, result }) => {
+export const cardItemChange = ({ cards, result }) => {
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
   };
-  todo.cards.map(card => {
+  cards.map(card => {
     const data = reorder(
       card.list,
       result.source.index,
       result.destination.index
     );
-    if (card.id === result.source.droppableId) {
+    if (card._id === result.source.droppableId) {
       card.list = data;
     }
     return data;
   });
   return {
-    type: "SET_TODO_STATE",
-    todoState: new Todo(todo._id, todo.cards)
+    type: "SET_CARDS_STATE",
+    todoState: cards
   };
 };
 
-export const cardItemShared = ({ todo, result }) => {
-  let start = find(todo.cards, o => {
-    return o.id === result.source.droppableId;
+export const cardItemShared = ({ cards, result }) => {
+  let start = find(cards, o => {
+    return o._id === result.source.droppableId;
   });
-  let end = find(todo.cards, o => {
-    return o.id === result.destination.droppableId;
+  let end = find(cards, o => {
+    return o._id === result.destination.droppableId;
   });
   const [removed] = start.list.splice(result.source.index, 1);
   end.list.splice(result.destination.index, 0, removed);
   return {
-    type: "SET_TODO_STATE",
-    todoState: new Todo(todo._id, todo.cards)
+    type: "SET_CARDS_STATE",
+    todoState: cards
   };
 };
 
-export const cardChange = ({ todo, result }) => {
-  const [removed] = todo.cards.splice(result.source.index, 1);
-  todo.cards.splice(result.destination.index, 0, removed);
+export const cardChange = ({ cards, result }) => {
+  const [removed] = cards.splice(result.source.index, 1);
+  cards.splice(result.destination.index, 0, removed);
   return {
-    type: "SET_TODO_STATE",
-    todoState: new Todo(todo._id, todo.cards)
+    type: "SET_CARDS_STATE",
+    todoState: cards
   };
 };
 
