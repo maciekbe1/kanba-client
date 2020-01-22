@@ -44,15 +44,20 @@ export default function DraggableItem({ item, index, cardID }) {
         itemID: item._id
       },
       Cookie.get("token")
-    ).then(() => {
-      dispatch(
-        removeItem({
-          itemID: item._id,
-          cardID: cardID
-        })
-      );
-      dispatch(setBackdrop(false));
-    });
+    )
+      .then(() => {
+        dispatch(
+          removeItem({
+            itemID: item._id,
+            cardID: cardID
+          })
+        );
+        dispatch(setBackdrop(false));
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(setBackdrop(false));
+      });
   };
   return (
     <Draggable

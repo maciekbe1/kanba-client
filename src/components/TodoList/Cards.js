@@ -84,7 +84,12 @@ export default function Cards() {
         Utwórz nową kartę
       </Button>
       {loading ? (
-        <Skeleton variant="rect" height={118} animation="wave" />
+        <Skeleton
+          variant="rect"
+          height={80}
+          animation="wave"
+          style={{ margin: "5px 0" }}
+        />
       ) : isEmpty(cards) ? (
         <Typography variant="subtitle1" style={{ margin: "10px 0" }}>
           nie masz list
