@@ -5,14 +5,14 @@ import { find } from "lodash";
 
 export const getCards = ({ userID }) => async dispatch => {
   return request(
-    `${process.env.REACT_APP_SERVER}/api/todo/get-user-cards`,
+    `${process.env.REACT_APP_SERVER}/api/cards/get-user-cards`,
     { userID },
     Cookie.get("token")
   )
     .then(res => {
       return dispatch({
         type: "SET_CARDS_STATE",
-        todoState: res.data
+        cardsState: res.data
       });
     })
     .catch(error => {
@@ -42,7 +42,7 @@ export const cardItemChange = ({ cards, result }) => {
   });
   return {
     type: "SET_CARDS_STATE",
-    todoState: cards
+    cardsState: cards
   };
 };
 
@@ -57,7 +57,7 @@ export const cardItemShared = ({ cards, result }) => {
   end.list.splice(result.destination.index, 0, removed);
   return {
     type: "SET_CARDS_STATE",
-    todoState: cards
+    cardsState: cards
   };
 };
 
@@ -66,7 +66,7 @@ export const cardChange = ({ cards, result }) => {
   cards.splice(result.destination.index, 0, removed);
   return {
     type: "SET_CARDS_STATE",
-    todoState: cards
+    cardsState: cards
   };
 };
 

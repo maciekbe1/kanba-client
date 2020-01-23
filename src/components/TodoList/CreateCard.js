@@ -44,7 +44,7 @@ export default function CreateCard({ modalHandler, user }) {
     setError(false);
     setLoading(true);
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/create-card`,
+      `${process.env.REACT_APP_SERVER}/api/cards/create-card`,
       {
         user,
         title: values.title,

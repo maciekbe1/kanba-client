@@ -38,7 +38,7 @@ export default function DraggableItem({ item, index, cardID }) {
   const removeItemFromCard = () => {
     dispatch(setBackdrop(true));
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/remove-card-item`,
+      `${process.env.REACT_APP_SERVER}/api/cards/remove-card-item`,
       {
         cardID,
         itemID: item._id

@@ -15,7 +15,7 @@ import { Skeleton } from "@material-ui/lab";
 
 export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
-  const cards = useSelector(state => state.cardsReducer.todoState);
+  const cards = useSelector(state => state.cardsReducer.cardsState);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);

@@ -20,7 +20,7 @@ export default function RemoveCard({ dialog, dialogHandler, cardID }) {
   const dispatch = useDispatch();
   const approvedRemoveList = () => {
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/remove-card`,
+      `${process.env.REACT_APP_SERVER}/api/cards/remove-card`,
       { cardID: cardID._id },
       Cookie.get("token")
     )

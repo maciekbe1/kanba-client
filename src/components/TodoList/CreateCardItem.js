@@ -46,7 +46,7 @@ export default function CreateCardItem({ modalHandler, cardID }) {
     setError(false);
     setLoading(true);
     request(
-      `${process.env.REACT_APP_SERVER}/api/todo/create-card-item`,
+      `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
       { cardID: cardID._id, item: values },
       Cookie.get("token")
     )

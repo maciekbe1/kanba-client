@@ -6,7 +6,7 @@ export const signOut = () => async dispatch => {
   localStorage.removeItem("persist:root");
   dispatch({
     type: "SET_CARDS_STATE",
-    todoState: null
+    cardsState: null
   });
   dispatch({
     type: "SIGNOUT_USER"
