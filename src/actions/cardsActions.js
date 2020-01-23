@@ -16,10 +16,9 @@ export const getCards = ({ userID }) => async dispatch => {
       });
     })
     .catch(error => {
-      if (error.response.data === "Invalid token") {
-        alert("Twoja sesja wygasła, zaloguj sie ponownie");
-        dispatch(signOut());
-      }
+      alert("Twoja sesja wygasła, zaloguj sie ponownie");
+      dispatch(signOut());
+      console.log(error);
     });
 };
 

@@ -1,11 +1,16 @@
 import * as API from "api/API";
 import Cookies from "js-cookie";
 
-export const signOut = () => {
+export const signOut = () => async dispatch => {
   Cookies.remove("token");
-  return {
+  localStorage.removeItem("persist:root");
+  dispatch({
+    type: "SET_CARDS_STATE",
+    todoState: null
+  });
+  dispatch({
     type: "SIGNOUT_USER"
-  };
+  });
 };
 export const signIn = ({ token, isAuth }) => async dispatch => {
   return await API.requestToken(
@@ -22,11 +27,7 @@ export const signIn = ({ token, isAuth }) => async dispatch => {
     })
     .catch(err => {
       alert("Wystąpił błąd, zaloguj sie ponownie.");
-      dispatch({
-        type: "SIGNIN_USER",
-        isAuth: false,
-        data: null
-      });
+      dispatch(signOut());
       console.log(err.response.data);
     });
 };
