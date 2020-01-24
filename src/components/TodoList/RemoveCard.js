@@ -16,12 +16,12 @@ import { useDispatch } from "react-redux";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-export default function RemoveCard({ dialog, dialogHandler, cardID }) {
+export default function RemoveCard({ dialog, dialogHandler, cardID, userID }) {
   const dispatch = useDispatch();
   const approvedRemoveList = () => {
     request(
       `${process.env.REACT_APP_SERVER}/api/cards/remove-card`,
-      { cardID: cardID._id },
+      { cardID: cardID._id, userID },
       Cookie.get("token")
     )
       .then(() => {
