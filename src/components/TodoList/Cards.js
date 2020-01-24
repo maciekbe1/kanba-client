@@ -95,7 +95,11 @@ export default function Cards() {
           nie masz list
         </Typography>
       ) : (
-        <DragDropComponent cards={cards} onDragEnd={onDragEnd} />
+        <DragDropComponent
+          cards={cards}
+          onDragEnd={onDragEnd}
+          userID={userID}
+        />
       )}
       <Modal modalHandler={modalHandler} openProps={open}>
         <CreateCard modalHandler={modalHandler} user={userID} />

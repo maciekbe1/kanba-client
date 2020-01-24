@@ -6,7 +6,7 @@ import RemoveCard from "./RemoveCard";
 import Modal from "../Utils/Modal";
 import CreateCardItem from "./CreateCardItem";
 
-export default function DragDropComponent({ cards, onDragEnd }) {
+export default function DragDropComponent({ cards, onDragEnd, userID }) {
   const [dialog, setDialog] = useState(false);
   const [cardID, setCardID] = useState();
   const [open, setOpen] = useState(false);
@@ -62,6 +62,7 @@ export default function DragDropComponent({ cards, onDragEnd }) {
         dialog={dialog}
         dialogHandler={dialogHandler}
         cardID={cardID}
+        userID={userID}
       />
       <Modal modalHandler={modalHandler} openProps={open}>
         <CreateCardItem modalHandler={modalHandler} cardID={cardID} />
