@@ -120,7 +120,7 @@ export default function DroppableContainer({
   useEffect(() => {
     dispatch(setBackdrop(false));
     setValues(cardTitle.current.textContent);
-  }, []);
+  }, [dispatch]);
   const onClikcDiscard = () => {
     cardTitle.current.textContent = cloneDeep(values);
   };
