@@ -24,6 +24,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 import { updateCard } from "actions/cardsActions";
+import { setBackdrop } from "actions";
 import { useDispatch } from "react-redux";
 const useStyles = makeStyles(theme => ({
   cardTitle: {
@@ -90,13 +91,20 @@ export default function DroppableContainer({
   const classes = useStyles();
   const dispatch = useDispatch();
   const expandClick = () => {
-    dispatch(
-      updateCard({
-        cardID: droppableId._id,
-        expand: !droppableId.expand
-      })
-    );
-    setValues(cardTitle.current.textContent);
+    dispatch(setBackdrop(true));
+    try {
+      dispatch(
+        updateCard({
+          cardID: droppableId._id,
+          expand: !droppableId.expand
+        })
+      );
+      setValues(cardTitle.current.textContent);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(setBackdrop(false));
+    }
   };
   const mouseDownCardTitle = e => {
     e.stopPropagation();
@@ -110,6 +118,7 @@ export default function DroppableContainer({
     }
   };
   useEffect(() => {
+    dispatch(setBackdrop(false));
     setValues(cardTitle.current.textContent);
   }, []);
   const onClikcDiscard = () => {
