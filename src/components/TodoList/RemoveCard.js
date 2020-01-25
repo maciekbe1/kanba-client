@@ -53,7 +53,7 @@ export default function RemoveCard({ dialog, dialogHandler, cardID, userID }) {
         <Button onClick={dialogHandler} color="primary">
           Nie
         </Button>
-        <Button onClick={approvedRemoveList} color="primary" color="secondary">
+        <Button onClick={approvedRemoveList} color="secondary">
           Tak
         </Button>
       </DialogActions>
