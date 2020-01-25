@@ -9,7 +9,8 @@ import {
   IconButton,
   Button,
   Collapse,
-  Tooltip
+  Tooltip,
+  Badge
 } from "@material-ui/core";
 import {
   DragIndicator,
@@ -33,10 +34,16 @@ const useStyles = makeStyles(theme => ({
       color: "#333232",
       borderRadius: "5px",
       padding: "0 5px",
-      outline: "none"
+      outline: "none",
+      marginLeft: "-5px"
     },
     "&:hover": {
-      cursor: "pointer"
+      cursor: "pointer",
+      backgroundColor: "#EEEEEE",
+      borderRadius: "5px",
+      color: "#212121",
+      padding: "0 5px",
+      marginLeft: "-5px"
     }
   },
   editContentIcons: {
@@ -186,7 +193,17 @@ export default function DroppableContainer({
                   aria-label={droppableId.expand ? "expandLess" : "expandMore"}
                   onClick={expandClick}
                 >
-                  {droppableId.expand ? <ExpandLess /> : <ExpandMore />}
+                  <Badge
+                    color="primary"
+                    badgeContent={list.length}
+                    max={99}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left"
+                    }}
+                  >
+                    {droppableId.expand ? <ExpandLess /> : <ExpandMore />}
+                  </Badge>
                 </IconButton>
               </Tooltip>
               <Tooltip title="Dodaj pozycje do karty" placement="top">
@@ -197,7 +214,6 @@ export default function DroppableContainer({
                   <Add />
                 </IconButton>
               </Tooltip>
-
               <Tooltip title="Usuń kartę" placement="top">
                 <IconButton
                   aria-label="delete"
@@ -220,10 +236,7 @@ export default function DroppableContainer({
                   />
                 ))
               ) : (
-                <Box>
-                  <br />
-                  No Items
-                </Box>
+                <Box>Karta jest pusta</Box>
               )}
               {provided.placeholder}
             </List>

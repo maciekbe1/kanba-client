@@ -28,8 +28,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
-import AlarmIcon from "@material-ui/icons/Alarm";
-import AlarmOnIcon from "@material-ui/icons/AlarmOn";
+import { ViewDay, AlarmOn } from "@material-ui/icons";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -114,8 +113,8 @@ export default function MiniDrawer(props) {
   const darkTheme = useSelector(state => state.layoutReducer.darkTheme);
   const tabs = [
     { icon: <HomeIcon />, label: "Home", to: "/" },
-    { icon: <AlarmIcon />, label: "Today", to: "/today" },
-    { icon: <AlarmOnIcon />, label: "Done", to: "/done" }
+    { icon: <ViewDay />, label: "Karty", to: "/cards" },
+    { icon: <AlarmOn />, label: "Done", to: "/done" }
   ];
   const tabValue = findIndex(tabs, function(item) {
     return item.to === pathname;
