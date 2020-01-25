@@ -27,7 +27,6 @@ import { updateCard } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
 const useStyles = makeStyles(theme => ({
   cardTitle: {
-    wordBreak: "break-all",
     fontWeight: "bold",
     "&:focus": {
       backgroundColor: "#e5e5e5",
@@ -39,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     },
     "&:hover": {
       cursor: "pointer",
-      backgroundColor: "#EEEEEE",
+      backgroundColor: "#FAFAFA",
       borderRadius: "5px",
       color: "#212121",
       padding: "0 5px",
@@ -56,6 +55,16 @@ const useStyles = makeStyles(theme => ({
     height: "20px",
     width: "20px",
     color: "#676464"
+  },
+  cardContentBox: {
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column"
+    }
+  },
+  titleBox: {
+    [theme.breakpoints.down("xs")]: {
+      width: "100%"
+    }
   }
 }));
 const EXPAND_TEXT = "Rozwiń kartę";
@@ -137,8 +146,13 @@ export default function DroppableContainer({
             display="flex"
             justifyContent="space-between"
             alignItems="center"
+            className={classes.cardContentBox}
           >
-            <Box display="flex" alignItems="center">
+            <Box
+              display="flex"
+              alignItems="center"
+              className={classes.titleBox}
+            >
               <DragIndicator />
               <Box position="relative">
                 <Typography
