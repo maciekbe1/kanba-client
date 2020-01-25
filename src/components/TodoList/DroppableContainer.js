@@ -72,7 +72,6 @@ export default function DroppableContainer({
   const cardTitle = useRef();
   const [editable, setEditable] = useState(false);
   const [values, setValues] = useState();
-  useOutsideEvent(cardTitle, setEditable);
   const classes = useStyles();
   const dispatch = useDispatch();
   const expandClick = () => {
@@ -84,24 +83,15 @@ export default function DroppableContainer({
     );
     setValues(cardTitle.current.textContent);
   };
-  const titleFocusHandler = e => {
+  const mouseDownCardTitle = e => {
     e.stopPropagation();
     cardTitle.current.contentEditable = true;
     cardTitle.current.focus();
     setEditable(true);
   };
-  const keyPress = e => {
+  const keyPressCardTitle = e => {
     if (e.key === "Enter") {
-      cardTitle.current.contentEditable = false;
       cardTitle.current.blur();
-      setEditable(false);
-      dispatch(
-        updateCard({
-          cardID: droppableId._id,
-          title: cardTitle.current.textContent
-        })
-      );
-      setValues(cardTitle.current.textContent);
     }
   };
   useEffect(() => {
@@ -112,16 +102,29 @@ export default function DroppableContainer({
   };
   const onClikcAccept = () => {
     cardTitle.current.contentEditable = false;
-    cardTitle.current.blur();
     setEditable(false);
-    dispatch(
-      updateCard({
-        cardID: droppableId._id,
-        title: cardTitle.current.textContent
-      })
-    );
-    setValues(cardTitle.current.textContent);
+    if (cardTitle.current.textContent !== values) {
+      dispatch(
+        updateCard({
+          cardID: droppableId._id,
+          title: cardTitle.current.textContent
+        })
+      );
+      setValues(cardTitle.current.textContent);
+    }
   };
+  const cardTitleOnBlur = e => {
+    setEditable(false);
+    if (cardTitle.current.textContent !== values) {
+      dispatch(
+        updateCard({
+          cardID: droppableId._id,
+          title: cardTitle.current.textContent
+        })
+      );
+    }
+  };
+  useOutsideEvent(cardTitle);
   return (
     <Droppable droppableId={droppableId._id} type="LIST">
       {(provided, snapshot) => (
@@ -142,9 +145,10 @@ export default function DroppableContainer({
                   ref={cardTitle}
                   className={classes.cardTitle}
                   variant="h6"
-                  onMouseDown={e => titleFocusHandler(e)}
-                  onKeyPress={e => keyPress(e)}
+                  onMouseDown={e => mouseDownCardTitle(e)}
+                  onKeyPress={e => keyPressCardTitle(e)}
                   tabIndex="0"
+                  onBlur={e => cardTitleOnBlur(e)}
                 >
                   {droppableId.title}
                 </Typography>
@@ -247,12 +251,11 @@ export default function DroppableContainer({
   );
 }
 
-function useOutsideEvent(ref, setEditable) {
+function useOutsideEvent(ref) {
   function handleClickOutside(event) {
     if (ref.current && !ref.current.contains(event.target)) {
       ref.current.setEditable = false;
       ref.current.blur();
-      setEditable(false);
     }
   }
   useEffect(() => {
