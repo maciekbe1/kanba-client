@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     },
     "&:hover": {
       cursor: "pointer",
-      backgroundColor: "#FAFAFA",
+      backgroundColor: "#e5e5e5",
       borderRadius: "5px",
       color: "#212121",
       padding: "0 5px",
@@ -64,6 +64,12 @@ const useStyles = makeStyles(theme => ({
   titleBox: {
     [theme.breakpoints.down("xs")]: {
       width: "100%"
+    }
+  },
+  buttonBox: {
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      justifyContent: "space-between"
     }
   }
 }));
@@ -202,7 +208,7 @@ export default function DroppableContainer({
                 ) : null}
               </Box>
             </Box>
-            <Box display="flex">
+            <Box display="flex" className={classes.buttonBox}>
               <Tooltip
                 title={droppableId.expand ? COLLAPSED_TEXT : EXPAND_TEXT}
                 placement="top"
