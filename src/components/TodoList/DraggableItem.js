@@ -61,7 +61,7 @@ export default function DraggableItem({ item, index, cardID }) {
   };
   useEffect(() => {
     dispatch(setBackdrop(false));
-  }, []);
+  }, [dispatch]);
   return (
     <Draggable
       key={item._id}
