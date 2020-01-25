@@ -5,7 +5,8 @@ import {
   getCards,
   cardItemChange,
   cardItemShared,
-  cardChange
+  cardChange,
+  updateCard
 } from "actions/cardsActions";
 import CreateCard from "./CreateCard";
 import DragDropComponent from "./DragDropComponent";
@@ -46,7 +47,10 @@ export default function Cards() {
 
   const onDragEnd = result => {
     let newData = cloneDeep(cards);
-    if (!result.destination) {
+    if (
+      result.destination.index === result.source.index &&
+      result.destination.droppableId === result.source.droppableId
+    ) {
       return cards;
     } else if (
       result.type === "LIST" &&
@@ -73,6 +77,16 @@ export default function Cards() {
         cardChange({
           cards,
           result
+        })
+      );
+      dispatch(
+        updateCard({
+          cardID: result.draggableId,
+          position: {
+            userID,
+            source: result.source.index,
+            destination: result.destination.index
+          }
         })
       );
     }
