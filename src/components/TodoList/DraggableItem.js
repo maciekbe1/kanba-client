@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Typography, ListItem, Box, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -59,6 +59,9 @@ export default function DraggableItem({ item, index, cardID }) {
         dispatch(setBackdrop(false));
       });
   };
+  useEffect(() => {
+    dispatch(setBackdrop(false));
+  }, []);
   return (
     <Draggable
       key={item._id}
