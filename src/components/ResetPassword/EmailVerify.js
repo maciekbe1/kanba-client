@@ -55,7 +55,6 @@ export default function ResetPassword() {
     })
       .then(res => {
         setloading(false);
-
         setSuccess(true);
         setMessage(res.data.message);
       })

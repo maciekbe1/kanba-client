@@ -210,7 +210,7 @@ export default function DroppableContainer({
           </Box>
           <Collapse in={droppableId.expand} timeout="auto" unmountOnExit>
             <List style={getListStyle(snapshot.isDraggingOver)}>
-              {list && list.length > 0 ? (
+              {list?.length > 0 ? (
                 list.map((item, key) => (
                   <DraggableItem
                     key={item._id}
