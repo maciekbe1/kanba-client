@@ -42,19 +42,19 @@ export default function RemoveCard({ dialog, dialogHandler, cardID, userID }) {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogTitle id="alert-dialog-slide-title">
-        Do u want to remove {cardID ? cardID.title : null}?
+        Na pewno chesz usunąć {cardID ? cardID.title : null}?
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          this list will be deleted permanently
+          Ta karta zostanie trwale usunięta.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={dialogHandler} color="primary">
-          Disagree
+          Nie
         </Button>
-        <Button onClick={approvedRemoveList} color="primary">
-          Agree
+        <Button onClick={approvedRemoveList} color="primary" color="secondary">
+          Tak
         </Button>
       </DialogActions>
     </Dialog>
