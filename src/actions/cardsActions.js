@@ -1,6 +1,7 @@
 import { request } from "api/API";
 import Cookie from "js-cookie";
 import { signOut } from "actions/UserActions";
+import { setBackdrop } from "actions";
 import { find } from "lodash";
 
 export const getCards = ({ userID }) => async dispatch => {
@@ -22,7 +23,7 @@ export const getCards = ({ userID }) => async dispatch => {
     });
 };
 
-export const cardItemChange = ({ cards, result }) => {
+export const cardItemChange = ({ cards, result }) => async dispatch => {
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -40,13 +41,36 @@ export const cardItemChange = ({ cards, result }) => {
     }
     return data;
   });
-  return {
-    type: "SET_CARDS_STATE",
-    cardsState: cards
-  };
+  dispatch(setBackdrop(true));
+  request(
+    `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
+    {
+      card: {
+        destination: result.destination.index,
+        itemID: result.draggableId,
+        cardID: result.destination.droppableId
+      },
+      type: "inside_list"
+    },
+    Cookie.get("token")
+  )
+    .then(() => {
+      dispatch(setBackdrop(false));
+    })
+    .catch(err => {
+      alert(err);
+      dispatch(setBackdrop(false));
+    });
+
+  dispatch({ type: "SET_CARDS_STATE", cardsState: cards });
+
+  // return {
+  //   type: "SET_CARDS_STATE",
+  //   cardsState: cards
+  // };
 };
 
-export const cardItemShared = ({ cards, result }) => {
+export const cardItemShared = ({ cards, result }) => async dispatch => {
   let start = find(cards, o => {
     return o._id === result.source.droppableId;
   });
@@ -55,20 +79,27 @@ export const cardItemShared = ({ cards, result }) => {
   });
   const [removed] = start.list.splice(result.source.index, 1);
   end.list.splice(result.destination.index, 0, removed);
+  dispatch(setBackdrop(true));
   request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
     {
       card: {
-        position: "all_lists",
         start: start._id,
         end: end._id,
-        source: result.source.index,
         destination: result.destination.index,
         draggableId: result.draggableId
-      }
+      },
+      type: "all_lists"
     },
     Cookie.get("token")
-  );
+  )
+    .then(() => {
+      dispatch(setBackdrop(false));
+    })
+    .catch(err => {
+      alert(err);
+      dispatch(setBackdrop(false));
+    });
   return {
     type: "SET_CARDS_STATE",
     cardsState: cards
