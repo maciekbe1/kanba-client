@@ -13,7 +13,6 @@ import DragDropComponent from "./DragDropComponent";
 import Modal from "../Utils/Modal";
 import { Button, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-const ALL_CARDS = "all_cards";
 
 export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
@@ -85,11 +84,11 @@ export default function Cards() {
         updateCard({
           cardID: result.draggableId,
           position: {
-            type: ALL_CARDS,
             userID,
             source: result.source.index,
             destination: result.destination.index
-          }
+          },
+          type: "all_cards"
         })
       );
     }

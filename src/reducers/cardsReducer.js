@@ -61,7 +61,8 @@ export default (state = INITIAL_DATA, action) => {
         `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
         {
           card: { [name]: action.payload[name] },
-          cardID: action.payload.cardID
+          cardID: action.payload.cardID,
+          type: action.payload.type
         },
         Cookie.get("token")
       )
