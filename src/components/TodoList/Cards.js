@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { isEmpty, cloneDeep } from "lodash";
+import { isEmpty, cloneDeep, isNull } from "lodash";
 import {
   getCards,
   cardItemChange,
@@ -13,6 +13,7 @@ import DragDropComponent from "./DragDropComponent";
 import Modal from "../Utils/Modal";
 import { Button, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
+const ALL_CARDS = "all_cards";
 
 export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
@@ -48,8 +49,9 @@ export default function Cards() {
   const onDragEnd = result => {
     let newData = cloneDeep(cards);
     if (
-      result.destination.index === result.source.index &&
-      result.destination.droppableId === result.source.droppableId
+      isNull(result.destination) ||
+      (result.destination?.index === result.source?.index &&
+        result.destination.droppableId === result.source.droppableId)
     ) {
       return cards;
     } else if (
@@ -83,6 +85,7 @@ export default function Cards() {
         updateCard({
           cardID: result.draggableId,
           position: {
+            type: ALL_CARDS,
             userID,
             source: result.source.index,
             destination: result.destination.index

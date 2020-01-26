@@ -55,6 +55,20 @@ export const cardItemShared = ({ cards, result }) => {
   });
   const [removed] = start.list.splice(result.source.index, 1);
   end.list.splice(result.destination.index, 0, removed);
+  request(
+    `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
+    {
+      card: {
+        position: "all_lists",
+        start: start._id,
+        end: end._id,
+        source: result.source.index,
+        destination: result.destination.index,
+        draggableId: result.draggableId
+      }
+    },
+    Cookie.get("token")
+  );
   return {
     type: "SET_CARDS_STATE",
     cardsState: cards
