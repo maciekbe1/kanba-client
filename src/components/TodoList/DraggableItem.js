@@ -63,14 +63,7 @@ export default function DraggableItem({ item, index, cardID }) {
     dispatch(setBackdrop(false));
   }, [dispatch]);
   return (
-    <Draggable
-      key={item._id}
-      draggableId={JSON.stringify({
-        nodeId: item._id,
-        type: "DragItem"
-      })}
-      index={index}
-    >
+    <Draggable key={item._id} draggableId={item._id} index={index}>
       {(provided, snapshot) => (
         <ListItem
           {...provided.draggableProps}
