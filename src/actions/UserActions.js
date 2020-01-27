@@ -31,3 +31,21 @@ export const signIn = ({ token, isAuth }) => async dispatch => {
       console.log(err.response.data);
     });
 };
+export const checkAuth = () => async dispatch => {
+  return await API.requestToken(
+    `${process.env.REACT_APP_SERVER}/api/users/me`,
+    Cookies.get("token")
+  )
+    .then(res => {
+      return dispatch({
+        type: "SIGNIN_USER",
+        isAuth: true,
+        data: res.data
+      });
+    })
+    .catch(err => {
+      alert("Sesja minęła, zaloguj sie ponownie.");
+      dispatch(signOut());
+      console.log(err.response.data);
+    });
+};
