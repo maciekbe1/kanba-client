@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { signOut } from "actions/UserActions";
 import { useSelector } from "react-redux";
 import { setTabValue } from "actions";
 import { setDarkTheme } from "actions";
+import { checkAuth } from "actions/UserActions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { findIndex } from "lodash";
@@ -34,7 +35,6 @@ import Tab from "@material-ui/core/Tab";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Switch from "@material-ui/core/Switch";
-
 const drawerWidth = 200;
 const useStyles = makeStyles(theme => ({
   root: {
@@ -111,6 +111,17 @@ export default function MiniDrawer(props) {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const darkTheme = useSelector(state => state.layoutReducer.darkTheme);
+
+  useEffect(() => {
+    const check = () => {
+      dispatch(checkAuth());
+    };
+    document.addEventListener("visibilitychange", check);
+    return () => {
+      document.removeEventListener("visibilitychange", check);
+    };
+  }, [dispatch]);
+
   const tabs = [
     { icon: <HomeIcon />, label: "Home", to: "/" },
     { icon: <ViewDay />, label: "Karty", to: "/cards" },
