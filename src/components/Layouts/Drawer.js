@@ -116,9 +116,9 @@ export default function MiniDrawer(props) {
     const check = () => {
       dispatch(checkAuth());
     };
-    document.addEventListener("visibilitychange", check);
+    window.addEventListener("focus", check);
     return () => {
-      document.removeEventListener("visibilitychange", check);
+      window.removeEventListener("focus", check);
     };
   }, [dispatch]);
 
