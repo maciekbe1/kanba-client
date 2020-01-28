@@ -30,7 +30,7 @@ export default function CreateCardItem({ modalHandler, cardID }) {
   const dispatch = useDispatch();
   const [values, setValues] = useState({
     title: "",
-    description: ""
+    content: ""
   });
 
   const [loading, setLoading] = useState(false);
@@ -90,11 +90,11 @@ export default function CreateCardItem({ modalHandler, cardID }) {
         <TextField
           fullWidth
           id="standard-optional"
-          label="Description"
-          value={values.description}
-          onChange={handleChange("description")}
+          label="content"
+          value={values.content}
+          onChange={handleChange("content")}
           multiline
-          name="description"
+          name="content"
           type="text"
           variant="outlined"
           style={{ margin: "5px 0 10px 0" }}

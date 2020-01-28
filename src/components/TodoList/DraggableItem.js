@@ -1,12 +1,18 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Typography, ListItem, Box, Button } from "@material-ui/core";
+import { Typography, ListItem, Box, Button, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { removeItem } from "actions/cardsActions";
 import { setBackdrop } from "actions";
 import { request } from "api/API";
 import Cookie from "js-cookie";
+
+import ExpandLess from "@material-ui/icons/ArrowRight";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import Collapse from "@material-ui/core/Collapse";
+import ListItemText from "@material-ui/core/ListItemText";
+
 const useStyles = makeStyles(theme => ({
   columnStyles: {
     flex: " 0 0 100%",
@@ -16,11 +22,16 @@ const useStyles = makeStyles(theme => ({
   rowStyles: {
     display: "flex",
     flexWrap: "wrap",
+    padding: "10px 8px 10px 3px",
     "&:hover": {
-      background: "#e5e5e5",
+      background: "#616161",
       borderRadius: "5px",
-      color: "#333232"
+      color: "#fff"
     }
+  },
+  expandItem: {
+    padding: "5px",
+    borderRadius: "50%"
   }
 }));
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -35,6 +46,11 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 export default function DraggableItem({ item, index, cardID }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
   const removeItemFromCard = () => {
     dispatch(setBackdrop(true));
     request(
@@ -78,15 +94,29 @@ export default function DraggableItem({ item, index, cardID }) {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography>{item.title}</Typography>
+            <Box display="flex" alignItems="center">
+              <ListItem
+                button
+                onClick={handleClick}
+                className={classes.expandItem}
+              >
+                {open ? <ExpandMore /> : <ExpandLess />}
+              </ListItem>
+              <Typography>{item.title}</Typography>
+            </Box>
             <Button
               color="secondary"
-              variant="outlined"
+              variant="contained"
               onClick={removeItemFromCard}
             >
               Usuń
             </Button>
           </Box>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemText>{item.content}</ListItemText>
+            </List>
+          </Collapse>
         </ListItem>
       )}
     </Draggable>
