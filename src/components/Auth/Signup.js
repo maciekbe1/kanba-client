@@ -70,7 +70,7 @@ export default function Signup() {
     <Container maxWidth="lg">
       {!success ? (
         <Grid container display="flex" justify="center">
-          <Grid item lg={6} xs={8}>
+          <Grid item lg={6} xs={10}>
             <form
               align="center"
               autoComplete="off"
