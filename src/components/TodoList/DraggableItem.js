@@ -1,6 +1,6 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Typography, ListItem, Box, Button, List } from "@material-ui/core";
+import { Typography, ListItem, Box, IconButton, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { removeItem } from "actions/cardsActions";
@@ -12,6 +12,7 @@ import ExpandLess from "@material-ui/icons/ArrowRight";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import Collapse from "@material-ui/core/Collapse";
 import ListItemText from "@material-ui/core/ListItemText";
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 
 const useStyles = makeStyles(theme => ({
   columnStyles: {
@@ -22,11 +23,11 @@ const useStyles = makeStyles(theme => ({
   rowStyles: {
     display: "flex",
     flexWrap: "wrap",
-    padding: "10px 8px 10px 3px",
+    padding: "10px 0px 10px 3px",
     "&:hover": {
-      background: "#616161",
+      background: theme.palette.type === "dark" ? "#616161" : "#E0E0E0",
       borderRadius: "5px",
-      color: "#fff"
+      color: theme.palette.type === "dark" ? "#fff" : "#212121"
     }
   },
   expandItem: {
@@ -103,16 +104,18 @@ export default function DraggableItem({ item, index, cardID }) {
               >
                 {open ? <ExpandMore /> : <ExpandLess />}
               </ListItem>
-              <Typography>{item.title}</Typography>
+              <Typography style={{ wordBreak: "break-all" }}>
+                {item.title}
+              </Typography>
             </Box>
             <Box>
-              <Button
+              <IconButton
                 color="secondary"
                 variant="contained"
                 onClick={removeItemFromCard}
               >
-                Usuń
-              </Button>
+                <HighlightOffIcon />
+              </IconButton>
             </Box>
           </Box>
           <Collapse in={open} timeout="auto" unmountOnExit>
