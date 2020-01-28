@@ -31,7 +31,8 @@ const useStyles = makeStyles(theme => ({
   },
   expandItem: {
     padding: "5px",
-    borderRadius: "50%"
+    borderRadius: "50%",
+    width: "auto"
   }
 }));
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -94,7 +95,7 @@ export default function DraggableItem({ item, index, cardID }) {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" pr={1}>
               <ListItem
                 button
                 onClick={handleClick}
@@ -104,13 +105,15 @@ export default function DraggableItem({ item, index, cardID }) {
               </ListItem>
               <Typography>{item.title}</Typography>
             </Box>
-            <Button
-              color="secondary"
-              variant="contained"
-              onClick={removeItemFromCard}
-            >
-              Usuń
-            </Button>
+            <Box>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={removeItemFromCard}
+              >
+                Usuń
+              </Button>
+            </Box>
           </Box>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
