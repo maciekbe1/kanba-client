@@ -1,6 +1,6 @@
 import { request } from "api/API";
 import Cookie from "js-cookie";
-import { signOut } from "actions/UserActions";
+// import { signOut } from "actions/UserActions";
 import { setBackdrop } from "actions";
 import { find } from "lodash";
 
@@ -17,8 +17,7 @@ export const getCards = ({ userID }) => async dispatch => {
       });
     })
     .catch(error => {
-      alert("Twoja sesja wygasła, zaloguj sie ponownie");
-      dispatch(signOut());
+      alert(error.response.data);
       console.log(error);
     });
 };
