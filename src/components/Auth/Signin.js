@@ -118,11 +118,13 @@ export default function Signin({ modalHandler }) {
         </Typography>
       </Link>
       {error ? (
-        <FormControl style={{ marginBottom: "20px" }}>
-          <FormHelperText className={classes.error} id="my-helper-text">
-            {message}
-          </FormHelperText>
-        </FormControl>
+        <Box>
+          <FormControl style={{ marginBottom: "20px" }}>
+            <FormHelperText className={classes.error} id="my-helper-text">
+              {message}
+            </FormHelperText>
+          </FormControl>
+        </Box>
       ) : null}
 
       <Box display="flex" justifyContent="flex-end" className={classes.buttons}>

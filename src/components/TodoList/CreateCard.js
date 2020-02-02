@@ -8,9 +8,9 @@ import {
   Box,
   Button,
   FormControl,
-  FormHelperText
+  FormHelperText,
+  CircularProgress
 } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { createCard } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
 
@@ -97,11 +97,13 @@ export default function CreateCard({ modalHandler, user }) {
           style={{ margin: "5px 0 10px 0" }}
         />
         {error ? (
-          <FormControl style={{ marginBottom: "20px" }}>
-            <FormHelperText className={classes.error} id="my-helper-text">
-              {message}
-            </FormHelperText>
-          </FormControl>
+          <Box>
+            <FormControl style={{ marginBottom: "20px" }}>
+              <FormHelperText className={classes.error} id="my-helper-text">
+                {message}
+              </FormHelperText>
+            </FormControl>
+          </Box>
         ) : null}
         <Box
           display="flex"
