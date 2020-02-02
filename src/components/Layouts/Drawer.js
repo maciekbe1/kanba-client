@@ -29,7 +29,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
-import { ViewDay, AlarmOn } from "@material-ui/icons";
+import { ViewDay, PermDataSetting } from "@material-ui/icons";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -123,9 +123,9 @@ export default function MiniDrawer(props) {
   }, [dispatch]);
 
   const tabs = [
-    { icon: <HomeIcon />, label: "Home", to: "/" },
-    { icon: <ViewDay />, label: "Karty", to: "/cards" },
-    { icon: <AlarmOn />, label: "Done", to: "/done" }
+    { icon: <HomeIcon />, label: "Główna", to: "/" },
+    { icon: <PermDataSetting />, label: "Projekty", to: "/projects" },
+    { icon: <ViewDay />, label: "Karty", to: "/cards" }
   ];
   const tabValue = findIndex(tabs, function(item) {
     return item.to === pathname;

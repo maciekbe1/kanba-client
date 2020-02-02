@@ -12,7 +12,7 @@ import SetPassword from "./components/ResetPassword/SetPassword";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import LayoutProvider from "./components/Layouts/LayoutProvider";
 import Layout from "./components/Layouts/Layout";
-import { Todo } from "./components/Private";
+import { CardsPrivate, ProjectsPrivate } from "./components/Private";
 import NotFound from "./components/Utils/NotFound";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -46,7 +46,8 @@ function App() {
                 render={render => <HomePage {...render} />}
               />
             )}
-            <ProtectedRoute path="/cards" component={Todo} />
+            <ProtectedRoute path="/cards" component={CardsPrivate} />
+            <ProtectedRoute path="/projects" component={ProjectsPrivate} />
             <Route path="/signup" component={Signup} />
             <Route path="/verify/:hash" component={AccountVerify} />
             <Route path="/reset-password" component={EmailVerify} />
