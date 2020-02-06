@@ -1,6 +1,5 @@
 import { request } from "api/API";
 import Cookie from "js-cookie";
-// import { signOut } from "actions/UserActions";
 import { setBackdrop } from "actions";
 import { find } from "lodash";
 

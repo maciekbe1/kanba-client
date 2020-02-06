@@ -1,55 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Typography, ListItem, Box, IconButton, List } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+
 import { useDispatch } from "react-redux";
 import { removeItem } from "actions/cardsActions";
 import { setBackdrop } from "actions";
 import { request } from "api/API";
-import Cookie from "js-cookie";
 
+import { Editor, EditorState, convertFromRaw } from "draft-js";
+
+import { Typography, ListItem, Box, IconButton, List } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import ExpandLess from "@material-ui/icons/ArrowRight";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import Collapse from "@material-ui/core/Collapse";
-import ListItemText from "@material-ui/core/ListItemText";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 
-const useStyles = makeStyles(theme => ({
-  columnStyles: {
-    flex: " 0 0 100%",
-    maxWidth: "100%",
-    position: "relative"
-  },
-  rowStyles: {
-    display: "flex",
-    flexWrap: "wrap",
-    padding: "10px 0px 10px 3px",
-    "&:hover": {
-      background: theme.palette.type === "dark" ? "#616161" : "#E0E0E0",
-      borderRadius: "5px",
-      color: theme.palette.type === "dark" ? "#fff" : "#212121"
-    }
-  },
-  expandItem: {
-    padding: "5px",
-    borderRadius: "50%",
-    width: "auto"
-  }
-}));
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // styles we need to apply on draggables
-  ...draggableStyle,
+import Cookie from "js-cookie";
 
-  ...(isDragging && {
-    borderRadius: "5px",
-    background: "#807e7e"
-  })
-});
 export default function DraggableItem({ item, index, cardID }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  useEffect(() => {
+    const rawEditorData = item.content;
+    if (rawEditorData !== null) {
+      const contentState = convertFromRaw(JSON.parse(rawEditorData));
+      setEditorState(EditorState.createWithContent(contentState));
+    }
+  }, [item]);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -119,12 +98,47 @@ export default function DraggableItem({ item, index, cardID }) {
             </Box>
           </Box>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemText>{item.content}</ListItemText>
-            </List>
+            <Box p={2} pt={0} className={classes.columnStyles}>
+              <List component="div" disablePadding>
+                {/* <ListItemText>{item.content}</ListItemText> */}
+                <Editor editorState={editorState} readOnly={true} />
+              </List>
+            </Box>
           </Collapse>
         </ListItem>
       )}
     </Draggable>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  columnStyles: {
+    flex: " 0 0 100%",
+    maxWidth: "100%",
+    position: "relative"
+  },
+  rowStyles: {
+    display: "flex",
+    flexWrap: "wrap",
+    padding: "10px 0px 10px 3px",
+    "&:hover": {
+      background: theme.palette.type === "dark" ? "#616161" : "#E0E0E0",
+      borderRadius: "5px",
+      color: theme.palette.type === "dark" ? "#fff" : "#212121"
+    }
+  },
+  expandItem: {
+    padding: "5px",
+    borderRadius: "50%",
+    width: "auto"
+  }
+}));
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // styles we need to apply on draggables
+  ...draggableStyle,
+
+  ...(isDragging && {
+    borderRadius: "5px",
+    background: "#807e7e"
+  })
+});

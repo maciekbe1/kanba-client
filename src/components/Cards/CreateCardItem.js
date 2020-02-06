@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { createItem } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
+import EditorContainer from "../Utils/Editor/EditorContainer";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -27,33 +28,30 @@ const useStyles = makeStyles(theme => ({
 export default function CreateCardItem({ modalHandler, cardID }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [values, setValues] = useState({
-    title: "",
-    content: ""
-  });
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
-
-  const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value });
+  const setContentHandler = value => {
+    setContent(value);
   };
-
   const addItemHandler = e => {
     e.preventDefault();
     setError(false);
     setLoading(true);
     request(
       `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
-      { cardID: cardID._id, item: values },
+      { cardID: cardID._id, item: { title, content } },
       Cookie.get("token")
     )
       .then(res => {
         dispatch(
           createItem({
             cardID: cardID._id,
-            values,
+            values: { title, content },
             itemID: res.data.id
           })
         );
@@ -77,8 +75,8 @@ export default function CreateCardItem({ modalHandler, cardID }) {
           error={error}
           id="standard-required"
           label="Title"
-          value={values.title}
-          onChange={handleChange("title")}
+          value={title}
+          onChange={e => setTitle(e.target.value)}
           helperText="* Required"
           name="title"
           type="text"
@@ -86,7 +84,7 @@ export default function CreateCardItem({ modalHandler, cardID }) {
           style={{ margin: "10px 0 5px 0" }}
         />
 
-        <TextField
+        {/* <TextField
           fullWidth
           id="standard-optional"
           label="content"
@@ -97,7 +95,8 @@ export default function CreateCardItem({ modalHandler, cardID }) {
           type="text"
           variant="outlined"
           style={{ margin: "5px 0 10px 0" }}
-        />
+        /> */}
+        <EditorContainer setContentHandler={setContentHandler} />
         {error ? (
           <Box>
             <FormControl style={{ marginBottom: "20px" }}>
