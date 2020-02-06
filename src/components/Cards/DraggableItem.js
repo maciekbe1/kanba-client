@@ -24,7 +24,7 @@ export default function DraggableItem({ item, index, cardID }) {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   useEffect(() => {
     const rawEditorData = item.content;
-    if (rawEditorData !== null || rawEditorData !== "") {
+    if (rawEditorData !== null && rawEditorData !== "") {
       const contentState = convertFromRaw(JSON.parse(rawEditorData));
       setEditorState(EditorState.createWithContent(contentState));
     }
