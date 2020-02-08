@@ -1,5 +1,7 @@
 import React from "react";
-import { Editor, EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 export default function EditorContainer({ setContentHandler }) {
   const [editorState, setEditorState] = React.useState(
@@ -14,10 +16,32 @@ export default function EditorContainer({ setContentHandler }) {
   };
 
   return (
-    <div>
+    <div className="editor-editing">
       <Editor
         editorState={editorState}
-        onChange={editorState => updateEditorState(editorState)}
+        onEditorStateChange={editorState => updateEditorState(editorState)}
+        toolbar={{
+          options: [
+            "inline",
+            "blockType",
+            "fontSize",
+            "fontFamily",
+            "list",
+            "textAlign",
+            "colorPicker",
+            "emoji",
+            "link",
+            "history"
+          ],
+          inline: { inDropdown: true },
+          list: { inDropdown: true },
+          textAlign: { inDropdown: true },
+          link: { inDropdown: true },
+          history: { inDropdown: true }
+        }}
+        wrapperClassName="demo-wrapper"
+        editorClassName="demo-editor"
+        placeholder="Napisz coś.."
       />
     </div>
   );

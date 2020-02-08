@@ -6,8 +6,8 @@ import { removeItem } from "actions/cardsActions";
 import { setBackdrop } from "actions";
 import { request } from "api/API";
 
-import { Editor, EditorState, convertFromRaw } from "draft-js";
-
+import { EditorState, convertFromRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
 import { Typography, ListItem, Box, IconButton, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandLess from "@material-ui/icons/ArrowRight";
@@ -97,11 +97,29 @@ export default function DraggableItem({ item, index, cardID }) {
               </IconButton>
             </Box>
           </Box>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box p={2} pt={0} className={classes.columnStyles}>
+          <Collapse
+            in={open}
+            timeout="auto"
+            unmountOnExit
+            style={{
+              width: "100%"
+            }}
+          >
+            <Box
+              p={2}
+              pt={0}
+              className={classes.columnStyles}
+              style={{
+                width: "100%"
+              }}
+            >
               <List component="div" disablePadding>
                 {/* <ListItemText>{item.content}</ListItemText> */}
-                <Editor editorState={editorState} readOnly={true} />
+                <Editor
+                  toolbarHidden
+                  editorState={editorState}
+                  readOnly={true}
+                />
               </List>
             </Box>
           </Collapse>

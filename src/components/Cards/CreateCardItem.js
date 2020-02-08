@@ -74,28 +74,15 @@ export default function CreateCardItem({ modalHandler, cardID }) {
           required
           error={error}
           id="standard-required"
-          label="Title"
+          label="Tytuł"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          helperText="* Required"
+          helperText="* Wymagane"
           name="title"
           type="text"
           variant="outlined"
           style={{ margin: "10px 0 5px 0" }}
         />
-
-        {/* <TextField
-          fullWidth
-          id="standard-optional"
-          label="content"
-          value={values.content}
-          onChange={handleChange("content")}
-          multiline
-          name="content"
-          type="text"
-          variant="outlined"
-          style={{ margin: "5px 0 10px 0" }}
-        /> */}
         <EditorContainer setContentHandler={setContentHandler} />
         {error ? (
           <Box>
