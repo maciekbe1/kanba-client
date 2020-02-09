@@ -26,7 +26,9 @@ export default function SimpleModal({ openProps, modalHandler, children }) {
       backgroundColor: theme.palette.background.paper,
       border: "1px solid #000",
       boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 2, 2)
+      padding: theme.spacing(2, 2, 2),
+      overflow: "scroll",
+      maxHeight: "100%"
     }
   }));
   const classes = useStyles();
@@ -40,9 +42,7 @@ export default function SimpleModal({ openProps, modalHandler, children }) {
         style={modalStyle}
         className={classes.paper}
       >
-        <Grid item lg={10} xs={10}>
-          {children}
-        </Grid>
+        <Grid item>{children}</Grid>
       </Grid>
     </Modal>
   );

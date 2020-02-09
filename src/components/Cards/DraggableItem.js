@@ -6,9 +6,21 @@ import { removeItem } from "actions/cardsActions";
 import { setBackdrop } from "actions";
 import { request } from "api/API";
 
-import { EditorState, convertFromRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import { Typography, ListItem, Box, IconButton, List } from "@material-ui/core";
+import {
+  EditorState,
+  convertFromRaw,
+  ContentState,
+  convertToRaw
+} from "draft-js";
+import EditorContainer from "../Utils/Editor/EditorContainer";
+
+import {
+  Typography,
+  ListItem,
+  Box,
+  IconButton,
+  Paper
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandLess from "@material-ui/icons/ArrowRight";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -22,15 +34,28 @@ export default function DraggableItem({ item, index, cardID }) {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [rawContent, setRawContent] = useState(
+    JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+  );
+  const [readOnly, setReadOnly] = useState(true);
   useEffect(() => {
     const rawEditorData = item.content;
     if (rawEditorData !== null && rawEditorData !== "") {
       const contentState = convertFromRaw(JSON.parse(rawEditorData));
       setEditorState(EditorState.createWithContent(contentState));
+    } else {
+      setEditorState(
+        EditorState.createWithContent(
+          ContentState.createFromText("@Brak treści")
+        )
+      );
     }
   }, [item]);
   const handleClick = () => {
     setOpen(!open);
+  };
+  const readOnlyHandler = () => {
+    setReadOnly(false);
   };
   const removeItemFromCard = () => {
     dispatch(setBackdrop(true));
@@ -55,6 +80,18 @@ export default function DraggableItem({ item, index, cardID }) {
         console.log(err);
         dispatch(setBackdrop(false));
       });
+  };
+  const updateItemContent = value => {
+    setReadOnly(value);
+    request(
+      `${process.env.REACT_APP_SERVER}/api/cards/update-item`,
+      {
+        cardID,
+        itemID: item._id,
+        content: rawContent
+      },
+      Cookie.get("token")
+    );
   };
   return (
     <Draggable key={item._id} draggableId={item._id} index={index}>
@@ -113,14 +150,20 @@ export default function DraggableItem({ item, index, cardID }) {
                 width: "100%"
               }}
             >
-              <List component="div" disablePadding>
-                {/* <ListItemText>{item.content}</ListItemText> */}
-                <Editor
-                  toolbarHidden
+              <Paper
+                elevation={3}
+                style={{ padding: "5px" }}
+                onClick={readOnlyHandler}
+              >
+                <EditorContainer
+                  toolbarHidden={readOnly}
                   editorState={editorState}
-                  readOnly={true}
+                  readOnly={readOnly}
+                  setEditorState={setEditorState}
+                  setRawContent={setRawContent}
+                  setOnBlur={updateItemContent}
                 />
-              </List>
+              </Paper>
             </Box>
           </Collapse>
         </ListItem>

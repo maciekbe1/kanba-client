@@ -9,7 +9,7 @@ import { applyMiddleware, createStore } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import rootReducer from "./reducers";
-import logger from "redux-logger";
+// import logger from "redux-logger";
 import thunk from "redux-thunk";
 
 const persistConfig = {
@@ -18,7 +18,8 @@ const persistConfig = {
 };
 let middleware = [];
 if (window.location.hostname === "localhost") {
-  middleware = [...middleware, thunk, logger];
+  // middleware = [...middleware, thunk, logger];
+  middleware = [...middleware, thunk];
 } else {
   middleware = [...middleware, thunk];
 }

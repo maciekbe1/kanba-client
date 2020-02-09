@@ -1,18 +1,11 @@
 body {
   font-family: "Roboto", sans-serif;
 }
-.editor-editing .rdw-editor-toolbar {
+.draft-editor-toolbar {
   background: unset !important;
   color: #000;
   border-radius: 4px !important;
   border: unset !important;
-}
-.editor-editing .DraftEditor-editorContainer {
-  border-radius: 4px !important;
-  border: 1px solid #6e6e6e !important;
-  padding: 5px 8px;
-  margin-bottom: 8px;
-}
-.public-DraftEditorPlaceholder-inner {
-  padding: 20px 0 0 10px;
+  display: flex;
+  justify-content: center;
 }
