@@ -147,3 +147,10 @@ export const removeItem = payload => {
     payload
   };
 };
+
+export const updateItem = payload => {
+  return {
+    type: "UPDATE_ITEM",
+    payload
+  };
+};

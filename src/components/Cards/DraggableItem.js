@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { useDispatch } from "react-redux";
-import { removeItem } from "actions/cardsActions";
+import { removeItem, updateItem } from "actions/cardsActions";
 import { setBackdrop } from "actions";
 import { request } from "api/API";
 
@@ -91,7 +91,15 @@ export default function DraggableItem({ item, index, cardID }) {
         content: rawContent
       },
       Cookie.get("token")
-    );
+    ).then(() => {
+      dispatch(
+        updateItem({
+          itemID: item._id,
+          cardID: cardID,
+          content: rawContent
+        })
+      );
+    });
   };
   return (
     <Draggable key={item._id} draggableId={item._id} index={index}>
