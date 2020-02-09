@@ -1,3 +1,11 @@
 body {
-    font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
+}
+.draft-editor-toolbar {
+  background: unset !important;
+  color: #000;
+  border-radius: 4px !important;
+  border: unset !important;
+  display: flex;
+  justify-content: center;
 }

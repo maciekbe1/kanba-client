@@ -74,10 +74,10 @@ export default function CreateCard({ modalHandler, user }) {
           required
           error={error}
           id="standard-required"
-          label="Title"
+          label="Tytuł"
           value={values.title}
           onChange={handleChange("title")}
-          helperText="* Required"
+          helperText="* Wymagane"
           name="title"
           type="text"
           variant="outlined"
@@ -87,7 +87,7 @@ export default function CreateCard({ modalHandler, user }) {
         <TextField
           fullWidth
           id="standard-optional"
-          label="Description"
+          label="Opis"
           value={values.description}
           onChange={handleChange("description")}
           multiline

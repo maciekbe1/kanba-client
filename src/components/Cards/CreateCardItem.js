@@ -14,6 +14,7 @@ import {
 import { createItem } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
 import EditorContainer from "../Utils/Editor/EditorContainer";
+import { EditorState, convertToRaw } from "draft-js";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -23,6 +24,12 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.error.main,
     fontWeight: "bold",
     fontSize: "14px"
+  },
+  draftEditorModal: {
+    borderRadius: "4px !important",
+    border: "1px solid #6e6e6e !important",
+    padding: "5px 8px",
+    marginBottom: "8px"
   }
 }));
 export default function CreateCardItem({ modalHandler, cardID }) {
@@ -30,28 +37,29 @@ export default function CreateCardItem({ modalHandler, cardID }) {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
-  const setContentHandler = value => {
-    setContent(value);
-  };
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [rawContent, setRawContent] = useState(
+    JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+  );
+
   const addItemHandler = e => {
     e.preventDefault();
     setError(false);
     setLoading(true);
     request(
       `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
-      { cardID: cardID._id, item: { title, content } },
+      { cardID: cardID._id, item: { title, content: rawContent } },
       Cookie.get("token")
     )
       .then(res => {
         dispatch(
           createItem({
             cardID: cardID._id,
-            values: { title, content },
+            values: { title, content: rawContent },
             itemID: res.data.id
           })
         );
@@ -74,29 +82,22 @@ export default function CreateCardItem({ modalHandler, cardID }) {
           required
           error={error}
           id="standard-required"
-          label="Title"
+          label="Tytuł"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          helperText="* Required"
+          helperText="* Wymagane"
           name="title"
           type="text"
           variant="outlined"
           style={{ margin: "10px 0 5px 0" }}
         />
-
-        {/* <TextField
-          fullWidth
-          id="standard-optional"
-          label="content"
-          value={values.content}
-          onChange={handleChange("content")}
-          multiline
-          name="content"
-          type="text"
-          variant="outlined"
-          style={{ margin: "5px 0 10px 0" }}
-        /> */}
-        <EditorContainer setContentHandler={setContentHandler} />
+        <div className={classes.draftEditorModal}>
+          <EditorContainer
+            setEditorState={setEditorState}
+            editorState={editorState}
+            setRawContent={setRawContent}
+          />
+        </div>
         {error ? (
           <Box>
             <FormControl style={{ marginBottom: "20px" }}>
