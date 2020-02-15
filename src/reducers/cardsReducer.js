@@ -53,6 +53,19 @@ export default (state = INITIAL_DATA, action) => {
         cardsState: new Card(state.cardsState).cards
       };
     }
+
+    case "UPDATE_ITEM": {
+      find(
+        find(state.cardsState, { _id: action.payload.cardID }).list,
+        item => item._id === action.payload.itemID
+      ).content = action.payload.content;
+
+      return {
+        ...state,
+        cardsState: new Card(state.cardsState).cards
+      };
+    }
+
     case "UPDATE_CARD": {
       const name = Object.keys(action.payload)[1];
       const o = find(state.cardsState, { _id: action.payload.cardID });

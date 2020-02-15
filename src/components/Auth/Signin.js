@@ -73,9 +73,9 @@ export default function Signin({ modalHandler }) {
   };
 
   return (
-    <form onSubmit={e => signInHandler(e)} autoComplete="off">
+    <form onSubmit={e => signInHandler(e)}>
       <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
-        Sign in to Kanba
+        Zaloguj się
       </Typography>
       <FormControl fullWidth>
         <InputLabel htmlFor="standard-adornment-email">
