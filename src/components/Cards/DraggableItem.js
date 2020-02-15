@@ -12,14 +12,15 @@ import {
   ContentState,
   convertToRaw
 } from "draft-js";
-import EditorContainer from "../Utils/Editor/EditorContainer";
+import EditorContainer from "../Editor/EditorContainer";
 
 import {
   Typography,
   ListItem,
   Box,
   IconButton,
-  Paper
+  Paper,
+  Button
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandLess from "@material-ui/icons/ArrowRight";
@@ -28,8 +29,45 @@ import Collapse from "@material-ui/core/Collapse";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 
 import Cookie from "js-cookie";
+import { cloneDeep } from "lodash";
 
 export default function DraggableItem({ item, index, cardID }) {
+  const [readOnly, setReadOnly] = useState(true);
+  const useStyles = makeStyles(theme => ({
+    columnStyles: {
+      flex: " 0 0 100%",
+      maxWidth: "100%",
+      position: "relative"
+    },
+    rowStyles: {
+      display: "flex",
+      flexWrap: "wrap",
+      padding: "10px 0px 10px 3px",
+      "&:hover": {
+        background: theme.palette.type === "dark" ? "#616161" : "#E0E0E0",
+        borderRadius: "5px",
+        color: theme.palette.type === "dark" ? "#fff" : "#212121"
+      }
+    },
+    expandItem: {
+      padding: "5px",
+      borderRadius: "50%",
+      width: "auto"
+    },
+    paper: {
+      padding: "5px",
+      "&:hover": {
+        cursor: readOnly ? "pointer" : "text"
+      }
+    },
+    success: {
+      backgroundColor: theme.palette.success.main,
+      color: "#fff",
+      textTransform: "none",
+      float: "right",
+      "&:hover": { backgroundColor: theme.palette.success.hover }
+    }
+  }));
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -37,7 +75,6 @@ export default function DraggableItem({ item, index, cardID }) {
   const [rawContent, setRawContent] = useState(
     JSON.stringify(convertToRaw(editorState.getCurrentContent()))
   );
-  const [readOnly, setReadOnly] = useState(true);
   useEffect(() => {
     const rawEditorData = item.content;
     if (rawEditorData !== null && rawEditorData !== "") {
@@ -83,23 +120,25 @@ export default function DraggableItem({ item, index, cardID }) {
   };
   const updateItemContent = value => {
     setReadOnly(value);
-    request(
-      `${process.env.REACT_APP_SERVER}/api/cards/update-item`,
-      {
-        cardID,
-        itemID: item._id,
-        content: rawContent
-      },
-      Cookie.get("token")
-    ).then(() => {
-      dispatch(
-        updateItem({
+    if (rawContent !== cloneDeep(item.content)) {
+      request(
+        `${process.env.REACT_APP_SERVER}/api/cards/update-item`,
+        {
+          cardID,
           itemID: item._id,
-          cardID: cardID,
           content: rawContent
-        })
-      );
-    });
+        },
+        Cookie.get("token")
+      ).then(() => {
+        dispatch(
+          updateItem({
+            itemID: item._id,
+            cardID: cardID,
+            content: rawContent
+          })
+        );
+      });
+    }
   };
   return (
     <Draggable key={item._id} draggableId={item._id} index={index}>
@@ -160,7 +199,7 @@ export default function DraggableItem({ item, index, cardID }) {
             >
               <Paper
                 elevation={3}
-                style={{ padding: "5px" }}
+                className={classes.paper}
                 onClick={readOnlyHandler}
               >
                 <EditorContainer
@@ -173,6 +212,17 @@ export default function DraggableItem({ item, index, cardID }) {
                 />
               </Paper>
             </Box>
+            {!readOnly ? (
+              <Box pr={2}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  className={classes.success}
+                >
+                  Zapisz
+                </Button>
+              </Box>
+            ) : null}
           </Collapse>
         </ListItem>
       )}
@@ -180,28 +230,6 @@ export default function DraggableItem({ item, index, cardID }) {
   );
 }
 
-const useStyles = makeStyles(theme => ({
-  columnStyles: {
-    flex: " 0 0 100%",
-    maxWidth: "100%",
-    position: "relative"
-  },
-  rowStyles: {
-    display: "flex",
-    flexWrap: "wrap",
-    padding: "10px 0px 10px 3px",
-    "&:hover": {
-      background: theme.palette.type === "dark" ? "#616161" : "#E0E0E0",
-      borderRadius: "5px",
-      color: theme.palette.type === "dark" ? "#fff" : "#212121"
-    }
-  },
-  expandItem: {
-    padding: "5px",
-    borderRadius: "50%",
-    width: "auto"
-  }
-}));
 const getItemStyle = (isDragging, draggableStyle) => ({
   // styles we need to apply on draggables
   ...draggableStyle,

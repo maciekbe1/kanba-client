@@ -7,28 +7,31 @@ import { useSelector } from "react-redux";
 import { ThemeProvider } from "@material-ui/styles";
 
 export default function LayoutProvider(props) {
-    const primary = blue[800];
-    const success = green[500];
-    const error = red[500];
-    const dark = useSelector(state =>
-        state.layoutReducer.darkTheme ? "dark" : "light"
-    );
-    const theme = createMuiTheme({
-        palette: {
-            type: dark,
-            primary: {
-                main: primary
-            },
-            success: {
-                main: success
-            },
-            error: {
-                main: error
-            }
-        },
-        status: {
-            danger: "orange"
-        }
-    });
-    return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
+  const primary = blue[800];
+  const success = green[500];
+  const successHover = green[800];
+
+  const error = red[500];
+  const dark = useSelector(state =>
+    state.layoutReducer.darkTheme ? "dark" : "light"
+  );
+  const theme = createMuiTheme({
+    palette: {
+      type: dark,
+      primary: {
+        main: primary
+      },
+      success: {
+        main: success,
+        hover: successHover
+      },
+      error: {
+        main: error
+      }
+    },
+    status: {
+      danger: "orange"
+    }
+  });
+  return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
 }

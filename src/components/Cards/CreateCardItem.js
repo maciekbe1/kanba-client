@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { createItem } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
-import EditorContainer from "../Utils/Editor/EditorContainer";
+import EditorContainer from "../Editor/EditorContainer";
 import { EditorState, convertToRaw } from "draft-js";
 
 const useStyles = makeStyles(theme => ({
