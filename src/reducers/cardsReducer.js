@@ -1,4 +1,4 @@
-import { remove, find } from "lodash";
+import { remove, find, set } from "lodash";
 import Card from "model/Card";
 import { request } from "api/API";
 import Cookie from "js-cookie";
@@ -55,10 +55,13 @@ export default (state = INITIAL_DATA, action) => {
     }
 
     case "UPDATE_ITEM": {
-      find(
+      const name = Object.keys(action.payload)[2];
+      const value = Object.values(action.payload)[2];
+      const obj = find(
         find(state.cardsState, { _id: action.payload.cardID }).list,
         item => item._id === action.payload.itemID
-      ).content = action.payload.content;
+      );
+      set(obj, [name], value);
 
       return {
         ...state,
@@ -80,7 +83,7 @@ export default (state = INITIAL_DATA, action) => {
         Cookie.get("token")
       )
         .then(() => {
-          console.log("card updated");
+          return;
         })
         .catch(error => {
           console.log(error);
