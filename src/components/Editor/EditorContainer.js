@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -11,11 +11,13 @@ export default function EditorContainer({
   readOnly = false,
   setOnBlur = null
 }) {
+  const [localRaw, setLocalRaw] = useState();
   const updateEditorState = editorState => {
     const contentState = editorState.getCurrentContent();
     const raw = convertToRaw(contentState);
     setEditorState(editorState);
     setRawContent(JSON.stringify(raw));
+    setLocalRaw(JSON.stringify(raw));
   };
 
   return (
@@ -25,7 +27,7 @@ export default function EditorContainer({
       editorState={editorState}
       onEditorStateChange={editorState => updateEditorState(editorState)}
       onBlur={(event, editorState) => {
-        return setOnBlur !== null ? setOnBlur(true) : null;
+        return setOnBlur !== null ? setOnBlur(true, "content", localRaw) : null;
       }}
       toolbar={{
         options: [
@@ -36,13 +38,13 @@ export default function EditorContainer({
           "colorPicker",
           "emoji",
           "link",
-          "history"
+          "history",
+          "remove"
         ],
         inline: { inDropdown: true },
         list: { inDropdown: true },
         textAlign: { inDropdown: true },
-        link: { inDropdown: true },
-        history: { inDropdown: true }
+        link: { inDropdown: true }
       }}
       toolbarClassName="draft-editor-toolbar"
       placeholder={

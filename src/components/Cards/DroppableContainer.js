@@ -26,54 +26,7 @@ import DraggableItem from "./DraggableItem";
 import { updateCard } from "actions/cardsActions";
 import { setBackdrop } from "actions";
 import { useDispatch } from "react-redux";
-const useStyles = makeStyles(theme => ({
-  cardTitle: {
-    fontWeight: "bold",
-    "&:focus": {
-      backgroundColor: "#e5e5e5",
-      color: "#333232",
-      borderRadius: "5px",
-      padding: "0 5px",
-      outline: "none",
-      marginLeft: "-5px"
-    },
-    "&:hover": {
-      cursor: "pointer",
-      backgroundColor: "#e5e5e5",
-      borderRadius: "5px",
-      color: "#212121",
-      padding: "0 5px",
-      marginLeft: "-5px"
-    }
-  },
-  editContentIcons: {
-    display: "flex",
-    marginTop: "2px",
-    zIndex: "10"
-  },
-  icon: {
-    borderRadius: "2px",
-    height: "20px",
-    width: "20px",
-    color: "#676464"
-  },
-  cardContentBox: {
-    [theme.breakpoints.down("xs")]: {
-      flexDirection: "column"
-    }
-  },
-  titleBox: {
-    [theme.breakpoints.down("xs")]: {
-      width: "100%"
-    }
-  },
-  buttonBox: {
-    [theme.breakpoints.down("xs")]: {
-      width: "100%",
-      justifyContent: "space-between"
-    }
-  }
-}));
+
 const EXPAND_TEXT = "Rozwiń kartę";
 const COLLAPSED_TEXT = "Zwiń kartę";
 export default function DroppableContainer({
@@ -91,7 +44,6 @@ export default function DroppableContainer({
   const classes = useStyles();
   const dispatch = useDispatch();
   const expandClick = () => {
-    dispatch(setBackdrop(true));
     try {
       dispatch(
         updateCard({
@@ -102,8 +54,6 @@ export default function DroppableContainer({
       setValues(cardTitle.current.textContent);
     } catch (error) {
       console.log(error);
-    } finally {
-      dispatch(setBackdrop(false));
     }
   };
   const mouseDownCardTitle = e => {
@@ -127,6 +77,9 @@ export default function DroppableContainer({
   const onClikcAccept = () => {
     cardTitle.current.contentEditable = false;
     setEditable(false);
+    if (cardTitle.current.textContent.length === 0) {
+      cardTitle.current.textContent = cloneDeep(values);
+    }
     if (cardTitle.current.textContent !== values) {
       dispatch(
         updateCard({
@@ -139,6 +92,9 @@ export default function DroppableContainer({
   };
   const cardTitleOnBlur = e => {
     setEditable(false);
+    if (cardTitle.current.textContent.length === 0) {
+      cardTitle.current.textContent = cloneDeep(values);
+    }
     if (cardTitle.current.textContent !== values) {
       dispatch(
         updateCard({
@@ -146,6 +102,7 @@ export default function DroppableContainer({
           title: cardTitle.current.textContent
         })
       );
+      setValues(cardTitle.current.textContent);
     }
   };
   useOutsideEvent(cardTitle);
@@ -294,3 +251,52 @@ function useOutsideEvent(ref) {
     };
   });
 }
+
+const useStyles = makeStyles(theme => ({
+  cardTitle: {
+    fontWeight: "bold",
+    "&:focus": {
+      backgroundColor: "#e5e5e5",
+      color: "#333232",
+      borderRadius: "5px",
+      padding: "0 5px",
+      outline: "none",
+      marginLeft: "-5px"
+    },
+    "&:hover": {
+      cursor: "pointer",
+      backgroundColor: "#e5e5e5",
+      borderRadius: "5px",
+      color: "#212121",
+      padding: "0 5px",
+      marginLeft: "-5px"
+    }
+  },
+  editContentIcons: {
+    display: "flex",
+    marginTop: "2px",
+    zIndex: "10"
+  },
+  icon: {
+    borderRadius: "2px",
+    height: "20px",
+    width: "20px",
+    color: "#676464"
+  },
+  cardContentBox: {
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column"
+    }
+  },
+  titleBox: {
+    [theme.breakpoints.down("xs")]: {
+      width: "100%"
+    }
+  },
+  buttonBox: {
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      justifyContent: "space-between"
+    }
+  }
+}));

@@ -11,15 +11,20 @@ import {
 import CreateCard from "./CreateCard";
 import DragDropComponent from "./DragDropComponent";
 import Modal from "../Utils/Modal";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
+import { makeStyles } from "@material-ui/core/styles";
+import SpeedDial from "@material-ui/lab/SpeedDial";
+import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
+import PostAddIcon from "@material-ui/icons/PostAdd";
 
 export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
   const cards = useSelector(state => state.cardsReducer.cardsState);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     let didCancel = false;
@@ -42,7 +47,7 @@ export default function Cards() {
   }, [userID, dispatch]);
 
   const modalHandler = () => {
-    setOpen(!open);
+    setOpenModal(!openModal);
   };
 
   const onDragEnd = result => {
@@ -93,12 +98,18 @@ export default function Cards() {
       );
     }
   };
+  const classes = useStyles();
+  const [openDial, setOpenDial] = React.useState(false);
 
+  const handleClose = () => {
+    setOpenDial(false);
+  };
+
+  const handleOpen = () => {
+    setOpenDial(true);
+  };
   return (
     <>
-      <Button variant="contained" color="primary" onClick={modalHandler}>
-        Utwórz nową kartę
-      </Button>
       {loading ? (
         <Skeleton
           variant="rect"
@@ -117,9 +128,50 @@ export default function Cards() {
           userID={userID}
         />
       )}
-      <Modal modalHandler={modalHandler} openProps={open}>
+      <Modal modalHandler={modalHandler} openProps={openModal}>
         <CreateCard modalHandler={modalHandler} user={userID} />
       </Modal>
+      <div className={classes.exampleWrapper}>
+        <SpeedDial
+          ariaLabel="SpeedDial example"
+          className={classes.speedDial}
+          icon={<SpeedDialIcon />}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          open={openDial}
+          direction="up"
+        >
+          <SpeedDialAction
+            icon={<PostAddIcon />}
+            tooltipTitle={"Utwórz kartę"}
+            onClick={modalHandler}
+          />
+        </SpeedDial>
+      </div>
     </>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  exampleWrapper: {
+    position: "fixed",
+    marginTop: theme.spacing(3),
+    right: 0,
+    bottom: 0
+  },
+  speedDial: {
+    position: "absolute",
+    opacity: "0.4",
+    "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+      bottom: theme.spacing(2),
+      right: theme.spacing(2)
+    },
+    "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+      top: theme.spacing(2),
+      left: theme.spacing(2)
+    },
+    "&:hover": {
+      opacity: 1
+    }
+  }
+}));
