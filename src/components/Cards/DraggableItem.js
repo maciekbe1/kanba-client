@@ -152,6 +152,7 @@ export default function DraggableItem({ item, index, cardID }) {
   const onClikcDiscard = () => {
     itemTitle.current.textContent = cloneDeep(titleText);
   };
+
   const onClikcAccept = () => {
     itemTitle.current.contentEditable = false;
     setEditable(false);
@@ -164,11 +165,18 @@ export default function DraggableItem({ item, index, cardID }) {
     }
   };
 
-  const handleClick = () => {
+  const expandClick = () => {
     setOpen(!open);
   };
-  const readOnlyHandler = () => {
-    setReadOnly(false);
+  const readOnlyHandler = e => {
+    e.preventDefault();
+    if (e.target.parentNode.parentNode.nodeName === "A") {
+      const url = e.target.parentNode.parentNode.getAttribute("href");
+      window.open(url, "_blank");
+      setReadOnly(true);
+    } else {
+      setReadOnly(false);
+    }
   };
   const removeItemFromCard = () => {
     dispatch(setBackdrop(true));
@@ -223,6 +231,12 @@ export default function DraggableItem({ item, index, cardID }) {
     }
   };
 
+  const onPaste = event => {
+    event.preventDefault();
+    const text = event.clipboardData.getData("text");
+    document.execCommand("insertText", false, text);
+  };
+
   useOutsideEvent(itemTitle);
 
   return (
@@ -247,7 +261,7 @@ export default function DraggableItem({ item, index, cardID }) {
             <Box display="flex" alignItems="center" pr={1}>
               <ListItem
                 button
-                onClick={handleClick}
+                onClick={expandClick}
                 className={classes.expandItem}
               >
                 {open ? <ExpandMore /> : <ExpandLess />}
@@ -256,9 +270,10 @@ export default function DraggableItem({ item, index, cardID }) {
                 <Typography
                   className={classes.itemTitle}
                   ref={itemTitle}
-                  onMouseDown={e => mouseDownItemTitle(e)}
-                  onKeyPress={e => keyPressItemTitle(e)}
-                  onBlur={e => cardItemOnBlur(e)}
+                  onMouseDown={mouseDownItemTitle}
+                  onKeyPress={keyPressItemTitle}
+                  onBlur={cardItemOnBlur}
+                  onPaste={onPaste}
                 >
                   {item.title}
                 </Typography>
@@ -345,6 +360,7 @@ export default function DraggableItem({ item, index, cardID }) {
                   variant="contained"
                   size="small"
                   className={classes.success}
+                  onClick={() => setReadOnly(true)}
                 >
                   Zapisz
                 </Button>
