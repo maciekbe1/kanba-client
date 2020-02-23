@@ -33,7 +33,8 @@ export default function DroppableContainer({
   droppableId,
   list,
   removeCard,
-  modalHandler
+  modalHandler,
+  setIsDrag
 }) {
   const getListStyle = isDraggingOver => ({
     // background: isDraggingOver ? "#212121" : ""
@@ -105,6 +106,11 @@ export default function DroppableContainer({
       setValues(cardTitle.current.textContent);
     }
   };
+  const onPaste = event => {
+    event.preventDefault();
+    const text = event.clipboardData.getData("text");
+    document.execCommand("insertText", false, text);
+  };
   useOutsideEvent(cardTitle);
   return (
     <Droppable droppableId={droppableId._id} type="LIST">
@@ -131,10 +137,11 @@ export default function DroppableContainer({
                   ref={cardTitle}
                   className={classes.cardTitle}
                   variant="h6"
-                  onMouseDown={e => mouseDownCardTitle(e)}
-                  onKeyPress={e => keyPressCardTitle(e)}
+                  onMouseDown={mouseDownCardTitle}
+                  onKeyPress={keyPressCardTitle}
                   tabIndex="0"
-                  onBlur={e => cardTitleOnBlur(e)}
+                  onBlur={cardTitleOnBlur}
+                  onPaste={onPaste}
                 >
                   {droppableId.title}
                 </Typography>
@@ -223,6 +230,7 @@ export default function DroppableContainer({
                     item={item}
                     cardID={droppableId._id}
                     index={key}
+                    setIsDrag={setIsDrag}
                   />
                 ))
               ) : (

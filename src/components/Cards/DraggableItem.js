@@ -6,13 +6,7 @@ import { removeItem, updateItem } from "actions/cardsActions";
 import { setBackdrop } from "actions";
 import { request } from "api/API";
 
-import {
-  EditorState,
-  convertFromRaw,
-  ContentState,
-  convertToRaw
-} from "draft-js";
-import EditorContainer from "../Editor/EditorContainer";
+import Editor from "../Editor/Editor";
 
 import {
   Typography,
@@ -31,8 +25,9 @@ import { Done, Clear } from "@material-ui/icons";
 
 import Cookie from "js-cookie";
 import { cloneDeep } from "lodash";
+import parse from "react-html-parser";
 
-export default function DraggableItem({ item, index, cardID }) {
+export default function DraggableItem({ item, index, cardID, setIsDrag }) {
   const [readOnly, setReadOnly] = useState(true);
   const useStyles = makeStyles(theme => ({
     columnStyles: {
@@ -57,6 +52,12 @@ export default function DraggableItem({ item, index, cardID }) {
     },
     paper: {
       padding: "5px",
+      overflow: "hidden",
+      "&:hover": {
+        cursor: readOnly ? "pointer" : "text"
+      }
+    },
+    editor: {
       "&:hover": {
         cursor: readOnly ? "pointer" : "text"
       }
@@ -102,26 +103,13 @@ export default function DraggableItem({ item, index, cardID }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [rawContent, setRawContent] = useState(
-    JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-  );
+  const [editorState, setEditorState] = useState("");
   const [editable, setEditable] = useState(false);
   const [titleText, setTitleText] = useState();
   const itemTitle = useRef();
 
   useEffect(() => {
-    const rawEditorData = item.content;
-    if (rawEditorData !== null && rawEditorData !== "") {
-      const contentState = convertFromRaw(JSON.parse(rawEditorData));
-      setEditorState(EditorState.createWithContent(contentState));
-    } else {
-      setEditorState(
-        EditorState.createWithContent(
-          ContentState.createFromText("@Brak treści")
-        )
-      );
-    }
+    setEditorState(item.content);
     setTitleText(itemTitle.current.textContent);
   }, [item]);
 
@@ -152,6 +140,7 @@ export default function DraggableItem({ item, index, cardID }) {
   const onClikcDiscard = () => {
     itemTitle.current.textContent = cloneDeep(titleText);
   };
+
   const onClikcAccept = () => {
     itemTitle.current.contentEditable = false;
     setEditable(false);
@@ -164,11 +153,21 @@ export default function DraggableItem({ item, index, cardID }) {
     }
   };
 
-  const handleClick = () => {
+  const expandClick = () => {
     setOpen(!open);
+    if (open && !readOnly) {
+      setReadOnly(!readOnly);
+      setIsDrag(false);
+    }
   };
-  const readOnlyHandler = () => {
-    setReadOnly(false);
+
+  const readOnlyHandler = e => {
+    if (e.target.nodeName === "A") {
+      setReadOnly(true);
+    } else {
+      setReadOnly(false);
+      setIsDrag(readOnly);
+    }
   };
   const removeItemFromCard = () => {
     dispatch(setBackdrop(true));
@@ -196,11 +195,12 @@ export default function DraggableItem({ item, index, cardID }) {
   };
 
   const postUpdateItem = (readOnlyValue, key, value) => {
+    setIsDrag(false);
     if (readOnlyValue !== null) {
       setReadOnly(readOnlyValue);
     }
     if (
-      rawContent !== cloneDeep(item.content) ||
+      editorState !== cloneDeep(item.content) ||
       titleText !== cloneDeep(item.title)
     ) {
       request(
@@ -223,10 +223,21 @@ export default function DraggableItem({ item, index, cardID }) {
     }
   };
 
+  const onPaste = event => {
+    event.preventDefault();
+    const text = event.clipboardData.getData("text");
+    document.execCommand("insertText", false, text);
+  };
+
   useOutsideEvent(itemTitle);
 
   return (
-    <Draggable key={item._id} draggableId={item._id} index={index}>
+    <Draggable
+      key={item._id}
+      draggableId={item._id}
+      index={index}
+      isDragDisabled={!readOnly}
+    >
       {(provided, snapshot) => (
         <ListItem
           {...provided.draggableProps}
@@ -247,7 +258,7 @@ export default function DraggableItem({ item, index, cardID }) {
             <Box display="flex" alignItems="center" pr={1}>
               <ListItem
                 button
-                onClick={handleClick}
+                onClick={expandClick}
                 className={classes.expandItem}
               >
                 {open ? <ExpandMore /> : <ExpandLess />}
@@ -256,9 +267,10 @@ export default function DraggableItem({ item, index, cardID }) {
                 <Typography
                   className={classes.itemTitle}
                   ref={itemTitle}
-                  onMouseDown={e => mouseDownItemTitle(e)}
-                  onKeyPress={e => keyPressItemTitle(e)}
-                  onBlur={e => cardItemOnBlur(e)}
+                  onMouseDown={mouseDownItemTitle}
+                  onKeyPress={keyPressItemTitle}
+                  onBlur={cardItemOnBlur}
+                  onPaste={onPaste}
                 >
                   {item.title}
                 </Typography>
@@ -316,28 +328,23 @@ export default function DraggableItem({ item, index, cardID }) {
               width: "100%"
             }}
           >
-            <Box
-              p={2}
-              pt={0}
-              className={classes.columnStyles}
-              style={{
-                width: "100%"
-              }}
-            >
-              <Paper
-                elevation={3}
-                className={classes.paper}
-                onClick={readOnlyHandler}
-              >
-                <EditorContainer
-                  toolbarHidden={readOnly}
-                  editorState={editorState}
-                  readOnly={readOnly}
-                  setEditorState={setEditorState}
-                  setRawContent={setRawContent}
-                  setOnBlur={postUpdateItem}
-                />
-              </Paper>
+            <Box p={2} pt={0}>
+              {!readOnly ? (
+                <div className={classes.editor}>
+                  <Editor
+                    editorState={editorState}
+                    setEditorState={setEditorState}
+                  />
+                </div>
+              ) : (
+                <Paper
+                  elevation={3}
+                  className={classes.paper}
+                  onClick={readOnlyHandler}
+                >
+                  {parse(editorState)}
+                </Paper>
+              )}
             </Box>
             {!readOnly ? (
               <Box pr={2}>
@@ -345,6 +352,7 @@ export default function DraggableItem({ item, index, cardID }) {
                   variant="contained"
                   size="small"
                   className={classes.success}
+                  onClick={() => postUpdateItem(true, "content", editorState)}
                 >
                   Zapisz
                 </Button>
