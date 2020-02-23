@@ -33,7 +33,8 @@ export default function DroppableContainer({
   droppableId,
   list,
   removeCard,
-  modalHandler
+  modalHandler,
+  setIsDrag
 }) {
   const getListStyle = isDraggingOver => ({
     // background: isDraggingOver ? "#212121" : ""
@@ -229,6 +230,7 @@ export default function DroppableContainer({
                     item={item}
                     cardID={droppableId._id}
                     index={key}
+                    setIsDrag={setIsDrag}
                   />
                 ))
               ) : (

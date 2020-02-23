@@ -13,8 +13,7 @@ import {
 } from "@material-ui/core";
 import { createItem } from "actions/cardsActions";
 import { useDispatch } from "react-redux";
-import EditorContainer from "../Editor/EditorContainer";
-import { EditorState, convertToRaw } from "draft-js";
+import Editor from "../Editor/Editor";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -26,8 +25,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: "14px"
   },
   draftEditorModal: {
-    borderRadius: "4px !important",
-    border: "1px solid #6e6e6e !important",
     padding: "5px 8px",
     marginBottom: "8px"
   }
@@ -35,16 +32,11 @@ const useStyles = makeStyles(theme => ({
 export default function CreateCardItem({ modalHandler, cardID }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-
   const [title, setTitle] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [rawContent, setRawContent] = useState(
-    JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-  );
+  const [editorState, setEditorState] = useState("");
 
   const addItemHandler = e => {
     e.preventDefault();
@@ -52,14 +44,14 @@ export default function CreateCardItem({ modalHandler, cardID }) {
     setLoading(true);
     request(
       `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
-      { cardID: cardID._id, item: { title, content: rawContent } },
+      { cardID: cardID._id, item: { title, content: editorState } },
       Cookie.get("token")
     )
       .then(res => {
         dispatch(
           createItem({
             cardID: cardID._id,
-            values: { title, content: rawContent },
+            values: { title, content: editorState },
             itemID: res.data.id
           })
         );
@@ -76,7 +68,7 @@ export default function CreateCardItem({ modalHandler, cardID }) {
       <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
         Utwórz zadanie
       </Typography>
-      <form noValidate autoComplete="off" onSubmit={e => addItemHandler(e)}>
+      <form noValidate autoComplete="off" onSubmit={addItemHandler}>
         <TextField
           fullWidth
           required
@@ -92,11 +84,7 @@ export default function CreateCardItem({ modalHandler, cardID }) {
           style={{ margin: "10px 0 5px 0" }}
         />
         <div className={classes.draftEditorModal}>
-          <EditorContainer
-            setEditorState={setEditorState}
-            editorState={editorState}
-            setRawContent={setRawContent}
-          />
+          <Editor setEditorState={setEditorState} editorState={editorState} />
         </div>
         {error ? (
           <Box>
