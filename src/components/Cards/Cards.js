@@ -106,7 +106,7 @@ export default function Cards() {
   };
 
   const handleOpen = () => {
-    setOpenDial(true);
+    setOpenDial(!openDial);
   };
   return (
     <>
@@ -137,7 +137,7 @@ export default function Cards() {
           className={classes.speedDial}
           icon={<SpeedDialIcon />}
           onClose={handleClose}
-          onOpen={handleOpen}
+          onClick={handleOpen}
           open={openDial}
           direction="up"
         >
@@ -157,7 +157,8 @@ const useStyles = makeStyles(theme => ({
     position: "fixed",
     marginTop: theme.spacing(3),
     right: 0,
-    bottom: 0
+    bottom: 0,
+    zIndex: 2
   },
   speedDial: {
     position: "absolute",
