@@ -296,7 +296,7 @@ const useStyles = makeStyles(theme => ({
       flexDirection: "column"
     },
     position: "sticky",
-    top: "75px",
+    top: "72px",
     zIndex: 1,
     background: theme.palette.background.paper
   },
