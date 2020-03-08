@@ -18,6 +18,10 @@ import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import PostAddIcon from "@material-ui/icons/PostAdd";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import * as CardsService from "services/CardsService";
+import * as CardsHelper from "helper/CardsHelper";
 
 export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
@@ -25,26 +29,24 @@ export default function Cards() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+  const [error, setError] = useState(false);
+
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
   useEffect(() => {
-    let didCancel = false;
-    async function fetchData() {
-      !didCancel && setLoading(true);
-      try {
-        !didCancel &&
-          (await dispatch(
-            getCards({
-              userID: userID
-            })
-          ));
-      } catch (error) {
+    setLoading(true);
+    CardsService.getCards(userID)
+      .then(res => {
+        dispatch(getCards({ cards: res.data }));
+        setLoading(false);
+      })
+      .catch(error => {
+        setLoading(false);
         console.log(error);
-      } finally {
-        !didCancel && setLoading(false);
-      }
-    }
-    fetchData();
-  }, [userID, dispatch]);
+      });
+  }, [dispatch, userID]);
 
   const modalHandler = () => {
     setOpenModal(!openModal);
@@ -62,40 +64,57 @@ export default function Cards() {
       result.type === "LIST" &&
       result.destination.droppableId === result.source.droppableId
     ) {
-      dispatch(
-        cardItemChange({
-          cards: newData,
-          result
-        })
-      );
+      try {
+        CardsService.updateCard(result);
+        const newCards = CardsHelper.cardItemChange(newData, result);
+        dispatch(
+          cardItemChange({
+            cards: newCards
+          })
+        );
+      } catch (error) {
+        setError(true);
+      }
     } else if (
       result.type === "LIST" &&
       result.destination.droppableId !== result.source.droppableId
     ) {
-      dispatch(
-        cardItemShared({
+      try {
+        const { start, end, newCards } = CardsHelper.cardItemShared(
           cards,
           result
-        })
-      );
+        );
+        CardsService.cardItemShared(start, end, result);
+        dispatch(
+          cardItemShared({
+            cards: newCards
+          })
+        );
+      } catch (error) {
+        setError(true);
+      }
     } else {
-      dispatch(
-        cardChange({
-          cards,
-          result
-        })
-      );
-      dispatch(
-        updateCard({
-          cardID: result.draggableId,
-          position: {
-            userID,
-            source: result.source.index,
-            destination: result.destination.index
-          },
-          type: "all_cards"
-        })
-      );
+      try {
+        const newCards = CardsHelper.cardChange(cards, result);
+        dispatch(
+          cardChange({
+            cards: newCards
+          })
+        );
+        dispatch(
+          updateCard({
+            cardID: result.draggableId,
+            position: {
+              userID,
+              source: result.source.index,
+              destination: result.destination.index
+            },
+            type: "all_cards"
+          })
+        );
+      } catch (error) {
+        setError(true);
+      }
     }
   };
   const classes = useStyles();
@@ -108,8 +127,25 @@ export default function Cards() {
   const handleOpen = () => {
     setOpenDial(!openDial);
   };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setError(false);
+  };
   return (
     <>
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error">
+          Wystąpił błąd. Odświez stronę
+        </Alert>
+      </Snackbar>
+
       {loading ? (
         <Skeleton
           variant="rect"
