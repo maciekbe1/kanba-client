@@ -150,6 +150,8 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
 
   const onClikcDiscard = () => {
     itemTitle.current.textContent = cloneDeep(titleText);
+    itemTitle.current.contentEditable = false;
+    setEditable(false);
   };
 
   const onClikcAccept = () => {
