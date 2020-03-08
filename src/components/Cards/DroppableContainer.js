@@ -294,7 +294,11 @@ const useStyles = makeStyles(theme => ({
   cardContentBox: {
     [theme.breakpoints.down("xs")]: {
       flexDirection: "column"
-    }
+    },
+    position: "sticky",
+    top: "72px",
+    zIndex: 1,
+    background: theme.palette.background.paper
   },
   titleBox: {
     [theme.breakpoints.down("xs")]: {

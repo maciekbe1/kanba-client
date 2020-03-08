@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import * as API from "api/API";
+import * as UserService from "services/UserService";
+import Cookies from "js-cookie";
 
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -55,22 +56,27 @@ function SigninForm() {
     e.preventDefault();
     setError(false);
     setLoading(true);
-    API.request(`${process.env.REACT_APP_SERVER}/api/auth`, {
-      email: values.email,
-      password: values.password
-    })
+    UserService.signInService(values.email, values.password)
       .then(res => {
-        dispatch(
-          signIn({
-            token: res.data,
-            isAuth: true
-          })
-        );
+        const token = res.data;
+        Cookies.set("token", token);
+        UserService.getMeService(token).then(res => {
+          dispatch(
+            signIn({
+              isAuth: true,
+              data: res.data
+            })
+          );
+        });
       })
       .catch(err => {
         setError(true);
         setLoading(false);
-        setMessage(err.response.data);
+        try {
+          setMessage(err.response.data);
+        } catch (error) {
+          setMessage("Coś poszło nie tak, spróbuj później");
+        }
       });
   };
   return (

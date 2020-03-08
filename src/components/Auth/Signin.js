@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import * as API from "api/API";
 import { useDispatch } from "react-redux";
 import { signIn } from "actions/UserActions";
 import { FormControl, Link } from "@material-ui/core";
@@ -15,6 +14,9 @@ import Box from "@material-ui/core/Box";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import * as UserService from "services/UserService";
+import Cookies from "js-cookie";
+
 const useStyles = makeStyles(theme => ({
   button: {
     marginRight: "10px"
@@ -53,22 +55,27 @@ export default function Signin({ modalHandler }) {
     e.preventDefault();
     setError(false);
     setLoading(true);
-    API.request(`${process.env.REACT_APP_SERVER}/api/auth`, {
-      email: values.email,
-      password: values.password
-    })
+    UserService.signInService(values.email, values.password)
       .then(res => {
-        dispatch(
-          signIn({
-            token: res.data,
-            isAuth: true
-          })
-        );
+        const token = res.data;
+        Cookies.set("token", token);
+        UserService.getMeService(token).then(res => {
+          dispatch(
+            signIn({
+              isAuth: true,
+              data: res.data
+            })
+          );
+        });
       })
       .catch(err => {
         setError(true);
         setLoading(false);
-        setMessage(err.response.data);
+        try {
+          setMessage(err.response.data);
+        } catch (error) {
+          setMessage("Coś poszło nie tak, spróbuj później");
+        }
       });
   };
 

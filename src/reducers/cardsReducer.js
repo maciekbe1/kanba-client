@@ -4,8 +4,10 @@ import { request } from "api/API";
 import Cookie from "js-cookie";
 
 const INITIAL_DATA = {
-  cardsState: []
+  cardsState: [],
+  selectedItems: []
 };
+
 export default (state = INITIAL_DATA, action) => {
   switch (action.type) {
     case "SET_CARDS_STATE": {
@@ -91,6 +93,13 @@ export default (state = INITIAL_DATA, action) => {
       return {
         ...state,
         cardsState: new Card(state.cardsState).cards
+      };
+    }
+
+    case "SELECTED_ITEMS": {
+      return {
+        ...state,
+        selectedItems: action.payload
       };
     }
     default:

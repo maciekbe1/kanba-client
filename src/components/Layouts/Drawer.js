@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import * as UserService from "services/UserService";
+import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { signOut } from "actions/UserActions";
 import { useSelector } from "react-redux";
 import { setTabValue } from "actions";
 import { setDarkTheme } from "actions";
-import { checkAuth } from "actions/UserActions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { findIndex } from "lodash";
@@ -114,7 +115,9 @@ export default function MiniDrawer(props) {
 
   useEffect(() => {
     const check = () => {
-      dispatch(checkAuth());
+      UserService.getMeService(Cookies.get("token"))
+        .then()
+        .catch(err => dispatch(signOut()));
     };
     window.addEventListener("focus", check);
     return () => {

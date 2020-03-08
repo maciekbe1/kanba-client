@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import * as CardsService from "services/CardsService";
 
-import { useDispatch } from "react-redux";
-import { removeItem, updateItem } from "actions/cardsActions";
-import { setBackdrop } from "actions";
-import { request } from "api/API";
+import { useDispatch, useSelector } from "react-redux";
+import { removeItem, updateItem, setSelectedItems } from "actions/cardsActions";
 
 import Editor from "../Editor/Editor";
 
@@ -14,31 +13,41 @@ import {
   Box,
   IconButton,
   Paper,
-  Button
+  Button,
+  Badge
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandLess from "@material-ui/icons/ArrowRight";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import Collapse from "@material-ui/core/Collapse";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+
 import { Done, Clear } from "@material-ui/icons";
 
-import Cookie from "js-cookie";
-import { cloneDeep } from "lodash";
+import { cloneDeep, find } from "lodash";
 import parse from "react-html-parser";
 
 export default function DraggableItem({ item, index, cardID, setIsDrag }) {
   const [readOnly, setReadOnly] = useState(true);
+  const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
+
   const useStyles = makeStyles(theme => ({
-    columnStyles: {
+    listItem: {
       flex: " 0 0 100%",
       maxWidth: "100%",
       position: "relative"
     },
     rowStyles: {
+      position: "relative",
       display: "flex",
       flexWrap: "wrap",
-      padding: "10px 0px 10px 3px",
+      padding: "0px 0px 0px 3px",
+      border: "1px solid",
+      borderRadius: "5px",
+      backgroundColor: find(selectedItems, ["itemID", item._id])
+        ? "#919191"
+        : "unset",
+      margin: "5px 0",
       "&:hover": {
         background: theme.palette.type === "dark" ? "#616161" : "#E0E0E0",
         borderRadius: "5px",
@@ -53,6 +62,7 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
     paper: {
       padding: "5px",
       overflow: "hidden",
+      minHeight: "100px",
       "&:hover": {
         cursor: readOnly ? "pointer" : "text"
       }
@@ -62,12 +72,8 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
         cursor: readOnly ? "pointer" : "text"
       }
     },
-    success: {
-      backgroundColor: theme.palette.success.main,
-      color: "#fff",
-      textTransform: "none",
-      float: "right",
-      "&:hover": { backgroundColor: theme.palette.success.hover }
+    saveItemContentBtn: {
+      marginRight: "5px"
     },
     itemTitle: {
       wordBreak: "break-all",
@@ -98,8 +104,12 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
       height: "20px",
       width: "20px",
       color: "#676464"
+    },
+    addContent: {
+      textTransform: "unset"
     }
   }));
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -107,6 +117,7 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
   const [editable, setEditable] = useState(false);
   const [titleText, setTitleText] = useState();
   const itemTitle = useRef();
+  const rowBox = useRef();
 
   useEffect(() => {
     setEditorState(item.content);
@@ -139,6 +150,8 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
 
   const onClikcDiscard = () => {
     itemTitle.current.textContent = cloneDeep(titleText);
+    itemTitle.current.contentEditable = false;
+    setEditable(false);
   };
 
   const onClikcAccept = () => {
@@ -169,16 +182,9 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
       setIsDrag(readOnly);
     }
   };
+
   const removeItemFromCard = () => {
-    dispatch(setBackdrop(true));
-    request(
-      `${process.env.REACT_APP_SERVER}/api/cards/remove-card-item`,
-      {
-        cardID,
-        itemID: item._id
-      },
-      Cookie.get("token")
-    )
+    CardsService.removeCardItem(cardID, item._id)
       .then(() => {
         dispatch(
           removeItem({
@@ -186,11 +192,9 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
             cardID: cardID
           })
         );
-        dispatch(setBackdrop(false));
       })
       .catch(err => {
         console.log(err);
-        dispatch(setBackdrop(false));
       });
   };
 
@@ -201,17 +205,9 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
     }
     if (
       editorState !== cloneDeep(item.content) ||
-      titleText !== cloneDeep(item.title)
+      itemTitle.current.textContent !== cloneDeep(item.title)
     ) {
-      request(
-        `${process.env.REACT_APP_SERVER}/api/cards/update-item`,
-        {
-          cardID,
-          itemID: item._id,
-          item: { [key]: value } //rawContent || titleText
-        },
-        Cookie.get("token")
-      ).then(() => {
+      CardsService.updateItem(cardID, item._id, key, value).then(() => {
         dispatch(
           updateItem({
             itemID: item._id,
@@ -222,6 +218,10 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
       });
     }
   };
+  const cancelUpdateItem = () => {
+    setEditorState(cloneDeep(item.content));
+    setReadOnly(!readOnly);
+  };
 
   const onPaste = event => {
     event.preventDefault();
@@ -231,6 +231,23 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
 
   useOutsideEvent(itemTitle);
 
+  const selectHandler = (e, itemID) => {
+    if (e.target.dataset?.name === "row") {
+      if (!find(selectedItems, ["itemID", itemID])) {
+        dispatch(setSelectedItems([...selectedItems, { cardID, itemID }]));
+      } else {
+        dispatch(
+          setSelectedItems(selectedItems.filter(item => item.itemID !== itemID))
+        );
+      }
+    }
+  };
+
+  const setSelectedItemsEmpty = () => {
+    dispatch(setSelectedItems([]));
+  };
+
+  useOutsideEventRowClick(rowBox, setSelectedItemsEmpty);
   return (
     <Draggable
       key={item._id}
@@ -249,11 +266,29 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
           )}
           className={classes.rowStyles}
         >
+          {snapshot.isDragging && selectedItems.length ? (
+            <Badge
+              color="primary"
+              badgeContent={
+                find(selectedItems, ["itemID", item._id])
+                  ? selectedItems.length
+                  : selectedItems.length + 1
+              }
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left"
+              }}
+            ></Badge>
+          ) : null}
           <Box
-            className={classes.columnStyles}
+            className={classes.listItem}
             display="flex"
             justifyContent="space-between"
             alignItems="center"
+            onClick={e => selectHandler(e, item._id)}
+            data-name="row"
+            ref={rowBox}
+            name="row-box"
           >
             <Box display="flex" alignItems="center" pr={1}>
               <ListItem
@@ -311,13 +346,15 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
               </Box>
             </Box>
             <Box>
-              <IconButton
-                color="secondary"
-                variant="contained"
-                onClick={removeItemFromCard}
-              >
-                <HighlightOffIcon />
-              </IconButton>
+              {readOnly ? (
+                <IconButton
+                  color="secondary"
+                  variant="contained"
+                  onClick={removeItemFromCard}
+                >
+                  <HighlightOffIcon />
+                </IconButton>
+              ) : null}
             </Box>
           </Box>
           <Collapse
@@ -335,8 +372,29 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
                     editorState={editorState}
                     setEditorState={setEditorState}
                   />
+                  <Box display="flex" justifyContent="flex-end" pt={2}>
+                    <Button
+                      className={classes.saveItemContentBtn}
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      onClick={() =>
+                        postUpdateItem(true, "content", editorState)
+                      }
+                    >
+                      Zapisz
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={cancelUpdateItem}
+                      color="secondary"
+                      variant="contained"
+                    >
+                      Anuluj
+                    </Button>
+                  </Box>
                 </div>
-              ) : (
+              ) : editorState ? (
                 <Paper
                   elevation={3}
                   className={classes.paper}
@@ -344,20 +402,17 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
                 >
                   {parse(editorState)}
                 </Paper>
+              ) : (
+                <Button
+                  className={classes.addContent}
+                  variant="contained"
+                  color="primary"
+                  onClick={readOnlyHandler}
+                >
+                  Dodaj treść
+                </Button>
               )}
             </Box>
-            {!readOnly ? (
-              <Box pr={2}>
-                <Button
-                  variant="contained"
-                  size="small"
-                  className={classes.success}
-                  onClick={() => postUpdateItem(true, "content", editorState)}
-                >
-                  Zapisz
-                </Button>
-              </Box>
-            ) : null}
           </Collapse>
         </ListItem>
       )}
@@ -380,6 +435,23 @@ function useOutsideEvent(ref) {
     if (ref.current && !ref.current.contains(event.target)) {
       ref.current.setEditable = false;
       ref.current.blur();
+    }
+  }
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
+}
+
+function useOutsideEventRowClick(ref, setSelectedItemsEmpty) {
+  function handleClickOutside(event) {
+    if (
+      ref.current.dataset?.name &&
+      !ref.current.dataset?.name.includes(event.target.dataset?.name)
+    ) {
+      setSelectedItemsEmpty();
     }
   }
   useEffect(() => {
