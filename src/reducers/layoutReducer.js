@@ -1,7 +1,12 @@
 const INITIAL_DATA = {
   tabValue: 0,
   darkTheme: false,
-  backdrop: false
+  backdrop: false,
+  bar: {
+    type: null,
+    message: null,
+    active: false
+  }
 };
 export default (state = INITIAL_DATA, action) => {
   switch (action.type) {
@@ -19,6 +24,11 @@ export default (state = INITIAL_DATA, action) => {
       return {
         ...state,
         backdrop: action.backdrop
+      };
+    case "BAR":
+      return {
+        ...state,
+        bar: action.bar
       };
     default:
       return state;

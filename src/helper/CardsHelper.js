@@ -38,3 +38,12 @@ export const cardChange = (cards, result) => {
   cards.splice(result.destination.index, 0, removed);
   return cards;
 };
+
+export const cardItemsSelectedChange = (cards, result, selected) => {
+  const destinationCard = cards.find(
+    card => card._id === result.destination.droppableId
+  );
+  console.log(destinationCard);
+  // destinationCard.list.splice(result.destination.index, 0, removed)
+  return selected;
+};

@@ -16,3 +16,10 @@ export const setBackdrop = backdrop => {
     backdrop
   };
 };
+
+export const setBar = bar => {
+  return {
+    type: "BAR",
+    bar
+  };
+};

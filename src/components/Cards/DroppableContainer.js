@@ -24,21 +24,22 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 import { updateCard } from "actions/cardsActions";
-import { setBackdrop } from "actions";
 import { useDispatch } from "react-redux";
 
 const EXPAND_TEXT = "Rozwiń kartę";
 const COLLAPSED_TEXT = "Zwiń kartę";
+
 export default function DroppableContainer({
   droppableId,
   list,
   removeCard,
   modalHandler,
-  setIsDrag
+  setDisableDrag
 }) {
   const getListStyle = isDraggingOver => ({
     // background: isDraggingOver ? "#212121" : ""
   });
+
   const cardTitle = useRef();
   const [editable, setEditable] = useState(false);
   const [values, setValues] = useState();
@@ -68,16 +69,22 @@ export default function DroppableContainer({
       cardTitle.current.blur();
     }
   };
+
   useEffect(() => {
-    dispatch(setBackdrop(false));
     setValues(cardTitle.current.textContent);
-  }, [dispatch]);
+  }, []);
+
   const onClikcDiscard = () => {
     cardTitle.current.textContent = cloneDeep(values);
+    cardTitle.current.contentEditable = false;
+    setEditable(false);
+    cardTitle.current.blur();
   };
+
   const onClikcAccept = () => {
     cardTitle.current.contentEditable = false;
     setEditable(false);
+    cardTitle.current.blur();
     if (cardTitle.current.textContent.length === 0) {
       cardTitle.current.textContent = cloneDeep(values);
     }
@@ -91,6 +98,7 @@ export default function DroppableContainer({
       setValues(cardTitle.current.textContent);
     }
   };
+
   const cardTitleOnBlur = e => {
     setEditable(false);
     if (cardTitle.current.textContent.length === 0) {
@@ -106,12 +114,15 @@ export default function DroppableContainer({
       setValues(cardTitle.current.textContent);
     }
   };
+
   const onPaste = event => {
     event.preventDefault();
     const text = event.clipboardData.getData("text");
     document.execCommand("insertText", false, text);
   };
+
   useOutsideEvent(cardTitle);
+
   return (
     <Droppable droppableId={droppableId._id} type="LIST">
       {(provided, snapshot) => (
@@ -230,7 +241,7 @@ export default function DroppableContainer({
                     item={item}
                     cardID={droppableId._id}
                     index={key}
-                    setIsDrag={setIsDrag}
+                    setDisableDrag={setDisableDrag}
                   />
                 ))
               ) : (

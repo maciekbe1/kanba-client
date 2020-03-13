@@ -27,7 +27,7 @@ import { Done, Clear } from "@material-ui/icons";
 import { cloneDeep, find } from "lodash";
 import parse from "react-html-parser";
 
-export default function DraggableItem({ item, index, cardID, setIsDrag }) {
+export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
   const [readOnly, setReadOnly] = useState(true);
   const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
 
@@ -170,7 +170,7 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
     setOpen(!open);
     if (open && !readOnly) {
       setReadOnly(!readOnly);
-      setIsDrag(false);
+      setDisableDrag(false);
     }
   };
 
@@ -179,7 +179,7 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
       setReadOnly(true);
     } else {
       setReadOnly(false);
-      setIsDrag(readOnly);
+      setDisableDrag(readOnly);
     }
   };
 
@@ -199,7 +199,7 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
   };
 
   const postUpdateItem = (readOnlyValue, key, value) => {
-    setIsDrag(false);
+    setDisableDrag(false);
     if (readOnlyValue !== null) {
       setReadOnly(readOnlyValue);
     }
@@ -218,7 +218,9 @@ export default function DraggableItem({ item, index, cardID, setIsDrag }) {
       });
     }
   };
+
   const cancelUpdateItem = () => {
+    setDisableDrag(false);
     setEditorState(cloneDeep(item.content));
     setReadOnly(!readOnly);
   };

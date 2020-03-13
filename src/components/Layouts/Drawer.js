@@ -4,8 +4,7 @@ import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { signOut } from "actions/UserActions";
 import { useSelector } from "react-redux";
-import { setTabValue } from "actions";
-import { setDarkTheme } from "actions";
+import { setTabValue, setDarkTheme, setBar } from "actions/layoutActions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { findIndex } from "lodash";
@@ -36,76 +35,9 @@ import Tab from "@material-ui/core/Tab";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Switch from "@material-ui/core/Switch";
-const drawerWidth = 200;
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex"
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  menuButton: {
-    marginRight: 20
-  },
-  hide: {
-    display: "none"
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: "nowrap"
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  drawerClose: {
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    overflowX: "hidden",
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1
-    }
-  },
-  toolbar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3)
-  },
-  title: {
-    flexGrow: 1
-  },
-  avatar: {
-    marginInlineStart: "auto",
-    padding: "0px"
-  },
-  gutters: theme.mixins.gutters()
-}));
 
+const drawerWidth = 200;
+const message = "Sesja wygasła, zaloguj się ponownie";
 export default function MiniDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
@@ -114,14 +46,23 @@ export default function MiniDrawer(props) {
   const darkTheme = useSelector(state => state.layoutReducer.darkTheme);
 
   useEffect(() => {
+    dispatch(setBar({ type: null, message: null, active: false }));
     const check = () => {
       UserService.getMeService(Cookies.get("token"))
-        .then()
-        .catch(err => dispatch(signOut()));
+        .then(() => console.log("object"))
+        .catch(err => {
+          console.log(err);
+          if (Cookies.get("token")) {
+            dispatch(setBar({ type: "error", message: message, active: true }));
+            dispatch(signOut());
+          }
+        });
     };
-    window.addEventListener("focus", check);
+    window.addEventListener("visibilitychange", check);
+    check();
     return () => {
-      window.removeEventListener("focus", check);
+      window.removeEventListener("visibilitychange", check);
+      check();
     };
   }, [dispatch]);
 
@@ -312,3 +253,72 @@ export default function MiniDrawer(props) {
     </div>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex"
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  menuButton: {
+    marginRight: 20
+  },
+  hide: {
+    display: "none"
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: "nowrap"
+  },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  drawerClose: {
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    overflowX: "hidden",
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up("sm")]: {
+      width: theme.spacing(9) + 1
+    }
+  },
+  toolbar: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3)
+  },
+  title: {
+    flexGrow: 1
+  },
+  avatar: {
+    marginInlineStart: "auto",
+    padding: "0px"
+  },
+  gutters: theme.mixins.gutters()
+}));
