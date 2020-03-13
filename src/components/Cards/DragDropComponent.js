@@ -10,7 +10,7 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
   const [dialog, setDialog] = useState(false);
   const [cardID, setCardID] = useState();
   const [open, setOpen] = useState(false);
-  const [isDrag, setIsDrag] = useState(false);
+  const [isDrag, setDisableDrag] = useState(false);
   const modalHandler = card => {
     setCardID(card);
     setOpen(!open);
@@ -56,7 +56,7 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
                           removeCard={removeCard}
                           index={key}
                           modalHandler={modalHandler}
-                          setIsDrag={setIsDrag}
+                          setDisableDrag={setDisableDrag}
                         />
                         {/* {provided.placeholder} */}
                       </Card>

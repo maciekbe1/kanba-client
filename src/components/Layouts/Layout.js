@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import Drawer from "./Drawer";
 import AppBar from "./AppBar";
+import Bar from "components/Layouts/Bar";
 import { withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
 
@@ -25,8 +26,18 @@ export default withRouter(function Layout({ isAuth, children, location }) {
   }, [location.pathname]);
 
   if (isAuth) {
-    return <Drawer>{children}</Drawer>;
+    return (
+      <Drawer>
+        <Bar />
+        {children}
+      </Drawer>
+    );
   } else {
-    return <AppBar>{children}</AppBar>;
+    return (
+      <AppBar>
+        <Bar />
+        {children}
+      </AppBar>
+    );
   }
 });

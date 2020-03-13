@@ -6,8 +6,11 @@ import {
   cardItemChange,
   cardItemShared,
   cardChange,
-  updateCard
+  updateCard,
+  setSelectedItems
 } from "actions/cardsActions";
+import { setBar } from "actions/layoutActions";
+
 import CreateCard from "./CreateCard";
 import DragDropComponent from "./DragDropComponent";
 import Modal from "../Utils/Modal";
@@ -18,22 +21,18 @@ import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import PostAddIcon from "@material-ui/icons/PostAdd";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
 import * as CardsService from "services/CardsService";
 import * as CardsHelper from "helper/CardsHelper";
 
+const message =
+  "Wystąpił błąd w pobraniu treści. Proszę wyloguj i zaloguj się ponownie";
 export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
   const cards = useSelector(state => state.cardsReducer.cardsState);
+  const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const [error, setError] = useState(false);
-
-  function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
 
   useEffect(() => {
     setLoading(true);
@@ -44,7 +43,7 @@ export default function Cards() {
       })
       .catch(error => {
         setLoading(false);
-        console.log(error);
+        dispatch(setBar({ type: "error", message: message, active: true }));
       });
   }, [dispatch, userID]);
 
@@ -60,6 +59,21 @@ export default function Cards() {
         result.destination.droppableId === result.source.droppableId)
     ) {
       return cards;
+    } else if (selectedItems.length > 1) {
+      const selectedContainItem = selectedItems.some(
+        item => item.itemID === result.draggableId
+      );
+      if (!selectedContainItem) {
+        const obj = {
+          itemID: result.draggableId,
+          cardID: result.source.droppableId
+        };
+        const newSelectedItems = [obj, ...selectedItems];
+        dispatch(setSelectedItems(newSelectedItems));
+        CardsHelper.cardItemsSelectedChange(cards, result, newSelectedItems);
+      } else {
+        CardsHelper.cardItemsSelectedChange(cards, result, selectedItems);
+      }
     } else if (
       result.type === "LIST" &&
       result.destination.droppableId === result.source.droppableId
@@ -73,7 +87,7 @@ export default function Cards() {
           })
         );
       } catch (error) {
-        setError(true);
+        console.log(error);
       }
     } else if (
       result.type === "LIST" &&
@@ -91,7 +105,7 @@ export default function Cards() {
           })
         );
       } catch (error) {
-        setError(true);
+        console.log(error);
       }
     } else {
       try {
@@ -113,7 +127,7 @@ export default function Cards() {
           })
         );
       } catch (error) {
-        setError(true);
+        console.log(error);
       }
     }
   };
@@ -128,24 +142,8 @@ export default function Cards() {
     setOpenDial(!openDial);
   };
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setError(false);
-  };
   return (
     <>
-      <Snackbar
-        open={error}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="error">
-          Wystąpił błąd. Odświez stronę
-        </Alert>
-      </Snackbar>
-
       {loading ? (
         <Skeleton
           variant="rect"
