@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { isEmpty, cloneDeep, isNull } from "lodash";
-import {
-  getCards,
-  cardItemChange,
-  cardItemShared,
-  cardChange,
-  updateCard,
-  setSelectedItems
-} from "actions/cardsActions";
+import { setCards, updateCard, setSelectedItems } from "actions/cardsActions";
 import { setBar } from "actions/layoutActions";
 
 import CreateCard from "./CreateCard";
@@ -28,6 +21,7 @@ const SESSION_MESSAGE =
   "Wystąpił błąd w pobraniu treści. Proszę wyloguj i zaloguj się ponownie";
 export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
+  const token = useSelector(state => state.authReducer.token);
   const cards = useSelector(state => state.cardsReducer.cardsState);
   const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
   const dispatch = useDispatch();
@@ -36,9 +30,9 @@ export default function Cards() {
 
   useEffect(() => {
     setLoading(true);
-    CardsService.getCards(userID)
+    CardsService.getCards(userID, token)
       .then(res => {
-        dispatch(getCards({ cards: res.data }));
+        dispatch(setCards({ cards: res.data }));
         setLoading(false);
       })
       .catch(error => {
@@ -47,7 +41,7 @@ export default function Cards() {
           setBar({ type: "error", message: SESSION_MESSAGE, active: true })
         );
       });
-  }, [dispatch, userID]);
+  }, [dispatch, userID, token]);
 
   const modalHandler = () => {
     setOpenModal(!openModal);
@@ -81,10 +75,10 @@ export default function Cards() {
       result.destination.droppableId === result.source.droppableId
     ) {
       try {
-        CardsService.updateCard(result);
+        CardsService.updateCardPosition(result, token);
         const newCards = CardsHelper.cardItemChange(newData, result);
         dispatch(
-          cardItemChange({
+          setCards({
             cards: newCards
           })
         );
@@ -100,9 +94,9 @@ export default function Cards() {
           cards,
           result
         );
-        CardsService.cardItemShared(start, end, result);
+        CardsService.cardItemShared(start, end, result, token);
         dispatch(
-          cardItemShared({
+          setCards({
             cards: newCards
           })
         );
@@ -113,7 +107,7 @@ export default function Cards() {
       try {
         const newCards = CardsHelper.cardChange(cards, result);
         dispatch(
-          cardChange({
+          setCards({
             cards: newCards
           })
         );
@@ -125,7 +119,8 @@ export default function Cards() {
               source: result.source.index,
               destination: result.destination.index
             },
-            type: "all_cards"
+            type: "all_cards",
+            token
           })
         );
       } catch (error) {

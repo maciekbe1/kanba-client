@@ -15,7 +15,6 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import * as UserService from "services/UserService";
-import Cookies from "js-cookie";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -58,12 +57,12 @@ export default function Signin({ modalHandler }) {
     UserService.signInService(values.email, values.password)
       .then(res => {
         const token = res.data;
-        Cookies.set("token", token);
         UserService.getMeService(token).then(res => {
           dispatch(
             signIn({
               isAuth: true,
-              data: res.data
+              data: res.data,
+              token
             })
           );
         });

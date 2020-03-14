@@ -30,7 +30,7 @@ import parse from "react-html-parser";
 export default function DraggableItem({ item, index, cardID }) {
   const [readOnly, setReadOnly] = useState(true);
   const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
-
+  const token = useSelector(state => state.authReducer.token);
   const useStyles = makeStyles(theme => ({
     listItem: {
       flex: " 0 0 100%",
@@ -180,7 +180,7 @@ export default function DraggableItem({ item, index, cardID }) {
   };
 
   const removeItemFromCard = () => {
-    CardsService.removeCardItem(cardID, item._id)
+    CardsService.removeCardItem(cardID, item._id, token)
       .then(() => {
         dispatch(
           removeItem({
@@ -202,7 +202,7 @@ export default function DraggableItem({ item, index, cardID }) {
       editorState !== cloneDeep(item.content) ||
       itemTitle.current.textContent !== cloneDeep(item.title)
     ) {
-      CardsService.updateItem(cardID, item._id, key, value).then(() => {
+      CardsService.updateItem(cardID, item._id, key, value, token).then(() => {
         dispatch(
           updateItem({
             itemID: item._id,

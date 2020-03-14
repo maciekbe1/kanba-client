@@ -24,7 +24,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 import { updateCard } from "actions/cardsActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const EXPAND_TEXT = "Rozwiń kartę";
 const COLLAPSED_TEXT = "Zwiń kartę";
@@ -45,12 +45,14 @@ export default function DroppableContainer({
   const [values, setValues] = useState();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const token = useSelector(state => state.authReducer.token);
   const expandClick = () => {
     try {
       dispatch(
         updateCard({
           cardID: droppableId._id,
-          expand: !droppableId.expand
+          expand: !droppableId.expand,
+          token
         })
       );
       setValues(cardTitle.current.textContent);
@@ -92,7 +94,8 @@ export default function DroppableContainer({
       dispatch(
         updateCard({
           cardID: droppableId._id,
-          title: cardTitle.current.textContent
+          title: cardTitle.current.textContent,
+          token
         })
       );
       setValues(cardTitle.current.textContent);
@@ -108,7 +111,8 @@ export default function DroppableContainer({
       dispatch(
         updateCard({
           cardID: droppableId._id,
-          title: cardTitle.current.textContent
+          title: cardTitle.current.textContent,
+          token
         })
       );
       setValues(cardTitle.current.textContent);

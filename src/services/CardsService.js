@@ -1,14 +1,13 @@
 import { request } from "api/API";
-import Cookie from "js-cookie";
 
-export const getCards = userID => {
+export const getCards = (userID, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/get-user-cards`,
     { userID },
-    Cookie.get("token")
+    token
   );
 };
-export const updateCard = result => {
+export const updateCardPosition = (result, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
     {
@@ -19,10 +18,10 @@ export const updateCard = result => {
       },
       type: "inside_list"
     },
-    Cookie.get("token")
+    token
   );
 };
-export const updateItem = (cardID, itemID, key, value) => {
+export const updateItem = (cardID, itemID, key, value, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-item`,
     {
@@ -30,10 +29,10 @@ export const updateItem = (cardID, itemID, key, value) => {
       itemID,
       item: { [key]: value } //rawContent || titleText
     },
-    Cookie.get("token")
+    token
   );
 };
-export const cardItemShared = (start, end, result) => {
+export const cardItemShared = (start, end, result, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
     {
@@ -45,17 +44,17 @@ export const cardItemShared = (start, end, result) => {
       },
       type: "all_lists"
     },
-    Cookie.get("token")
+    token
   );
 };
 
-export const removeCardItem = (cardID, itemID) => {
+export const removeCardItem = (cardID, itemID, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/remove-card-item`,
     {
       cardID,
       itemID
     },
-    Cookie.get("token")
+    token
   );
 };

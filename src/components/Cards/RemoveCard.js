@@ -8,21 +8,22 @@ import {
   DialogTitle,
   DialogContentText
 } from "@material-ui/core";
-import Cookie from "js-cookie";
 import { request } from "api/API";
 import { removeCard } from "actions/cardsActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 export default function RemoveCard({ dialog, dialogHandler, cardID, userID }) {
   const dispatch = useDispatch();
+  const token = useSelector(state => state.authReducer.token);
+
   const approvedRemoveList = () => {
     request(
       `${process.env.REACT_APP_SERVER}/api/cards/remove-card`,
       { cardID: cardID._id, userID },
-      Cookie.get("token")
+      token
     )
       .then(() => {
         dialogHandler(false);
