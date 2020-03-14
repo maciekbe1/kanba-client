@@ -37,7 +37,7 @@ import Menu from "@material-ui/core/Menu";
 import Switch from "@material-ui/core/Switch";
 
 const drawerWidth = 200;
-const message = "Sesja wygasła, zaloguj się ponownie";
+const SESSION_MESSAGE = "Sesja wygasła, zaloguj się ponownie";
 export default function MiniDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
@@ -49,11 +49,13 @@ export default function MiniDrawer(props) {
     dispatch(setBar({ type: null, message: null, active: false }));
     const check = () => {
       UserService.getMeService(Cookies.get("token"))
-        .then(() => console.log("object"))
+        .then()
         .catch(err => {
           console.log(err);
           if (Cookies.get("token")) {
-            dispatch(setBar({ type: "error", message: message, active: true }));
+            dispatch(
+              setBar({ type: "error", message: SESSION_MESSAGE, active: true })
+            );
             dispatch(signOut());
           }
         });

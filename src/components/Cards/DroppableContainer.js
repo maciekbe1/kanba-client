@@ -34,7 +34,7 @@ export default function DroppableContainer({
   list,
   removeCard,
   modalHandler,
-  setDisableDrag
+  dragHandleProps
 }) {
   const getListStyle = isDraggingOver => ({
     // background: isDraggingOver ? "#212121" : ""
@@ -136,6 +136,8 @@ export default function DroppableContainer({
             justifyContent="space-between"
             alignItems="center"
             className={classes.cardContentBox}
+            {...dragHandleProps}
+            onDoubleClick={expandClick}
           >
             <Box
               display="flex"
@@ -241,7 +243,6 @@ export default function DroppableContainer({
                     item={item}
                     cardID={droppableId._id}
                     index={key}
-                    setDisableDrag={setDisableDrag}
                   />
                 ))
               ) : (

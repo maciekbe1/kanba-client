@@ -10,7 +10,6 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
   const [dialog, setDialog] = useState(false);
   const [cardID, setCardID] = useState();
   const [open, setOpen] = useState(false);
-  const [isDrag, setDisableDrag] = useState(false);
   const modalHandler = card => {
     setCardID(card);
     setOpen(!open);
@@ -32,18 +31,9 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
           {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {cards.map((card, key) => (
-                <Draggable
-                  key={card._id}
-                  draggableId={card._id}
-                  index={key}
-                  isDragDisabled={isDrag}
-                >
+                <Draggable key={card._id} draggableId={card._id} index={key}>
                   {provided => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
+                    <div ref={provided.innerRef} {...provided.draggableProps}>
                       <Card
                         style={{
                           margin: "5px auto",
@@ -56,7 +46,7 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
                           removeCard={removeCard}
                           index={key}
                           modalHandler={modalHandler}
-                          setDisableDrag={setDisableDrag}
+                          dragHandleProps={provided.dragHandleProps}
                         />
                         {/* {provided.placeholder} */}
                       </Card>
