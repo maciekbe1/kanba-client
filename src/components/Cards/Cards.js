@@ -24,7 +24,7 @@ import PostAddIcon from "@material-ui/icons/PostAdd";
 import * as CardsService from "services/CardsService";
 import * as CardsHelper from "helper/CardsHelper";
 
-const message =
+const SESSION_MESSAGE =
   "Wystąpił błąd w pobraniu treści. Proszę wyloguj i zaloguj się ponownie";
 export default function Cards() {
   const userID = useSelector(state => state.authReducer.data._id);
@@ -43,7 +43,9 @@ export default function Cards() {
       })
       .catch(error => {
         setLoading(false);
-        dispatch(setBar({ type: "error", message: message, active: true }));
+        dispatch(
+          setBar({ type: "error", message: SESSION_MESSAGE, active: true })
+        );
       });
   }, [dispatch, userID]);
 

@@ -27,7 +27,7 @@ import { Done, Clear } from "@material-ui/icons";
 import { cloneDeep, find } from "lodash";
 import parse from "react-html-parser";
 
-export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
+export default function DraggableItem({ item, index, cardID }) {
   const [readOnly, setReadOnly] = useState(true);
   const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
 
@@ -64,12 +64,7 @@ export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
       overflow: "hidden",
       minHeight: "100px",
       "&:hover": {
-        cursor: readOnly ? "pointer" : "text"
-      }
-    },
-    editor: {
-      "&:hover": {
-        cursor: readOnly ? "pointer" : "text"
+        border: readOnly ? "2px solid " + theme.palette.primary.main : ""
       }
     },
     saveItemContentBtn: {
@@ -170,16 +165,17 @@ export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
     setOpen(!open);
     if (open && !readOnly) {
       setReadOnly(!readOnly);
-      setDisableDrag(false);
     }
   };
 
   const readOnlyHandler = e => {
-    if (e.target.nodeName === "A") {
+    let selection = window.getSelection().toString();
+    if (selection) {
+      setReadOnly(true);
+    } else if (e.target.nodeName === "A") {
       setReadOnly(true);
     } else {
       setReadOnly(false);
-      setDisableDrag(readOnly);
     }
   };
 
@@ -199,7 +195,6 @@ export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
   };
 
   const postUpdateItem = (readOnlyValue, key, value) => {
-    setDisableDrag(false);
     if (readOnlyValue !== null) {
       setReadOnly(readOnlyValue);
     }
@@ -220,7 +215,6 @@ export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
   };
 
   const cancelUpdateItem = () => {
-    setDisableDrag(false);
     setEditorState(cloneDeep(item.content));
     setReadOnly(!readOnly);
   };
@@ -260,7 +254,6 @@ export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
       {(provided, snapshot) => (
         <ListItem
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
           ref={provided.innerRef}
           style={getItemStyle(
             snapshot.isDragging,
@@ -291,6 +284,7 @@ export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
             data-name="row"
             ref={rowBox}
             name="row-box"
+            {...provided.dragHandleProps}
           >
             <Box display="flex" alignItems="center" pr={1}>
               <ListItem
@@ -369,7 +363,7 @@ export default function DraggableItem({ item, index, cardID, setDisableDrag }) {
           >
             <Box p={2} pt={0}>
               {!readOnly ? (
-                <div className={classes.editor}>
+                <div>
                   <Editor
                     editorState={editorState}
                     setEditorState={setEditorState}
