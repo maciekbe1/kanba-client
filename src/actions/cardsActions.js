@@ -1,25 +1,4 @@
-export const getCards = ({ cards }) => {
-  return {
-    type: "SET_CARDS_STATE",
-    cardsState: cards
-  };
-};
-
-export const cardItemChange = ({ cards }) => {
-  return {
-    type: "SET_CARDS_STATE",
-    cardsState: cards
-  };
-};
-
-export const cardItemShared = ({ cards }) => {
-  return {
-    type: "SET_CARDS_STATE",
-    cardsState: cards
-  };
-};
-
-export const cardChange = ({ cards }) => {
+export const setCards = ({ cards }) => {
   return {
     type: "SET_CARDS_STATE",
     cardsState: cards

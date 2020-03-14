@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import * as UserService from "services/UserService";
-import Cookies from "js-cookie";
 
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -59,12 +58,12 @@ function SigninForm() {
     UserService.signInService(values.email, values.password)
       .then(res => {
         const token = res.data;
-        Cookies.set("token", token);
         UserService.getMeService(token).then(res => {
           dispatch(
             signIn({
               isAuth: true,
-              data: res.data
+              data: res.data,
+              token
             })
           );
         });

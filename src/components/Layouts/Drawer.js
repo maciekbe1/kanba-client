@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import * as UserService from "services/UserService";
-import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { signOut } from "actions/UserActions";
 import { useSelector } from "react-redux";
@@ -44,20 +43,17 @@ export default function MiniDrawer(props) {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const darkTheme = useSelector(state => state.layoutReducer.darkTheme);
-
+  const token = useSelector(state => state.authReducer.token);
   useEffect(() => {
     dispatch(setBar({ type: null, message: null, active: false }));
     const check = () => {
-      UserService.getMeService(Cookies.get("token"))
+      UserService.getMeService(token)
         .then()
         .catch(err => {
-          console.log(err);
-          if (Cookies.get("token")) {
-            dispatch(
-              setBar({ type: "error", message: SESSION_MESSAGE, active: true })
-            );
-            dispatch(signOut());
-          }
+          dispatch(
+            setBar({ type: "error", message: SESSION_MESSAGE, active: true })
+          );
+          dispatch(signOut());
         });
     };
     window.addEventListener("visibilitychange", check);
@@ -66,7 +62,7 @@ export default function MiniDrawer(props) {
       window.removeEventListener("visibilitychange", check);
       check();
     };
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   const tabs = [
     { icon: <HomeIcon />, label: "Główna", to: "/" },

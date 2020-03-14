@@ -1,7 +1,6 @@
 import { remove, find, set } from "lodash";
 import Card from "model/Card";
 import { request } from "api/API";
-import Cookie from "js-cookie";
 
 const INITIAL_DATA = {
   cardsState: [],
@@ -82,7 +81,7 @@ export default (state = INITIAL_DATA, action) => {
           cardID: action.payload.cardID,
           type: action.payload.type
         },
-        Cookie.get("token")
+        action.payload.token
       )
         .then(() => {
           return;

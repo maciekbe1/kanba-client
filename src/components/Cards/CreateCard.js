@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { request } from "api/API";
-import Cookie from "js-cookie";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
@@ -12,7 +11,7 @@ import {
   CircularProgress
 } from "@material-ui/core";
 import { createCard } from "actions/cardsActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -34,6 +33,8 @@ export default function CreateCard({ modalHandler, user }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
+
+  const token = useSelector(state => state.authReducer.token);
   const dispatch = useDispatch();
 
   const handleChange = prop => event => {
@@ -50,7 +51,7 @@ export default function CreateCard({ modalHandler, user }) {
         title: values.title,
         description: values.description
       },
-      Cookie.get("token")
+      token
     )
       .then(res => {
         dispatch(createCard(res.data));
