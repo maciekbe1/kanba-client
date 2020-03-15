@@ -44,7 +44,7 @@ export default function DraggableItem({ item, index, cardID }) {
       padding: "0px 0px 0px 3px",
       border: "1px solid",
       borderRadius: "5px",
-      backgroundColor: find(selectedItems, ["itemID", item._id])
+      backgroundColor: find(selectedItems, ["_id", item._id])
         ? "#919191"
         : "unset",
       margin: "5px 0",
@@ -229,11 +229,11 @@ export default function DraggableItem({ item, index, cardID }) {
 
   const selectHandler = (e, itemID) => {
     if (e.target.dataset?.name === "row") {
-      if (!find(selectedItems, ["itemID", itemID])) {
-        dispatch(setSelectedItems([...selectedItems, { cardID, itemID }]));
+      if (!find(selectedItems, ["_id", itemID])) {
+        dispatch(setSelectedItems([...selectedItems, item]));
       } else {
         dispatch(
-          setSelectedItems(selectedItems.filter(item => item.itemID !== itemID))
+          setSelectedItems(selectedItems.filter(item => item._id !== itemID))
         );
       }
     }
@@ -265,7 +265,7 @@ export default function DraggableItem({ item, index, cardID }) {
             <Badge
               color="primary"
               badgeContent={
-                find(selectedItems, ["itemID", item._id])
+                find(selectedItems, ["_id", item._id])
                   ? selectedItems.length
                   : selectedItems.length + 1
               }

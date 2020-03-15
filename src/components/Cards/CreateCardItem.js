@@ -51,7 +51,7 @@ export default function CreateCardItem({ modalHandler, cardID }) {
         dispatch(
           createItem({
             cardID: cardID._id,
-            values: { title, content: editorState },
+            values: { title, content: editorState, cardID: cardID._id },
             itemID: res.data.id
           })
         );

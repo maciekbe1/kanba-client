@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { isEmpty, cloneDeep, isNull } from "lodash";
+import { isEmpty, cloneDeep, isNull, find } from "lodash";
 import { setCards, updateCard, setSelectedItems } from "actions/cardsActions";
 import { setBar } from "actions/layoutActions";
 
@@ -55,20 +55,49 @@ export default function Cards() {
         result.destination.droppableId === result.source.droppableId)
     ) {
       return cards;
-    } else if (selectedItems.length > 1) {
+    } else if (selectedItems.length >= 1) {
       const selectedContainItem = selectedItems.some(
-        item => item.itemID === result.draggableId
+        item => item._id === result.draggableId
       );
+
+      const position = result.destination.index;
+
       if (!selectedContainItem) {
-        const obj = {
-          itemID: result.draggableId,
-          cardID: result.source.droppableId
-        };
-        const newSelectedItems = [obj, ...selectedItems];
+        const card = find(cards, ["_id", result.source.droppableId]);
+        const item = find(card.list, ["_id", result.draggableId]);
+        const newSelectedItems = [item, ...selectedItems];
+
         dispatch(setSelectedItems(newSelectedItems));
-        CardsHelper.cardItemsSelectedChange(cards, result, newSelectedItems);
+
+        CardsService.updateManyItems(
+          result.destination.droppableId,
+          newSelectedItems.map(item => {
+            return { itemID: item._id, cardID: item.cardID };
+          }),
+          position,
+          token
+        );
+        const newCards = CardsHelper.cardItemsSelectedChange(
+          cards,
+          result,
+          newSelectedItems
+        );
+        dispatch(setCards({ cards: newCards }));
       } else {
-        CardsHelper.cardItemsSelectedChange(cards, result, selectedItems);
+        CardsService.updateManyItems(
+          result.destination.droppableId,
+          selectedItems.map(item => {
+            return { itemID: item._id, cardID: item.cardID };
+          }),
+          position,
+          token
+        );
+        const newCards = CardsHelper.cardItemsSelectedChange(
+          cards,
+          result,
+          selectedItems
+        );
+        dispatch(setCards({ cards: newCards }));
       }
     } else if (
       result.type === "LIST" &&
