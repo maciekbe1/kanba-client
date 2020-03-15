@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { isEmpty, cloneDeep, isNull, find } from "lodash";
+import { isEmpty, cloneDeep, isNull, find, isNil } from "lodash";
 import { setCards, updateCard, setSelectedItems } from "actions/cardsActions";
 import { setBar } from "actions/layoutActions";
 
@@ -72,7 +72,12 @@ export default function Cards() {
         CardsService.updateManyItems(
           result.destination.droppableId,
           newSelectedItems.map(item => {
-            return { itemID: item._id, cardID: item.cardID };
+            return {
+              itemID: item._id,
+              cardID: isNil(item.cardID)
+                ? result.source.droppableId
+                : item.cardID
+            };
           }),
           position,
           token
@@ -87,7 +92,12 @@ export default function Cards() {
         CardsService.updateManyItems(
           result.destination.droppableId,
           selectedItems.map(item => {
-            return { itemID: item._id, cardID: item.cardID };
+            return {
+              itemID: item._id,
+              cardID: isNil(item.cardID)
+                ? result.source.droppableId
+                : item.cardID
+            };
           }),
           position,
           token
