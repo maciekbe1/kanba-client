@@ -31,6 +31,9 @@ export default function DraggableItem({ item, index, cardID }) {
   const [readOnly, setReadOnly] = useState(true);
   const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
   const token = useSelector(state => state.authReducer.token);
+  const dark = useSelector(state =>
+    state.layoutReducer.darkTheme ? "dark" : "light"
+  );
   const useStyles = makeStyles(theme => ({
     listItem: {
       flex: " 0 0 100%",
@@ -43,15 +46,21 @@ export default function DraggableItem({ item, index, cardID }) {
       flexWrap: "wrap",
       padding: "0px 0px 0px 3px",
       border: "1px solid",
+      borderColor: dark === "dark" ? "#616161" : "#E0E0E0",
       borderRadius: "5px",
       backgroundColor: find(selectedItems, ["_id", item._id])
         ? "#919191"
-        : "unset",
+        : dark === "dark"
+        ? "#616161"
+        : "#E0E0E0",
       margin: "5px 0",
+      color: dark === "dark" ? "#fff" : "#212121",
       "&:hover": {
-        background: theme.palette.type === "dark" ? "#616161" : "#E0E0E0",
-        borderRadius: "5px",
-        color: theme.palette.type === "dark" ? "#fff" : "#212121"
+        backgroundColor: find(selectedItems, ["_id", item._id])
+          ? "#919191"
+          : dark === "dark"
+          ? "#6e6e6e"
+          : "#d3d3d3"
       }
     },
     expandItem: {
@@ -73,7 +82,7 @@ export default function DraggableItem({ item, index, cardID }) {
     itemTitle: {
       wordBreak: "break-all",
       "&:focus": {
-        backgroundColor: "#e5e5e5",
+        backgroundColor: dark === "dark" ? "#e5e5e5" : "#f2f2f2",
         color: "#333232",
         borderRadius: "5px",
         padding: "0 5px",
@@ -82,7 +91,7 @@ export default function DraggableItem({ item, index, cardID }) {
       },
       "&:hover": {
         cursor: "pointer",
-        backgroundColor: "#e5e5e5",
+        backgroundColor: dark === "dark" ? "#e5e5e5" : "#f2f2f2",
         borderRadius: "5px",
         color: "#212121",
         padding: "0 5px",
@@ -257,7 +266,8 @@ export default function DraggableItem({ item, index, cardID }) {
           ref={provided.innerRef}
           style={getItemStyle(
             snapshot.isDragging,
-            provided.draggableProps.style
+            provided.draggableProps.style,
+            dark
           )}
           className={classes.rowStyles}
         >
@@ -416,13 +426,13 @@ export default function DraggableItem({ item, index, cardID }) {
   );
 }
 
-const getItemStyle = (isDragging, draggableStyle) => ({
+const getItemStyle = (isDragging, draggableStyle, dark) => ({
   // styles we need to apply on draggables
   ...draggableStyle,
 
   ...(isDragging && {
     borderRadius: "5px",
-    background: "#807e7e"
+    background: dark === "dark" ? "#807e7e" : "#c6c6c6"
   })
 });
 
