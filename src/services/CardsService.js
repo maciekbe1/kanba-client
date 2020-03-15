@@ -58,3 +58,20 @@ export const removeCardItem = (cardID, itemID, token) => {
     token
   );
 };
+
+export const updateManyItems = (
+  destination,
+  selectedItems,
+  position,
+  token
+) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/update-many-items`,
+    {
+      destination,
+      selectedItems,
+      position
+    },
+    token
+  );
+};

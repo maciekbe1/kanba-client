@@ -1,4 +1,4 @@
-import { find } from "lodash";
+import { find, remove } from "lodash";
 
 export const cardItemChange = (cards, result) => {
   const reorder = (list, startIndex, endIndex) => {
@@ -29,6 +29,7 @@ export const cardItemShared = (cards, result) => {
     return o._id === result.destination.droppableId;
   });
   const [removed] = start.list.splice(result.source.index, 1);
+  removed.cardID = result.destination.droppableId;
   end.list.splice(result.destination.index, 0, removed);
   return { start, end, newCards: cards };
 };
@@ -43,7 +44,15 @@ export const cardItemsSelectedChange = (cards, result, selected) => {
   const destinationCard = cards.find(
     card => card._id === result.destination.droppableId
   );
-  console.log(destinationCard);
-  // destinationCard.list.splice(result.destination.index, 0, removed)
-  return selected;
+
+  cards.forEach(card => {
+    selected.forEach(s => {
+      remove(card.list, ["_id", s._id]);
+      s.cardID = result.destination.droppableId;
+    });
+  });
+
+  destinationCard.list.splice(result.destination.index, 0, ...selected);
+
+  return cards;
 };
