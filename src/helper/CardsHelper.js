@@ -56,3 +56,12 @@ export const cardItemsSelectedChange = (cards, result, selected) => {
 
   return cards;
 };
+
+export const removeSelectedItems = (cards, selectedItems) => {
+  cards.forEach(card => {
+    selectedItems.forEach(s => {
+      remove(card.list, ["_id", s._id]);
+    });
+  });
+  return cards;
+};

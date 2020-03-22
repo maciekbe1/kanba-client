@@ -75,3 +75,11 @@ export const updateManyItems = (
     token
   );
 };
+
+export const removeSelectedItems = (token, selected) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/remove-many-items`,
+    { selected },
+    token
+  );
+};

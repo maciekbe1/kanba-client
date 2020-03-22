@@ -5,6 +5,7 @@ import { setCards, updateCard, setSelectedItems } from "actions/cardsActions";
 import { setBar } from "actions/layoutActions";
 
 import CreateCard from "./CreateCard";
+import RemoveItems from "./RemoveItems";
 import DragDropComponent from "./DragDropComponent";
 import Modal from "../Utils/Modal";
 import { Typography } from "@material-ui/core";
@@ -14,6 +15,7 @@ import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import PostAddIcon from "@material-ui/icons/PostAdd";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import * as CardsService from "services/CardsService";
 import * as CardsHelper from "helper/CardsHelper";
 
@@ -169,7 +171,7 @@ export default function Cards() {
   };
   const classes = useStyles();
   const [openDial, setOpenDial] = React.useState(false);
-
+  const [dialog, setDialog] = useState(false);
   const handleClose = () => {
     setOpenDial(false);
   };
@@ -177,7 +179,9 @@ export default function Cards() {
   const handleOpen = () => {
     setOpenDial(!openDial);
   };
-
+  const removeSelectedDialog = () => {
+    setDialog(!dialog);
+  };
   return (
     <>
       {loading ? (
@@ -202,22 +206,39 @@ export default function Cards() {
         <CreateCard modalHandler={modalHandler} user={userID} />
       </Modal>
       <div className={classes.exampleWrapper}>
-        <SpeedDial
-          ariaLabel="SpeedDial example"
-          className={classes.speedDial}
-          icon={<SpeedDialIcon />}
-          onClose={handleClose}
-          onClick={handleOpen}
-          open={openDial}
-          direction="up"
-        >
-          <SpeedDialAction
-            icon={<PostAddIcon />}
-            tooltipTitle={"Utwórz kartę"}
-            onClick={modalHandler}
+        {!selectedItems.length ? (
+          <SpeedDial
+            ariaLabel="create"
+            className={classes.speedDial}
+            icon={<SpeedDialIcon />}
+            onClose={handleClose}
+            onClick={handleOpen}
+            open={openDial}
+            direction="up"
+          >
+            <SpeedDialAction
+              icon={<PostAddIcon />}
+              tooltipTitle={"Utwórz kartę"}
+              onClick={modalHandler}
+            />
+          </SpeedDial>
+        ) : (
+          <SpeedDial
+            ariaLabel="remove"
+            onClick={removeSelectedDialog}
+            className={classes.speedDialRemove}
+            open={false}
+            data-name="selected"
+            icon={<DeleteForeverIcon data-name="selected" edge="end" />}
           />
-        </SpeedDial>
+        )}
       </div>
+      <RemoveItems
+        dialog={dialog}
+        dialogHandler={removeSelectedDialog}
+        selectedItems={selectedItems}
+        cards={cards}
+      />
     </>
   );
 }
@@ -240,6 +261,32 @@ const useStyles = makeStyles(theme => ({
     "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
       top: theme.spacing(2),
       left: theme.spacing(2)
+    },
+    "&.MuiFab-label": {
+      width: "auto"
+    },
+    "&:hover": {
+      opacity: 1
+    }
+  },
+  speedDialRemove: {
+    position: "absolute",
+    opacity: "0.4",
+    "&.MuiSpeedDial-root .MuiFab-primary": {
+      backgroundColor: theme.palette.error.main
+    },
+    "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+      bottom: theme.spacing(2),
+      right: theme.spacing(2)
+    },
+    "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+      top: theme.spacing(2),
+      left: theme.spacing(2)
+    },
+    "&.MuiSpeedDial-root .MuiSvgIcon-root": {
+      width: "100%",
+      height: "53px",
+      padding: "14px"
     },
     "&:hover": {
       opacity: 1
