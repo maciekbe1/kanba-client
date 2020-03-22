@@ -455,7 +455,7 @@ function useOutsideEventRowClick(ref, setSelectedItemsEmpty) {
     if (
       ref.current.dataset?.name &&
       !ref.current.dataset?.name.includes(event.target.dataset?.name) &&
-      event.target.parentNode.dataset.name !== "selected"
+      event.target.parentNode.dataset?.name !== "selected"
     ) {
       setSelectedItemsEmpty();
     }
