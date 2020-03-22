@@ -121,7 +121,7 @@ export default function DraggableItem({ item, index, cardID }) {
   const [editable, setEditable] = useState(false);
   const [titleText, setTitleText] = useState();
   const itemTitle = useRef();
-  const rowBox = useRef();
+  const selectedBox = useRef();
 
   useEffect(() => {
     setEditorState(item.content);
@@ -237,7 +237,7 @@ export default function DraggableItem({ item, index, cardID }) {
   useOutsideEvent(itemTitle);
 
   const selectHandler = (e, itemID) => {
-    if (e.target.dataset?.name === "row") {
+    if (e.target.dataset?.name === "selected") {
       if (!find(selectedItems, ["_id", itemID])) {
         dispatch(setSelectedItems([...selectedItems, item]));
       } else {
@@ -252,7 +252,7 @@ export default function DraggableItem({ item, index, cardID }) {
     dispatch(setSelectedItems([]));
   };
 
-  useOutsideEventRowClick(rowBox, setSelectedItemsEmpty);
+  useOutsideEventRowClick(selectedBox, setSelectedItemsEmpty);
   return (
     <Draggable
       key={item._id}
@@ -291,9 +291,8 @@ export default function DraggableItem({ item, index, cardID }) {
             justifyContent="space-between"
             alignItems="center"
             onClick={e => selectHandler(e, item._id)}
-            data-name="row"
-            ref={rowBox}
-            name="row-box"
+            data-name="selected"
+            ref={selectedBox}
             {...provided.dragHandleProps}
           >
             <Box display="flex" alignItems="center" pr={1}>
@@ -455,7 +454,8 @@ function useOutsideEventRowClick(ref, setSelectedItemsEmpty) {
   function handleClickOutside(event) {
     if (
       ref.current.dataset?.name &&
-      !ref.current.dataset?.name.includes(event.target.dataset?.name)
+      !ref.current.dataset?.name.includes(event.target.dataset?.name) &&
+      event.target.parentNode.dataset.name !== "selected"
     ) {
       setSelectedItemsEmpty();
     }

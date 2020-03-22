@@ -8,25 +8,36 @@ import {
   DialogTitle,
   DialogContentText
 } from "@material-ui/core";
-import { request } from "api/API";
-import { removeCard } from "actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
+import * as CardsService from "services/CardsService";
+import * as CardsHelper from "helper/CardsHelper";
+
+import { setCards, setSelectedItems } from "actions/cardsActions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-export default function RemoveCard({ dialog, dialogHandler, cardID, userID }) {
+
+export default function RemoveItems({
+  dialog,
+  dialogHandler,
+  cards,
+  selectedItems
+}) {
   const dispatch = useDispatch();
   const token = useSelector(state => state.authReducer.token);
-
   const approvedRemoveList = () => {
-    request(
-      `${process.env.REACT_APP_SERVER}/api/cards/remove-card`,
-      { cardID: cardID._id, userID },
-      token
-    );
     dialogHandler(false);
-    dispatch(removeCard({ cardID: cardID._id }));
+    const newCards = CardsHelper.removeSelectedItems(cards, selectedItems);
+    const selected = selectedItems.map(item => {
+      return {
+        itemID: item._id,
+        cardID: item.cardID
+      };
+    });
+    CardsService.removeSelectedItems(token, selected);
+    dispatch(setCards({ cards: newCards }));
+    dispatch(setSelectedItems([]));
   };
   return (
     <Dialog
@@ -38,18 +49,22 @@ export default function RemoveCard({ dialog, dialogHandler, cardID, userID }) {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogTitle id="alert-dialog-slide-title">
-        Na pewno chesz usunąć {cardID ? cardID.title : null}?
+        Na pewno chesz usunąć zaznaczone zadania?
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          Ta karta zostanie trwale usunięta.
+          Zadania zostaną trwale usunięte.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={dialogHandler} color="primary">
+        <Button onClick={dialogHandler} color="primary" data-name="selected">
           Nie
         </Button>
-        <Button onClick={approvedRemoveList} color="secondary">
+        <Button
+          onClick={approvedRemoveList}
+          color="secondary"
+          data-name="selected"
+        >
           Tak
         </Button>
       </DialogActions>
