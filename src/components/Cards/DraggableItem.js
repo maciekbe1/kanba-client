@@ -44,7 +44,6 @@ export default function DraggableItem({ item, index, cardID }) {
       position: "relative",
       display: "flex",
       flexWrap: "wrap",
-      padding: "0px 0px 0px 3px",
       border: "1px solid",
       borderColor: dark === "dark" ? "#616161" : "#E0E0E0",
       borderRadius: "5px",
@@ -53,7 +52,6 @@ export default function DraggableItem({ item, index, cardID }) {
         : dark === "dark"
         ? "#616161"
         : "#E0E0E0",
-      margin: "5px 0",
       color: dark === "dark" ? "#fff" : "#212121",
       "&:hover": {
         backgroundColor: find(selectedItems, ["_id", item._id])
@@ -427,12 +425,14 @@ export default function DraggableItem({ item, index, cardID }) {
 
 const getItemStyle = (isDragging, draggableStyle, dark) => ({
   // styles we need to apply on draggables
-  ...draggableStyle,
+  padding: "0 0 0 3px",
+  margin: "0 0 5px 0",
 
   ...(isDragging && {
     borderRadius: "5px",
     background: dark === "dark" ? "#807e7e" : "#c6c6c6"
-  })
+  }),
+  ...draggableStyle
 });
 
 function useOutsideEvent(ref) {
