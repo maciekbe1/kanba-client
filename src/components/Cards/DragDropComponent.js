@@ -23,7 +23,10 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
     setCardID(card);
     setDialog(true);
   };
-
+  const getCardStyle = draggableStyle => ({
+    margin: `0 0 8px 0`,
+    ...draggableStyle
+  });
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -33,10 +36,13 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
               {cards.map((card, key) => (
                 <Draggable key={card._id} draggableId={card._id} index={key}>
                   {provided => (
-                    <div ref={provided.innerRef} {...provided.draggableProps}>
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      style={getCardStyle(provided.draggableProps.style)}
+                    >
                       <Card
                         style={{
-                          margin: "5px auto",
                           overflow: "visible"
                         }}
                       >
