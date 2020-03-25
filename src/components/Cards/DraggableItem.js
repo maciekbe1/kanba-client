@@ -374,6 +374,7 @@ export default function DraggableItem({ item, index, cardID }) {
                   <Editor
                     editorState={editorState}
                     setEditorState={setEditorState}
+                    onFocus={true}
                   />
                   <Box display="flex" justifyContent="flex-end" pt={2}>
                     <Button

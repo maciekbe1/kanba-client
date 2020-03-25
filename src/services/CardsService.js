@@ -7,6 +7,15 @@ export const getCards = (userID, token) => {
     token
   );
 };
+
+export const createItem = (cardID, item, token) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
+    { cardID, item },
+    token
+  );
+};
+
 export const updateCardPosition = (result, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-card`,

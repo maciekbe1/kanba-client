@@ -40,7 +40,7 @@ export default (state = INITIAL_DATA, action) => {
       });
       return {
         ...state,
-        cardsState: state.cardsState
+        cardsState: new Card(state.cardsState).cards
       };
     }
 

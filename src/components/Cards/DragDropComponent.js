@@ -3,17 +3,10 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card } from "@material-ui/core";
 import DroppableContainer from "./DroppableContainer";
 import RemoveCard from "./RemoveCard";
-import Modal from "../Utils/Modal";
-import CreateCardItem from "./CreateCardItem";
 
 export default function DragDropComponent({ cards, onDragEnd, userID }) {
   const [dialog, setDialog] = useState(false);
   const [cardID, setCardID] = useState();
-  const [open, setOpen] = useState(false);
-  const modalHandler = card => {
-    setCardID(card);
-    setOpen(!open);
-  };
 
   const dialogHandler = () => {
     setDialog(!dialog);
@@ -51,7 +44,6 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
                           list={cards[key].list}
                           removeCard={removeCard}
                           index={key}
-                          modalHandler={modalHandler}
                           dragHandleProps={provided.dragHandleProps}
                         />
                         {/* {provided.placeholder} */}
@@ -71,9 +63,6 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
         cardID={cardID}
         userID={userID}
       />
-      <Modal modalHandler={modalHandler} openProps={open}>
-        <CreateCardItem modalHandler={modalHandler} cardID={cardID} />
-      </Modal>
     </>
   );
 }

@@ -15,16 +15,18 @@ import {
 import {
   DragIndicator,
   Delete,
-  Add,
   Done,
   Clear,
   ExpandLess,
   ExpandMore
 } from "@material-ui/icons";
+import AddIcon from "@material-ui/icons/Add";
+import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 import { updateCard } from "actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
+import CreateCardItem from "components/Cards/CreateCardItem";
 
 const EXPAND_TEXT = "Rozwiń kartę";
 const COLLAPSED_TEXT = "Zwiń kartę";
@@ -33,7 +35,6 @@ export default function DroppableContainer({
   droppableId,
   list,
   removeCard,
-  modalHandler,
   dragHandleProps
 }) {
   const getListStyle = isDraggingOver => ({
@@ -43,6 +44,7 @@ export default function DroppableContainer({
   const cardTitle = useRef();
   const [editable, setEditable] = useState(false);
   const [values, setValues] = useState();
+  const [createOpen, setCreateOpen] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
   const token = useSelector(state => state.authReducer.token);
@@ -136,107 +138,131 @@ export default function DroppableContainer({
           style={{ paddingBottom: "16px" }}
         >
           <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
             className={classes.cardContentBox}
-            {...dragHandleProps}
             onDoubleClick={expandClick}
+            display="flex"
+            flexDirection="column"
           >
             <Box
               display="flex"
+              justifyContent="space-between"
               alignItems="center"
-              className={classes.titleBox}
+              {...dragHandleProps}
             >
-              <DragIndicator />
-              <Box position="relative">
-                <Typography
-                  ref={cardTitle}
-                  className={classes.cardTitle}
-                  variant="h6"
-                  onMouseDown={mouseDownCardTitle}
-                  onKeyPress={keyPressCardTitle}
-                  tabIndex="0"
-                  onBlur={cardTitleOnBlur}
-                  onPaste={onPaste}
-                >
-                  {droppableId.title}
-                </Typography>
-                {editable ? (
-                  <Box
-                    display="flex"
-                    justifyContent="flex-end"
-                    className={classes.editContentIcons}
-                    position="absolute"
-                    right="0px"
+              <Box
+                display="flex"
+                alignItems="center"
+                className={classes.titleBox}
+              >
+                <DragIndicator />
+                <Box position="relative">
+                  <Typography
+                    ref={cardTitle}
+                    className={classes.cardTitle}
+                    variant="h6"
+                    onMouseDown={mouseDownCardTitle}
+                    onKeyPress={keyPressCardTitle}
+                    tabIndex="0"
+                    onBlur={cardTitleOnBlur}
+                    onPaste={onPaste}
                   >
-                    <Button
-                      size="small"
-                      onMouseDown={onClikcAccept}
-                      variant="contained"
-                      style={{
-                        marginRight: "2px",
-                        padding: "2px",
-                        minWidth: "10px"
+                    {droppableId.title}
+                  </Typography>
+                  {editable ? (
+                    <Box
+                      display="flex"
+                      justifyContent="flex-end"
+                      className={classes.editContentIcons}
+                      position="absolute"
+                      right="0px"
+                    >
+                      <Button
+                        size="small"
+                        onMouseDown={onClikcAccept}
+                        variant="contained"
+                        style={{
+                          marginRight: "2px",
+                          padding: "2px",
+                          minWidth: "10px"
+                        }}
+                      >
+                        <Done className={classes.icon} />
+                      </Button>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onMouseDown={onClikcDiscard}
+                        style={{
+                          marginLeft: "2px",
+                          padding: "2px",
+                          minWidth: "10px"
+                        }}
+                      >
+                        <Clear className={classes.icon} />
+                      </Button>
+                    </Box>
+                  ) : null}
+                </Box>
+              </Box>
+              <Box display="flex" className={classes.buttonBox}>
+                <Tooltip
+                  title={droppableId.expand ? COLLAPSED_TEXT : EXPAND_TEXT}
+                  placement="top"
+                >
+                  <IconButton
+                    aria-label={
+                      droppableId.expand ? "expandLess" : "expandMore"
+                    }
+                    onClick={expandClick}
+                  >
+                    <Badge
+                      color="primary"
+                      badgeContent={list.length}
+                      max={99}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "left"
                       }}
                     >
-                      <Done className={classes.icon} />
-                    </Button>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      onMouseDown={onClikcDiscard}
-                      style={{
-                        marginLeft: "2px",
-                        padding: "2px",
-                        minWidth: "10px"
-                      }}
+                      {droppableId.expand ? <ExpandLess /> : <ExpandMore />}
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+                {createOpen ? (
+                  <Tooltip title="Zamknij okno" placement="top">
+                    <IconButton
+                      aria-label="close"
+                      onClick={() => setCreateOpen(!createOpen)}
                     >
-                      <Clear className={classes.icon} />
-                    </Button>
-                  </Box>
-                ) : null}
+                      <CloseIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Dodaj pozycje do karty" placement="top">
+                    <IconButton
+                      aria-label="add"
+                      onClick={() => setCreateOpen(!createOpen)}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+                <Tooltip title="Usuń kartę" placement="top">
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => removeCard(droppableId)}
+                  >
+                    <Delete />
+                  </IconButton>
+                </Tooltip>
               </Box>
             </Box>
-            <Box display="flex" className={classes.buttonBox}>
-              <Tooltip
-                title={droppableId.expand ? COLLAPSED_TEXT : EXPAND_TEXT}
-                placement="top"
-              >
-                <IconButton
-                  aria-label={droppableId.expand ? "expandLess" : "expandMore"}
-                  onClick={expandClick}
-                >
-                  <Badge
-                    color="primary"
-                    badgeContent={list.length}
-                    max={99}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left"
-                    }}
-                  >
-                    {droppableId.expand ? <ExpandLess /> : <ExpandMore />}
-                  </Badge>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Dodaj pozycje do karty" placement="top">
-                <IconButton
-                  aria-label="add"
-                  onClick={() => modalHandler(droppableId)}
-                >
-                  <Add />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Usuń kartę" placement="top">
-                <IconButton
-                  aria-label="delete"
-                  onClick={() => removeCard(droppableId)}
-                >
-                  <Delete />
-                </IconButton>
-              </Tooltip>
-            </Box>
+            {createOpen ? (
+              <CreateCardItem
+                cardID={droppableId}
+                setCreateOpen={setCreateOpen}
+              />
+            ) : null}
           </Box>
           <Collapse in={droppableId.expand} timeout="auto" unmountOnExit>
             <List style={getListStyle(snapshot.isDraggingOver)}>
