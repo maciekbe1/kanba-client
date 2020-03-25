@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { request } from "api/API";
+import React, { useState, useRef, useEffect } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
-  Typography,
   Box,
   Button,
   FormControl,
@@ -12,11 +11,12 @@ import {
 } from "@material-ui/core";
 import { createItem } from "actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
+import * as CardsService from "services/CardsService";
 import Editor from "../Editor/Editor";
 
 const useStyles = makeStyles(theme => ({
   button: {
-    marginRight: "10px"
+    textTransform: "unset"
   },
   error: {
     color: theme.palette.error.main,
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: "8px"
   }
 }));
-export default function CreateCardItem({ modalHandler, cardID }) {
+export default function CreateCardItem({ cardID, setCreateOpen }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
@@ -36,17 +36,16 @@ export default function CreateCardItem({ modalHandler, cardID }) {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [editorState, setEditorState] = useState("");
+  const titleField = useRef();
   const token = useSelector(state => state.authReducer.token);
-
+  useEffect(() => {
+    titleField.current.focus();
+  }, []);
   const addItemHandler = e => {
     e.preventDefault();
     setError(false);
     setLoading(true);
-    request(
-      `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
-      { cardID: cardID._id, item: { title, content: editorState } },
-      token
-    )
+    CardsService.createItem(cardID._id, { title, content: editorState }, token)
       .then(res => {
         dispatch(
           createItem({
@@ -55,7 +54,12 @@ export default function CreateCardItem({ modalHandler, cardID }) {
             itemID: res.data.id
           })
         );
-        modalHandler();
+        setLoading(false);
+        setMessage("");
+        setTitle("");
+        setEditorState("");
+        titleField.current.focus();
+        setCreateOpen(false);
       })
       .catch(error => {
         setError(true);
@@ -64,50 +68,60 @@ export default function CreateCardItem({ modalHandler, cardID }) {
       });
   };
   return (
-    <>
-      <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
-        Utwórz zadanie
-      </Typography>
-      <form noValidate autoComplete="off" onSubmit={addItemHandler}>
+    <form noValidate autoComplete="off" onSubmit={addItemHandler}>
+      <div className={classes.draftEditorModal}>
         <TextField
           fullWidth
           required
+          inputRef={titleField}
           error={error}
           id="standard-required"
           label="Tytuł"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          helperText="* Wymagane"
           name="title"
           type="text"
-          variant="outlined"
-          style={{ margin: "10px 0 5px 0" }}
         />
-        <div className={classes.draftEditorModal}>
-          <Editor setEditorState={setEditorState} editorState={editorState} />
-        </div>
-        {error ? (
-          <Box>
-            <FormControl style={{ marginBottom: "20px" }}>
-              <FormHelperText className={classes.error} id="my-helper-text">
-                {message}
-              </FormHelperText>
-            </FormControl>
-          </Box>
-        ) : null}
+        <Editor setEditorState={setEditorState} editorState={editorState} />
+      </div>
+      <Box display="flex" justifyContent="space-between" px={1} mb={1}>
+        <Box>
+          <FormControl>
+            <FormHelperText className={classes.error} id="my-helper-text">
+              {message}
+            </FormHelperText>
+          </FormControl>
+        </Box>
         <Box
           display="flex"
           justifyContent="flex-end"
           className={classes.buttons}
         >
-          <Button variant="outlined" type="submit" className={classes.button}>
-            {loading ? <CircularProgress size={20} /> : "Create"}
+          <Button
+            color="primary"
+            variant="contained"
+            type="submit"
+            className={classes.button}
+            size="small"
+            style={{ marginRight: "10px" }}
+          >
+            {loading ? (
+              <CircularProgress size={20} style={{ color: "red" }} />
+            ) : (
+              "Utwórz"
+            )}
           </Button>
-          <Button onClick={modalHandler} variant="outlined" color="secondary">
-            Cancel
+          <Button
+            onClick={() => setCreateOpen(false)}
+            variant="contained"
+            color="secondary"
+            size="small"
+            className={classes.button}
+          >
+            Anuluj
           </Button>
         </Box>
-      </form>
-    </>
+      </Box>
+    </form>
   );
 }
