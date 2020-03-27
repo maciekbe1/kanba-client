@@ -17,127 +17,113 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 
-import Modal from "../Utils/Modal";
-import Signin from "../Auth/Signin";
-
 const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1
-    },
-    menuButton: {
-        marginRight: theme.spacing(2)
-    },
-    title: {
-        flexGrow: 1
-    },
-    list: {
-        width: 250
-    },
-    fullList: {
-        width: "auto"
-    },
-    paper: {
-        background: theme.palette.primary
-    },
-    logo: {
-        textDecoration: "none",
-        color: "white"
-    },
-    offset: theme.mixins.toolbar
+  root: {
+    flexGrow: 1
+  },
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+  title: {
+    flexGrow: 1
+  },
+  list: {
+    width: 250
+  },
+  fullList: {
+    width: "auto"
+  },
+  paper: {
+    background: theme.palette.primary
+  },
+  logo: {
+    textDecoration: "none",
+    color: "white"
+  },
+  offset: theme.mixins.toolbar
 }));
 
 export default function PublicAppBar(props) {
-    const classes = useStyles();
-    const [state, setState] = React.useState({
-        left: false
-    });
-    //modal
-    const [open, setOpen] = React.useState(false);
-    const modalHandler = () => {
-        setOpen(!open);
-    };
+  const classes = useStyles();
+  const [state, setState] = React.useState({
+    left: false
+  });
 
-    const toggleDrawer = (side, open) => event => {
-        if (
-            event.type === "keydown" &&
-            (event.key === "Tab" || event.key === "Shift")
-        ) {
-            return;
-        }
+  const toggleDrawer = (side, open) => event => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
 
-        setState({ ...state, [side]: open });
-    };
-    const sideList = side => (
-        <div
-            className={classes.list}
-            role="presentation"
-            onClick={toggleDrawer(side, false)}
-            onKeyDown={toggleDrawer(side, false)}
-        >
-            <List>
-                {["Inbox", "Starred", "Send email", "Drafts"].map(
-                    (text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    )
-                )}
-            </List>
-            <Divider />
-            <List>
-                {["All mail", "Trash", "Spam"].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-            </List>
-        </div>
-    );
+    setState({ ...state, [side]: open });
+  };
+  const sideList = side => (
+    <div
+      className={classes.list}
+      role="presentation"
+      onClick={toggleDrawer(side, false)}
+      onKeyDown={toggleDrawer(side, false)}
+    >
+      <List>
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {["All mail", "Trash", "Spam"].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
 
-    return (
-        <div className={classes.root}>
-            <AppBar position="fixed" className={classes.paper}>
-                <Toolbar>
-                    <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={toggleDrawer("left", true)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        <Link className={classes.logo} to="/">
-                            Kanba
-                        </Link>
-                    </Typography>
-                    <Button color="inherit" onClick={modalHandler}>
-                        Sign in
-                    </Button>
-                    <Button variant="outlined" color="inherit" href="/signup">
-                        Sign up
-                    </Button>
-                </Toolbar>
-            </AppBar>
-            <div className={classes.offset} />
-            <Drawer
-                anchor="left"
-                open={state.left}
-                onClose={toggleDrawer("left", false)}
-            >
-                {sideList("left")}
-            </Drawer>
-            {props.children}
-            <Modal modalHandler={modalHandler} openProps={open}>
-                <Signin modalHandler={modalHandler} />
-            </Modal>
-        </div>
-    );
+  return (
+    <div className={classes.root}>
+      <AppBar position="fixed" className={classes.paper}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer("left", true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            <Link className={classes.logo} to="/">
+              Kanba
+            </Link>
+          </Typography>
+          <Button color="inherit" href="/signin">
+            Zaloguj
+          </Button>
+          <Button variant="outlined" color="inherit" href="/signup">
+            Dołącz
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <div className={classes.offset} />
+      <Drawer
+        anchor="left"
+        open={state.left}
+        onClose={toggleDrawer("left", false)}
+      >
+        {sideList("left")}
+      </Drawer>
+    </div>
+  );
 }

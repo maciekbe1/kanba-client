@@ -72,14 +72,14 @@ export default function ResetPassword() {
             <Typography
               align="center"
               color="textSecondary"
-              variant="h2"
+              variant="h3"
               gutterBottom
             >
-              Forget Password?
+              Zapomniałeś hasła?
             </Typography>
             <Typography align="center" variant="subtitle1" paragraph>
-              Enter the email adress you used to register and we'll email you
-              the link and password reset instruction.
+              Wprowadź adres email, który uyłeś do rejestracji, a my prześlemy
+              na ten email link resetujący hasło.
             </Typography>
             <Paper
               component="form"

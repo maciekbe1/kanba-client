@@ -7,6 +7,8 @@ import { FormControl } from "@material-ui/core";
 import { Input } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
+import Typography from "@material-ui/core/Typography";
+import { Link } from "@material-ui/core";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
@@ -17,7 +19,7 @@ import Lock from "@material-ui/icons/Lock";
 import Mail from "@material-ui/icons/Mail";
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import GoogleAuth from "components/Auth/GoogleAuth";
 import { signIn } from "actions/UserActions";
 import { useDispatch } from "react-redux";
 
@@ -81,7 +83,7 @@ function SigninForm() {
   return (
     <Container maxWidth="lg">
       <Grid container display="flex" justify="center">
-        <Grid item lg={6} xs={10}>
+        <Grid item lg={4} xs={8}>
           <form align="center" onSubmit={e => signInHandler(e)}>
             <h1>Zaloguj się</h1>
             <Box display="flex" alignItems="center">
@@ -130,6 +132,11 @@ function SigninForm() {
                 />
               </FormControl>
             </Box>
+            <Link href="/reset-password">
+              <Typography variant="caption" display="block" gutterBottom>
+                Zapomniałeś hasła?
+              </Typography>
+            </Link>
             {error ? (
               <FormControl
                 style={{
@@ -152,11 +159,17 @@ function SigninForm() {
                 {loading ? (
                   <CircularProgress size={20} color="secondary" />
                 ) : (
-                  "Sign in"
+                  "Zaloguj"
                 )}
               </Button>
             </Box>
           </form>
+          <Box my={2}>
+            <Typography align="center">Lub</Typography>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <GoogleAuth />
+          </Box>
         </Grid>
       </Grid>
     </Container>

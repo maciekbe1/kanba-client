@@ -4,8 +4,7 @@ import { useDispatch } from "react-redux";
 import { signOut } from "actions/UserActions";
 import { useSelector } from "react-redux";
 import { setTabValue, setDarkTheme, setBar } from "actions/layoutActions";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { findIndex } from "lodash";
 
 import clsx from "clsx";

@@ -13,3 +13,9 @@ export const getMeService = token => {
     token
   );
 };
+
+export const signInGoogleService = token => {
+  return API.request(`${process.env.REACT_APP_SERVER}/api/auth/googleSignIn`, {
+    token
+  });
+};
