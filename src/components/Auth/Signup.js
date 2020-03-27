@@ -19,6 +19,7 @@ import Mail from "@material-ui/icons/Mail";
 import Grid from "@material-ui/core/Grid";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import Typography from "@material-ui/core/Typography";
+import GoogleAuth from "components/Auth/GoogleAuth";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -70,14 +71,14 @@ export default function Signup() {
     <Container maxWidth="lg">
       {!success ? (
         <Grid container display="flex" justify="center">
-          <Grid item lg={6} xs={10}>
+          <Grid item lg={6} xs={8}>
             <form
               align="center"
               autoComplete="off"
               onSubmit={e => signUpHandler(e)}
             >
-              <h5>Join Kanba</h5>
-              <h1>Create your account</h1>
+              <h5>Dołącz do nas</h5>
+              <h1>Utwórz swoje konto</h1>
               <Box display="flex" alignItems="center">
                 <Mail color="primary" style={{ marginRight: "10px" }} />
                 <FormControl fullWidth style={{ marginBottom: "20px" }}>
@@ -158,9 +159,15 @@ export default function Signup() {
                 fullWidth
                 className={classes.button}
               >
-                Sign up
+                Zarejestruj się
               </Button>
             </form>
+            <Box my={2}>
+              <Typography align="center">Lub</Typography>
+            </Box>
+            <Box display="flex" justifyContent="center">
+              <GoogleAuth />
+            </Box>
           </Grid>
         </Grid>
       ) : (
@@ -180,10 +187,12 @@ export default function Signup() {
               variant="h2"
               gutterBottom
             >
-              Account Created
+              Konto zostało utworzone.
             </Typography>
             <Typography align="center" variant="subtitle1">
-              Thank you for registering. Check your email for verification link.
+              Dziękujemy za rejestracje. Wysłaliśmy link weryfikacyjny na twoją
+              skrzynkę pocztową. Kliknij w link by ukończyć proces rejestracji
+              konta.
             </Typography>
             <Typography
               align="center"
@@ -191,7 +200,7 @@ export default function Signup() {
               gutterBottom
               className={classes.bold}
             >
-              After verify you will successful login to application.
+              Po weryfikacji, będziesz mógł zalogować się do aplikacji.
             </Typography>
           </Box>
         </Container>
