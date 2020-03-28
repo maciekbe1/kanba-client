@@ -41,7 +41,6 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
                       >
                         <DroppableContainer
                           droppableId={card}
-                          list={cards[key].list}
                           removeCard={removeCard}
                           index={key}
                           dragHandleProps={provided.dragHandleProps}

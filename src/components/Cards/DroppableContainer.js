@@ -33,9 +33,9 @@ const COLLAPSED_TEXT = "Zwiń kartę";
 
 export default function DroppableContainer({
   droppableId,
-  list,
   removeCard,
-  dragHandleProps
+  dragHandleProps,
+  index
 }) {
   const getListStyle = isDraggingOver => ({
     // background: isDraggingOver ? "#212121" : ""
@@ -49,18 +49,15 @@ export default function DroppableContainer({
   const dispatch = useDispatch();
   const token = useSelector(state => state.authReducer.token);
   const expandClick = () => {
-    try {
-      dispatch(
-        updateCard({
-          cardID: droppableId._id,
-          expand: !droppableId.expand,
-          token
-        })
-      );
-      setValues(cardTitle.current.textContent);
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(
+      updateCard({
+        cardID: droppableId._id,
+        expand: !droppableId.expand,
+        token,
+        index
+      })
+    );
+    setValues(cardTitle.current.textContent);
   };
   const mouseDownCardTitle = e => {
     e.stopPropagation();
@@ -139,7 +136,6 @@ export default function DroppableContainer({
         >
           <Box
             className={classes.cardContentBox}
-            onDoubleClick={expandClick}
             display="flex"
             flexDirection="column"
           >
@@ -148,6 +144,7 @@ export default function DroppableContainer({
               justifyContent="space-between"
               alignItems="center"
               {...dragHandleProps}
+              onDoubleClick={expandClick}
             >
               <Box
                 display="flex"
@@ -217,7 +214,7 @@ export default function DroppableContainer({
                   >
                     <Badge
                       color="primary"
-                      badgeContent={list.length}
+                      badgeContent={droppableId.list.length}
                       max={99}
                       anchorOrigin={{
                         vertical: "top",
@@ -266,8 +263,8 @@ export default function DroppableContainer({
           </Box>
           <Collapse in={droppableId.expand} timeout="auto" unmountOnExit>
             <List style={getListStyle(snapshot.isDraggingOver)}>
-              {list?.length > 0 ? (
-                list.map((item, key) => (
+              {droppableId.list?.length > 0 ? (
+                droppableId.list.map((item, key) => (
                   <DraggableItem
                     key={item._id}
                     item={item}

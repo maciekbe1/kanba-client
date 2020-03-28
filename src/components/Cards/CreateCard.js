@@ -111,7 +111,12 @@ export default function CreateCard({ modalHandler, user }) {
           justifyContent="flex-end"
           className={classes.buttons}
         >
-          <Button variant="outlined" type="submit" className={classes.button}>
+          <Button
+            disabled={loading}
+            variant="outlined"
+            type="submit"
+            className={classes.button}
+          >
             {loading ? <CircularProgress size={20} /> : "Create"}
           </Button>
           <Button onClick={modalHandler} variant="outlined" color="secondary">

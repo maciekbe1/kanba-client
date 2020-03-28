@@ -104,6 +104,7 @@ export default function CreateCardItem({ cardID, setCreateOpen }) {
             className={classes.button}
             size="small"
             style={{ marginRight: "10px" }}
+            disabled={loading}
           >
             {loading ? (
               <CircularProgress size={20} style={{ color: "red" }} />

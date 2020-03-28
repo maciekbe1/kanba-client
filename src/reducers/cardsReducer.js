@@ -72,7 +72,7 @@ export default (state = INITIAL_DATA, action) => {
 
     case "UPDATE_CARD": {
       const name = Object.keys(action.payload)[1];
-      const o = find(state.cardsState, { _id: action.payload.cardID });
+      const o = state.cardsState[action.payload.index];
       o[name] = action.payload[name];
       request(
         `${process.env.REACT_APP_SERVER}/api/cards/update-card`,

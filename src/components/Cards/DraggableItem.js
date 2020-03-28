@@ -114,7 +114,7 @@ export default function DraggableItem({ item, index, cardID }) {
 
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [editorState, setEditorState] = useState("");
   const [editable, setEditable] = useState(false);
   const [titleText, setTitleText] = useState();
