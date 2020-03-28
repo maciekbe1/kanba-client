@@ -7,7 +7,7 @@ import "./assets/styles/Global.scss";
 import HomePage from "./components/HomePage";
 import { useSelector } from "react-redux";
 import Signup from "./components/Auth/Signup";
-import Signin from "./components/Auth/SigninForm";
+import Signin from "./components/Auth/Signin";
 
 import Dashboard from "./components/Dashboard/Dashboard";
 import AccountVerify from "./components/Account/Verify";

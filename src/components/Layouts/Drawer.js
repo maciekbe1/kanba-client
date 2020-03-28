@@ -33,6 +33,7 @@ import Tab from "@material-ui/core/Tab";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Switch from "@material-ui/core/Switch";
+import Signout from "components/Auth/Signout";
 
 const drawerWidth = 200;
 const SESSION_MESSAGE = "Sesja wygasła, zaloguj się ponownie";
@@ -73,10 +74,7 @@ export default function MiniDrawer(props) {
   });
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const logoutHandler = () => {
-    setAnchorEl(null);
-    dispatch(signOut());
-  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -168,7 +166,7 @@ export default function MiniDrawer(props) {
               Dark theme{" "}
               <Switch checked={darkTheme} onChange={handleThemeChange} />
             </MenuItem>
-            <MenuItem onClick={logoutHandler}>Log out</MenuItem>
+            <Signout setAnchorEl={setAnchorEl} />
           </Menu>
         </Toolbar>
       </AppBar>
