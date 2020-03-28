@@ -124,6 +124,7 @@ export default function PublicAppBar(props) {
       >
         {sideList("left")}
       </Drawer>
+      {props.children}
     </div>
   );
 }
