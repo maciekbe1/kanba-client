@@ -65,7 +65,8 @@ function Signin() {
             signIn({
               isAuth: true,
               data: res.data,
-              token
+              token,
+              byGoogle: false
             })
           );
         });

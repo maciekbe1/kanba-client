@@ -17,7 +17,8 @@ export default function GoogleAuth() {
           signIn({
             isAuth: true,
             data: res.data,
-            token
+            token,
+            byGoogle: true
           })
         );
       });
