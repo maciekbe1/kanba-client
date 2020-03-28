@@ -8,6 +8,7 @@ export const signIn = payload => {
     type: "SIGNIN_USER",
     isAuth: payload.isAuth,
     data: payload.data,
-    token: payload.token
+    token: payload.token,
+    byGoogle: payload.byGoogle
   };
 };

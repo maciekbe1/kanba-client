@@ -1,33 +1,36 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { signIn } from "actions/UserActions";
-import { FormControl, Link } from "@material-ui/core";
+import * as UserService from "services/UserService";
+
+import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
+import { FormControl } from "@material-ui/core";
 import { Input } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
+import Typography from "@material-ui/core/Typography";
+import { Link } from "@material-ui/core";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
+import { makeStyles } from "@material-ui/core/styles";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import Typography from "@material-ui/core/Typography";
+import Lock from "@material-ui/icons/Lock";
+import Mail from "@material-ui/icons/Mail";
+import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import * as UserService from "services/UserService";
+import GoogleAuth from "components/Auth/GoogleAuth";
+import { signIn } from "actions/UserActions";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
-  button: {
-    marginRight: "10px"
-  },
   error: {
     color: theme.palette.error.main,
     fontWeight: "bold",
     fontSize: "14px"
   }
 }));
-
-export default function Signin({ modalHandler }) {
+function Signin() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [values, setValues] = useState({
@@ -62,7 +65,8 @@ export default function Signin({ modalHandler }) {
             signIn({
               isAuth: true,
               data: res.data,
-              token
+              token,
+              byGoogle: false
             })
           );
         });
@@ -77,70 +81,99 @@ export default function Signin({ modalHandler }) {
         }
       });
   };
-
   return (
-    <form onSubmit={e => signInHandler(e)}>
-      <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
-        Zaloguj się
-      </Typography>
-      <FormControl fullWidth>
-        <InputLabel htmlFor="standard-adornment-email">
-          Email address
-        </InputLabel>
-        <Input
-          id="email"
-          aria-describedby="email-helper-text"
-          type="email"
-          value={values.email}
-          error={error}
-          onChange={handleChange("email")}
-        />
-      </FormControl>
-
-      <FormControl fullWidth style={{ margin: "20px 0" }}>
-        <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-        <Input
-          id="standard-adornment-password"
-          type={values.showPassword ? "text" : "password"}
-          value={values.password}
-          onChange={handleChange("password")}
-          error={error}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
+    <Container maxWidth="lg">
+      <Grid container display="flex" justify="center">
+        <Grid item lg={4} xs={8}>
+          <form align="center" onSubmit={e => signInHandler(e)}>
+            <h1>Zaloguj się</h1>
+            <Box display="flex" alignItems="center">
+              <Mail color="primary" style={{ marginRight: "10px" }} />
+              <FormControl fullWidth style={{ marginBottom: "20px" }}>
+                <InputLabel htmlFor="standard-adornment-email">
+                  Email
+                </InputLabel>
+                <Input
+                  id="email"
+                  aria-describedby="email-helper-text"
+                  type="email"
+                  value={values.email}
+                  error={error}
+                  onChange={handleChange("email")}
+                />
+              </FormControl>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <Lock color="primary" style={{ marginRight: "10px" }} />
+              <FormControl fullWidth style={{ marginBottom: "20px" }}>
+                <InputLabel htmlFor="standard-adornment-password">
+                  Hasło
+                </InputLabel>
+                <Input
+                  id="standard-adornment-password"
+                  type={values.showPassword ? "text" : "password"}
+                  value={values.password}
+                  onChange={handleChange("password")}
+                  error={error}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {values.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+            </Box>
+            <Link href="/reset-password">
+              <Typography variant="caption" display="block" gutterBottom>
+                Zapomniałeś hasła?
+              </Typography>
+            </Link>
+            {error ? (
+              <FormControl
+                style={{
+                  color: "red"
+                }}
               >
-                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-      </FormControl>
-      <Link href="/reset-password">
-        <Typography variant="caption" display="block" gutterBottom>
-          Forget password?
-        </Typography>
-      </Link>
-      {error ? (
-        <Box>
-          <FormControl style={{ marginBottom: "20px" }}>
-            <FormHelperText className={classes.error} id="my-helper-text">
-              {message}
-            </FormHelperText>
-          </FormControl>
-        </Box>
-      ) : null}
-
-      <Box display="flex" justifyContent="flex-end" className={classes.buttons}>
-        <Button variant="outlined" type="submit" className={classes.button}>
-          {loading ? <CircularProgress size={20} /> : "Sign in"}
-        </Button>
-        <Button onClick={modalHandler} variant="outlined" color="secondary">
-          Cancel
-        </Button>
-      </Box>
-    </form>
+                <FormHelperText className={classes.error} id="my-helper-text">
+                  {message}
+                </FormHelperText>
+              </FormControl>
+            ) : null}
+            <Box>
+              <Button
+                style={{ marginTop: "20px" }}
+                type="submit"
+                color="primary"
+                variant="contained"
+                fullWidth
+              >
+                {loading ? (
+                  <CircularProgress size={20} color="secondary" />
+                ) : (
+                  "Zaloguj"
+                )}
+              </Button>
+            </Box>
+          </form>
+          <Box my={2}>
+            <Typography align="center">Lub</Typography>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <GoogleAuth />
+          </Box>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
+export default Signin;
