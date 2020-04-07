@@ -1,6 +1,6 @@
 const INITIAL_DATA = {
   tabValue: 0,
-  darkTheme: false,
+  theme: false,
   backdrop: false,
   bar: {
     type: null,
@@ -15,10 +15,10 @@ export default (state = INITIAL_DATA, action) => {
         ...state,
         tabValue: action.tabValue
       };
-    case "DARK_THEME":
+    case "SET_THEME":
       return {
         ...state,
-        darkTheme: action.darkTheme
+        theme: action.theme
       };
     case "BACKDROP":
       return {

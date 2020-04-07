@@ -27,7 +27,6 @@ export default function SimpleModal({ openProps, modalHandler, children }) {
       border: "1px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 2, 2),
-      overflow: "scroll",
       maxHeight: "100%"
     }
   }));

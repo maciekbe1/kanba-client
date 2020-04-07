@@ -12,12 +12,10 @@ export default function LayoutProvider(props) {
   const successHover = green[800];
 
   const error = red[500];
-  const themeType = useSelector(state =>
-    state.layoutReducer.darkTheme ? "dark" : "light"
-  );
+  const themeType = useSelector(state => state.layoutReducer.theme);
   const theme = createMuiTheme({
     palette: {
-      type: themeType,
+      type: themeType ? "dark" : "light",
       primary: {
         main: primary
       },

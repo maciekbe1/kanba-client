@@ -1,0 +1,36 @@
+.card-component {
+  .navbar-component {
+    width: 100%;
+    .title-component {
+      .title {
+        font-weight: bold;
+        &:hover {
+          cursor: pointer;
+          background-color: #e5e5e5;
+          border-radius: 5px;
+          color: #212121;
+          padding: 0 5px;
+          margin-left: -5px;
+        }
+        &:focus {
+          background-color: #e5e5e5;
+          color: #333232;
+          border-radius: 5px;
+          padding: 0 5px;
+          outline: none;
+          margin-left: -5px;
+        }
+      }
+      .icons-wrapper {
+        z-index: 10;
+        margin-top: 2px;
+        .icon {
+          border-radius: 2px;
+          height: 20px;
+          width: 20px;
+          color: #676464;
+        }
+      }
+    }
+  }
+}

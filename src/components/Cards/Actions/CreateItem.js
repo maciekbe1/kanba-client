@@ -1,6 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect
+} from "components/Cards/Actions/node_modules/react";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "components/Cards/Actions/node_modules/@material-ui/core/styles";
 import {
   TextField,
   Box,
@@ -8,11 +12,11 @@ import {
   FormControl,
   FormHelperText,
   CircularProgress
-} from "@material-ui/core";
-import { createItem } from "actions/cardsActions";
-import { useDispatch, useSelector } from "react-redux";
-import * as CardsService from "services/CardsService";
-import Editor from "../Editor/Editor";
+} from "components/Cards/Actions/node_modules/@material-ui/core";
+import { createItem } from "components/Cards/Actions/node_modules/actions/cardsActions";
+import { useDispatch } from "components/Cards/Actions/node_modules/react-redux";
+import * as CardsService from "components/Cards/Actions/node_modules/services/CardsService";
+import Editor from "components/Cards/Actions/node_modules/components/Editor/Editor";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -28,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: "8px"
   }
 }));
-export default function CreateCardItem({ cardID, setCreateOpen }) {
+export default function CreateCardItem({ cardID, setCreateOpen, token }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
@@ -37,7 +41,7 @@ export default function CreateCardItem({ cardID, setCreateOpen }) {
   const [message, setMessage] = useState("");
   const [editorState, setEditorState] = useState("");
   const titleField = useRef();
-  const token = useSelector(state => state.authReducer.token);
+
   useEffect(() => {
     titleField.current.focus();
   }, []);

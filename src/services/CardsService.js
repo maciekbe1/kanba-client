@@ -92,3 +92,11 @@ export const removeSelectedItems = (token, selected) => {
     token
   );
 };
+
+export const removeCard = (cardID, userID, token) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/remove-card`,
+    { cardID, userID },
+    token
+  );
+};

@@ -26,7 +26,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 import { updateCard } from "actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
-import CreateCardItem from "components/Cards/CreateCardItem";
+import CreateCardItem from "components/Cards/Actions/CreateItem";
 
 const EXPAND_TEXT = "Rozwiń kartę";
 const COLLAPSED_TEXT = "Zwiń kartę";

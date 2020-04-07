@@ -1,4 +1,4 @@
-import React from "react";
+import React from "components/Cards/Actions/node_modules/react";
 import {
   Button,
   Dialog,
@@ -7,12 +7,15 @@ import {
   Slide,
   DialogTitle,
   DialogContentText
-} from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import * as CardsService from "services/CardsService";
-import * as CardsHelper from "helper/CardsHelper";
+} from "components/Cards/Actions/node_modules/@material-ui/core";
+import { useDispatch } from "components/Cards/Actions/node_modules/react-redux";
+import * as CardsService from "components/Cards/Actions/node_modules/services/CardsService";
+import * as CardsHelper from "components/Cards/Actions/node_modules/helper/CardsHelper";
 
-import { setCards, setSelectedItems } from "actions/cardsActions";
+import {
+  setCards,
+  setSelectedItems
+} from "components/Cards/Actions/node_modules/actions/cardsActions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -22,10 +25,10 @@ export default function RemoveItems({
   dialog,
   dialogHandler,
   cards,
-  selectedItems
+  selectedItems,
+  token
 }) {
   const dispatch = useDispatch();
-  const token = useSelector(state => state.authReducer.token);
   const approvedRemoveList = () => {
     dialogHandler(false);
     const newCards = CardsHelper.removeSelectedItems(cards, selectedItems);

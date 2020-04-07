@@ -3,7 +3,7 @@ import * as UserService from "services/UserService";
 import { useDispatch } from "react-redux";
 import { signOut } from "actions/UserActions";
 import { useSelector } from "react-redux";
-import { setTabValue, setDarkTheme, setBar } from "actions/layoutActions";
+import { setTabValue, setTheme, setBar } from "actions/layoutActions";
 import { Link, useLocation } from "react-router-dom";
 import { findIndex } from "lodash";
 
@@ -34,15 +34,15 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Switch from "@material-ui/core/Switch";
 import Signout from "components/Auth/Signout";
+import { SESSION_MESSAGE } from "constants/index";
 
 const drawerWidth = 200;
-const SESSION_MESSAGE = "Sesja wygasła, zaloguj się ponownie";
 export default function MiniDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const darkTheme = useSelector(state => state.layoutReducer.darkTheme);
+  const themeType = useSelector(state => state.layoutReducer.theme);
   const token = useSelector(state => state.authReducer.token);
   useEffect(() => {
     dispatch(setBar({ type: null, message: null, active: false }));
@@ -94,7 +94,7 @@ export default function MiniDrawer(props) {
   };
 
   const handleThemeChange = () => {
-    dispatch(setDarkTheme(!darkTheme));
+    dispatch(setTheme(!themeType));
   };
 
   const menuOpen = Boolean(anchorEl);
@@ -164,7 +164,7 @@ export default function MiniDrawer(props) {
           >
             <MenuItem>
               Dark theme{" "}
-              <Switch checked={darkTheme} onChange={handleThemeChange} />
+              <Switch checked={themeType} onChange={handleThemeChange} />
             </MenuItem>
             <Signout setAnchorEl={setAnchorEl} />
           </Menu>
