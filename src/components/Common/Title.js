@@ -5,13 +5,10 @@ import Box from "@material-ui/core/Box";
 import { Done, Clear } from "@material-ui/icons";
 import { cloneDeep } from "lodash";
 
-import { useDispatch } from "react-redux";
-import { updateCard } from "actions/cardsActions";
-
-export default function Title({ title, token, cardID, index }) {
+export default function Title({ title, onTitleChange }) {
   const [value, setValue] = useState();
   const [editable, setEditable] = useState(false);
-  const dispatch = useDispatch();
+
   const cardTitle = useRef();
 
   useEffect(() => {
@@ -39,14 +36,7 @@ export default function Title({ title, token, cardID, index }) {
       cardTitle.current.textContent = cloneDeep(value);
     }
     if (cardTitle.current.textContent !== value) {
-      dispatch(
-        updateCard({
-          cardID: cardID,
-          title: cardTitle.current.textContent,
-          token,
-          index
-        })
-      );
+      onTitleChange(cardTitle.current.textContent);
       setValue(cardTitle.current.textContent);
     }
   };
@@ -71,7 +61,6 @@ export default function Title({ title, token, cardID, index }) {
   return (
     <Box position="relative" className="title-component">
       <Typography
-        variant="h5"
         ref={cardTitle}
         onMouseDown={onMouseDown}
         onKeyPress={onKeyPress}

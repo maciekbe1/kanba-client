@@ -7,9 +7,11 @@ import * as CardsService from "services/CardsService";
 import { CARDS_PROBLEM_MESSAGE } from "constants/index";
 import CardsView from "components/Cards/CardsView";
 
+import Container from "@material-ui/core/Container";
+
 export default function TestCards() {
-  const userID = useSelector(state => state.authReducer.data._id);
-  const token = useSelector(state => state.authReducer.token);
+  const userID = useSelector((state) => state.authReducer.data._id);
+  const token = useSelector((state) => state.authReducer.token);
   const [pending, setPending] = useState(true);
   const dispatch = useDispatch();
 
@@ -19,7 +21,11 @@ export default function TestCards() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  return pending ? <div>loading</div> : <InnerCardView pending={pending} />;
+  return (
+    <Container>
+      {pending ? <div>loading</div> : <InnerCardView pending={pending} />}
+    </Container>
+  );
 }
 
 const InnerCardView = memo(function InnerComponent({ pending }) {
@@ -28,11 +34,11 @@ const InnerCardView = memo(function InnerComponent({ pending }) {
 
 function fetchCards(dispatch, userID, token, setPending) {
   CardsService.getCards(userID, token)
-    .then(res => {
+    .then((res) => {
       setPending(false);
       return dispatch(setCards({ cards: res.data }));
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch(
         setBar({ type: "error", message: CARDS_PROBLEM_MESSAGE, active: true })
       );

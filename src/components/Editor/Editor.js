@@ -1,77 +1,43 @@
-import React, { useRef } from "react";
-import "jodit";
-import JoditEditor from "jodit-react";
-import { useTheme } from "@material-ui/styles";
-const Editor = ({ editorState, setEditorState, onFocus = false }) => {
-  const editor = useRef(null);
-  const theme = useTheme();
-  config.theme = theme.palette.type;
-  config.autofocus = onFocus;
-  const onBlurHanlder = newContent => {
-    setEditorState(newContent);
-    editor.current.blur();
-  };
+import React from "react";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "ckeditor5-build-classic-plus";
+
+export default function Editor({ content, setEditorContent }) {
   return (
-    <JoditEditor
-      ref={editor}
-      value={editorState}
-      config={config}
-      onBlur={newContent => onBlurHanlder(newContent)}
+    <CKEditor
+      editor={ClassicEditor}
+      data={content}
+      config={editorConfiguration}
+      onChange={(event, editor) => {
+        const data = editor.getData();
+        // console.log({ event, editor, data });
+        setEditorContent(data);
+      }}
     />
   );
+}
+
+const editorConfiguration = {
+  toolbar: [
+    "undo",
+    "redo",
+    "|",
+    "bold",
+    "italic",
+    "underLine",
+    "strikethrough",
+    "alignment",
+    "|",
+    "heading",
+    "fontColor",
+    "fontBackgroundColor",
+    "fontSize",
+    "link",
+    "|",
+    "bulletedList",
+    "numberedList",
+    "insertTable",
+    "blockQuote",
+    "code"
+  ]
 };
-const buttons = [
-  "fullsize",
-  "undo",
-  "redo",
-  "|",
-  "bold",
-  "strikethrough",
-  "underline",
-  "italic",
-  "|",
-  "left",
-  "center",
-  "right",
-  "|",
-  "font",
-  "fontsize",
-  "|",
-  "ul",
-  "ol",
-  "|",
-  "outdent",
-  "indent",
-  "brush",
-  "eraser",
-  "|",
-  "superscript",
-  "subscript",
-  "paragraph",
-  "|",
-  "image",
-  "video",
-  "|",
-  "table",
-  "link",
-  "\n",
-  "selectall",
-  "cut",
-  "copy",
-  "paste",
-  "|",
-  "hr",
-  "symbol",
-  "source"
-];
-const config = {
-  readonly: false, // all options from https://xdsoft.net/jodit/doc/
-  showPlaceholder: false,
-  enter: "div",
-  limitChars: 5000,
-  toolbarSticky: true,
-  autofocus: false,
-  buttons: buttons,
-  colorPickerDefaultTab: "color"
-};
-export default Editor;

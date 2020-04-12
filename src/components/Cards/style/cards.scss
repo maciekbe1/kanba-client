@@ -1,35 +1,51 @@
 .card-component {
-  .navbar-component {
+  .card-navbar-component {
     width: 100%;
     .title-component {
       .title {
         font-weight: bold;
-        &:hover {
-          cursor: pointer;
-          background-color: #e5e5e5;
-          border-radius: 5px;
-          color: #212121;
-          padding: 0 5px;
-          margin-left: -5px;
-        }
-        &:focus {
-          background-color: #e5e5e5;
-          color: #333232;
-          border-radius: 5px;
-          padding: 0 5px;
-          outline: none;
-          margin-left: -5px;
-        }
+        font-size: 2em;
       }
-      .icons-wrapper {
-        z-index: 10;
-        margin-top: 2px;
-        .icon {
-          border-radius: 2px;
-          height: 20px;
-          width: 20px;
-          color: #676464;
-        }
+    }
+  }
+  .card-item {
+    margin-top: -1px;
+    background: inherit;
+    border: 1px solid rgb(204, 204, 204);
+    transition: margin 0.15s ease-in-out 0s;
+    &:hover {
+      background: rgb(239, 242, 245);
+    }
+    .expand-button {
+      padding: 5px;
+      border-radius: 50%;
+      width: auto;
+    }
+    .card-item-content {
+      padding: 5px;
+    }
+  }
+  .card-item.expand {
+    &:hover {
+      background: inherit;
+    }
+    margin: 8px 0;
+    transition: margin 0.15s ease-in-out 0s;
+    box-shadow: rgba(37, 42, 49, 0.16) 0px 1px 4px 0px,
+      rgba(37, 42, 49, 0.12) 0px 4px 8px 0px;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid rgb(204, 204, 204);
+  }
+  .card-description {
+    .card-description-title {
+      margin-left: 4px;
+    }
+    .card-description-textbox {
+      padding: 4px;
+      border-radius: 5px;
+      &:hover {
+        background: rgb(239, 242, 245);
       }
     }
   }

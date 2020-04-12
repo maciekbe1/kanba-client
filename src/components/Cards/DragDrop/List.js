@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 export default function List({ card }) {
   return (
     <Droppable droppableId={card._id} type="LIST">
-      {provided => (
+      {(provided) => (
         <div ref={provided.innerRef} {...provided.droppableProps}>
           {card.list.map((item, index) => (
             <InnerItem key={item._id} item={item} index={index} />

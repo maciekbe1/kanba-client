@@ -9,8 +9,12 @@ import CloseIcon from "@material-ui/icons/Close";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import { CARD_COLLAPSED, CARD_EXPANDED } from "constants/index";
-export default function Actions({ expand, listLength, onRemoveCard }) {
-  const toggle = () => {};
+export default function Actions({
+  expand,
+  listLength,
+  onRemoveCard,
+  onToggle
+}) {
   const editorIsOpen = false;
   const onEditorHandler = () => {};
   return (
@@ -18,7 +22,7 @@ export default function Actions({ expand, listLength, onRemoveCard }) {
       <Tooltip title={expand ? CARD_COLLAPSED : CARD_EXPANDED} placement="top">
         <IconButton
           aria-label={expand ? "expandLess" : "expandMore"}
-          onClick={toggle}
+          onClick={onToggle}
         >
           <Badge
             color="primary"

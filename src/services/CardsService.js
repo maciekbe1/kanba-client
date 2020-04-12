@@ -36,7 +36,7 @@ export const updateItem = (cardID, itemID, key, value, token) => {
     {
       cardID,
       itemID,
-      item: { [key]: value } //rawContent || titleText
+      item: { [key]: value }
     },
     token
   );

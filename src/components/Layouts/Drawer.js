@@ -35,6 +35,7 @@ import Menu from "@material-ui/core/Menu";
 import Switch from "@material-ui/core/Switch";
 import Signout from "components/Auth/Signout";
 import { SESSION_MESSAGE } from "constants/index";
+import Avatar from "@material-ui/core/Avatar";
 
 const drawerWidth = 200;
 export default function MiniDrawer(props) {
@@ -43,11 +44,11 @@ export default function MiniDrawer(props) {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const themeType = useSelector(state => state.layoutReducer.theme);
-  const token = useSelector(state => state.authReducer.token);
+  const user = useSelector(state => state.authReducer);
   useEffect(() => {
     dispatch(setBar({ type: null, message: null, active: false }));
     const check = () => {
-      UserService.getMeService(token)
+      UserService.getMeService(user.token)
         .then()
         .catch(err => {
           dispatch(
@@ -62,7 +63,7 @@ export default function MiniDrawer(props) {
       window.removeEventListener("visibilitychange", check);
       check();
     };
-  }, [dispatch, token]);
+  }, [dispatch, user.token]);
 
   const tabs = [
     { icon: <HomeIcon />, label: "Główna", to: "/" },
@@ -146,7 +147,11 @@ export default function MiniDrawer(props) {
             color="inherit"
             className={classes.avatar}
           >
-            <AccountCircleIcon fontSize="large" />
+            {user.data.photo ? (
+              <Avatar alt={user.data.name} src={user.data.photo} />
+            ) : (
+              <AccountCircleIcon fontSize="large" />
+            )}
           </IconButton>
           <Menu
             id="menu-appbar"
