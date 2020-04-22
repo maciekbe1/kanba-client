@@ -18,5 +18,5 @@ export default function List({ card }) {
 }
 
 const InnerItem = memo(function InnerItem({ item, index }) {
-  return <Item itemObj={JSON.stringify(item)} index={index} />;
+  return <Item item={item} index={index} />;
 });

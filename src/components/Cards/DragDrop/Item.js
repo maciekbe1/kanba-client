@@ -8,16 +8,31 @@ import Collapse from "@material-ui/core/Collapse";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ListItem from "@material-ui/core/ListItem";
+import { useDispatch, useSelector } from "react-redux";
+import * as CardsService from "services/CardsService";
+import { updateItem } from "actions/cardsActions";
 
-export default function DndItem({ itemObj, index }) {
-  const item = JSON.parse(itemObj);
+export default function DndItem({ item, index }) {
+  // const item = JSON.parse(itemObj);
   const [expand, setExpand] = useState(false);
-  const onTitleChange = () => {
-    console.log("title changed");
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.authReducer.token);
+
+  const onTitleChange = (title) => {
+    CardsService.updateItem(item.cardID, item._id, "title", title, token);
+    dispatch(
+      updateItem({
+        itemID: item._id,
+        cardID: item.cardID,
+        title
+      })
+    );
   };
+
   const itemToggle = useCallback(() => {
     setExpand(!expand);
   }, [expand]);
+
   const getItemStyle = (draggableStyle, isOver) => {
     return {
       padding: "0 0 0 3px",

@@ -4,12 +4,15 @@ import EditorButtons from "components/Editor/EditorButtons";
 import Box from "@material-ui/core/Box";
 import parse from "react-html-parser";
 import { cloneDeep } from "lodash";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateItem } from "actions/cardsActions";
 import * as CardsService from "services/CardsService";
 
 export default function Description({ content, cardID, itemID }) {
   const [edit, setEdit] = useState(false);
   const [editorContent, setEditorContent] = useState("");
+  const [memoContent, setMemoContent] = useState(content);
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
 
   useEffect(() => {
@@ -19,13 +22,21 @@ export default function Description({ content, cardID, itemID }) {
   const onSaveContent = () => {
     setEdit(!edit);
     if (editorContent !== cloneDeep(content)) {
+      setMemoContent(editorContent);
       CardsService.updateItem(cardID, itemID, "content", editorContent, token);
+      dispatch(
+        updateItem({
+          itemID: itemID,
+          cardID: cardID,
+          content: editorContent
+        })
+      );
     }
   };
 
   const onCancelContent = () => {
     setEdit(!edit);
-    setEditorContent(cloneDeep(content));
+    setEditorContent(memoContent);
   };
 
   const onSetEdit = (e) => {

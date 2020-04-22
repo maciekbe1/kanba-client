@@ -61,6 +61,7 @@ export default function Navbar({ card, index, onRemove, provided }) {
         listLength={card.list.length}
         onRemoveCard={onRemoveCard}
         onToggle={onToggle}
+        cardID={card._id}
       />
     </Box>
   );

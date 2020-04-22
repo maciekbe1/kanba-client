@@ -1,6 +1,6 @@
-import React, { useState } from "components/Cards/Actions/node_modules/react";
-import { request } from "components/Cards/Actions/node_modules/api/API";
-import { makeStyles } from "components/Cards/Actions/node_modules/@material-ui/core/styles";
+import React, { useState } from "react";
+import { request } from "api/API";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
   Typography,
@@ -9,11 +9,11 @@ import {
   FormControl,
   FormHelperText,
   CircularProgress
-} from "components/Cards/Actions/node_modules/@material-ui/core";
-import { createCard } from "components/Cards/Actions/node_modules/actions/cardsActions";
-import { useDispatch } from "components/Cards/Actions/node_modules/react-redux";
+} from "@material-ui/core";
+import { createCard } from "actions/cardsActions";
+import { useDispatch } from "react-redux";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: "10px"
   },
@@ -36,10 +36,10 @@ export default function CreateCard({ modalHandler, user, token }) {
 
   const dispatch = useDispatch();
 
-  const handleChange = prop => event => {
+  const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
-  const createCardHandler = e => {
+  const createCardHandler = (e) => {
     e.preventDefault();
     setError(false);
     setLoading(true);
@@ -52,11 +52,11 @@ export default function CreateCard({ modalHandler, user, token }) {
       },
       token
     )
-      .then(res => {
+      .then((res) => {
         dispatch(createCard(res.data));
         modalHandler();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         setError(true);
         setLoading(false);
@@ -68,7 +68,11 @@ export default function CreateCard({ modalHandler, user, token }) {
       <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
         Utwórz kartę
       </Typography>
-      <form noValidate autoComplete="off" onSubmit={e => createCardHandler(e)}>
+      <form
+        noValidate
+        autoComplete="off"
+        onSubmit={(e) => createCardHandler(e)}
+      >
         <TextField
           fullWidth
           required

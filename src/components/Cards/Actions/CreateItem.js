@@ -1,132 +1,110 @@
-import React, {
-  useState,
-  useRef,
-  useEffect
-} from "components/Cards/Actions/node_modules/react";
-
-import { makeStyles } from "components/Cards/Actions/node_modules/@material-ui/core/styles";
-import {
-  TextField,
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  CircularProgress
-} from "components/Cards/Actions/node_modules/@material-ui/core";
-import { createItem } from "components/Cards/Actions/node_modules/actions/cardsActions";
-import { useDispatch } from "components/Cards/Actions/node_modules/react-redux";
-import * as CardsService from "components/Cards/Actions/node_modules/services/CardsService";
-import Editor from "components/Cards/Actions/node_modules/components/Editor/Editor";
-
-const useStyles = makeStyles(theme => ({
-  button: {
-    textTransform: "unset"
+import React, { useState, useEffect } from "react";
+import Box from "@material-ui/core/Box";
+import TextField from "@material-ui/core/TextField";
+import Editor from "components/Editor/Editor";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    marginTop: theme.spacing(1),
+    width: 200
   },
-  error: {
-    color: theme.palette.error.main,
-    fontWeight: "bold",
-    fontSize: "14px"
-  },
-  draftEditorModal: {
-    padding: "5px 8px",
-    marginBottom: "8px"
+  textField: {
+    width: 200
   }
 }));
-export default function CreateCardItem({ cardID, setCreateOpen, token }) {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+export default function CreateItem({ setData, error, message }) {
+  const [editorContent, setEditorContent] = useState();
   const [title, setTitle] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [message, setMessage] = useState("");
-  const [editorState, setEditorState] = useState("");
-  const titleField = useRef();
-
+  const [status, setStatus] = useState("");
+  const [alert, setAlert] = useState(new Date().toISOString().slice(0, 16));
+  const [priority, setPriority] = useState("");
+  const classes = useStyles();
   useEffect(() => {
-    titleField.current.focus();
-  }, []);
-  const addItemHandler = e => {
-    e.preventDefault();
-    setError(false);
-    setLoading(true);
-    CardsService.createItem(cardID._id, { title, content: editorState }, token)
-      .then(res => {
-        dispatch(
-          createItem({
-            cardID: cardID._id,
-            values: { title, content: editorState, cardID: cardID._id },
-            itemID: res.data.id
-          })
-        );
-        setLoading(false);
-        setMessage("");
-        setTitle("");
-        setEditorState("");
-        titleField.current.focus();
-        setCreateOpen(false);
-      })
-      .catch(error => {
-        setError(true);
-        setLoading(false);
-        setMessage(error.response.data);
-      });
+    setData({ title, content: editorContent, status, alert, priority });
+  }, [title, editorContent, status, alert, priority, setData]);
+  const statusChange = (event) => {
+    setStatus(event.target.value);
+  };
+  const priorityChange = (event) => {
+    setPriority(event.target.value);
   };
   return (
-    <form noValidate autoComplete="off" onSubmit={addItemHandler}>
-      <div className={classes.draftEditorModal}>
-        <TextField
-          fullWidth
-          required
-          inputRef={titleField}
-          error={error}
-          id="standard-required"
-          label="Tytuł"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          name="title"
-          type="text"
-        />
-        <Editor setEditorState={setEditorState} editorState={editorState} />
-      </div>
-      <Box display="flex" justifyContent="space-between" px={1} mb={1}>
-        <Box>
-          <FormControl>
-            <FormHelperText className={classes.error} id="my-helper-text">
-              {message}
-            </FormHelperText>
-          </FormControl>
-        </Box>
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          className={classes.buttons}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-            type="submit"
-            className={classes.button}
-            size="small"
-            style={{ marginRight: "10px" }}
-            disabled={loading}
+    <Box>
+      <TextField
+        fullWidth
+        required
+        error={error}
+        id="standard-required"
+        label="Tytuł"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        name="title"
+        type="text"
+      />
+      {error ? (
+        <FormControl>
+          <FormHelperText id="my-helper-text">{message}</FormHelperText>
+        </FormControl>
+      ) : null}
+      <Editor content={editorContent} setEditorContent={setEditorContent} />
+      <Box display="flex" flexDirection="column">
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink id="status-select">
+            Status
+          </InputLabel>
+          <Select
+            labelId="status-select"
+            id="status-select-filled"
+            value={status}
+            onChange={statusChange}
+            displayEmpty
           >
-            {loading ? (
-              <CircularProgress size={20} style={{ color: "red" }} />
-            ) : (
-              "Utwórz"
-            )}
-          </Button>
-          <Button
-            onClick={() => setCreateOpen(false)}
-            variant="contained"
-            color="secondary"
-            size="small"
-            className={classes.button}
+            <MenuItem value="">
+              <em>Brak</em>
+            </MenuItem>
+            <MenuItem value={"Oczekuje"}>Oczekuje</MenuItem>
+            <MenuItem value={"W toku"}>W toku</MenuItem>
+            <MenuItem value={"Zrobione"}>Zrobione</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink id="priority-select">
+            Priorytet
+          </InputLabel>
+          <Select
+            labelId="priority-select"
+            id="priority-select-filled"
+            value={priority}
+            onChange={priorityChange}
+            displayEmpty
           >
-            Anuluj
-          </Button>
-        </Box>
+            <MenuItem value="">
+              <em>Brak</em>
+            </MenuItem>
+            <MenuItem value={"Niski"}>Niski</MenuItem>
+            <MenuItem value={"Średni"}>Średni</MenuItem>
+            <MenuItem value={"Wysoki"}>Wysoki</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <TextField
+            id="datetime-local"
+            label="Przypomnienie"
+            type="datetime-local"
+            defaultValue={alert}
+            className={classes.textField}
+            onChange={(e) => setAlert(e.target.value)}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+        </FormControl>
       </Box>
-    </form>
+    </Box>
   );
 }

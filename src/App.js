@@ -19,7 +19,7 @@ import { CardsPrivate, ProjectsPrivate } from "./components/Private";
 import NotFound from "./components/Utils/NotFound";
 
 function App() {
-  const isAuth = useSelector(state => state.authReducer.isAuth);
+  const isAuth = useSelector((state) => state.authReducer.isAuth);
   return (
     <LayoutProvider>
       <BrowserRouter>
@@ -30,13 +30,13 @@ function App() {
               <ProtectedRoute
                 path="/"
                 exact
-                render={render => <Dashboard {...render} />}
+                render={(render) => <Dashboard {...render} />}
               />
             ) : (
               <Route
                 path="/"
                 exact
-                render={render => <HomePage {...render} />}
+                render={(render) => <HomePage {...render} />}
               />
             )}
             <ProtectedRoute path="/cards" component={CardsPrivate} />

@@ -26,7 +26,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 import { updateCard } from "actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
-import CreateCardItem from "components/Cards/Actions/CreateItem";
+import CreateCardItem from "components/Cards/Old/CreateItemOld";
 
 const EXPAND_TEXT = "Rozwiń kartę";
 const COLLAPSED_TEXT = "Zwiń kartę";
@@ -37,7 +37,7 @@ export default function DroppableContainer({
   dragHandleProps,
   index
 }) {
-  const getListStyle = isDraggingOver => ({
+  const getListStyle = (isDraggingOver) => ({
     // background: isDraggingOver ? "#212121" : ""
   });
 
@@ -47,7 +47,7 @@ export default function DroppableContainer({
   const [createOpen, setCreateOpen] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
-  const token = useSelector(state => state.authReducer.token);
+  const token = useSelector((state) => state.authReducer.token);
   const expandClick = () => {
     dispatch(
       updateCard({
@@ -59,13 +59,13 @@ export default function DroppableContainer({
     );
     setValues(cardTitle.current.textContent);
   };
-  const mouseDownCardTitle = e => {
+  const mouseDownCardTitle = (e) => {
     e.stopPropagation();
     cardTitle.current.contentEditable = true;
     cardTitle.current.focus();
     setEditable(true);
   };
-  const keyPressCardTitle = e => {
+  const keyPressCardTitle = (e) => {
     if (e.key === "Enter") {
       cardTitle.current.blur();
     }
@@ -101,7 +101,7 @@ export default function DroppableContainer({
     }
   };
 
-  const cardTitleOnBlur = e => {
+  const cardTitleOnBlur = (e) => {
     setEditable(false);
     if (cardTitle.current.textContent.length === 0) {
       cardTitle.current.textContent = cloneDeep(values);
@@ -118,7 +118,7 @@ export default function DroppableContainer({
     }
   };
 
-  const onPaste = event => {
+  const onPaste = (event) => {
     event.preventDefault();
     const text = event.clipboardData.getData("text");
     document.execCommand("insertText", false, text);
@@ -299,7 +299,7 @@ function useOutsideEvent(ref) {
   });
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   cardTitle: {
     fontWeight: "bold",
     "&:focus": {

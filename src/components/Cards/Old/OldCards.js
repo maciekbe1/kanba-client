@@ -4,7 +4,7 @@ import { isEmpty, cloneDeep, isNull, find, isNil } from "lodash";
 import { setCards, updateCard, setSelectedItems } from "actions/cardsActions";
 import { setBar } from "actions/layoutActions";
 
-import CreateCard from "../Actions/CreateCard";
+import CreateCard from "./CreateCardOld";
 import RemoveItems from "../Actions/RemoveItem";
 import DragDropComponent from "./DragDropComponent";
 import Modal from "../../Utils/Modal";
@@ -20,10 +20,12 @@ import * as CardsHelper from "helper/CardsHelper";
 const SESSION_MESSAGE =
   "Wystąpił błąd w pobraniu treści. Proszę wyloguj i zaloguj się ponownie";
 export default function Cards() {
-  const userID = useSelector(state => state.authReducer.data._id);
-  const token = useSelector(state => state.authReducer.token);
-  const cards = useSelector(state => state.cardsReducer.cardsState);
-  const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
+  const userID = useSelector((state) => state.authReducer.data._id);
+  const token = useSelector((state) => state.authReducer.token);
+  const cards = useSelector((state) => state.cardsReducer.cardsState);
+  const selectedItems = useSelector(
+    (state) => state.cardsReducer.selectedItems
+  );
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
@@ -31,11 +33,11 @@ export default function Cards() {
   useEffect(() => {
     setLoading(true);
     CardsService.getCards(userID, token)
-      .then(res => {
+      .then((res) => {
         dispatch(setCards({ cards: res.data }));
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         setLoading(false);
         dispatch(
           setBar({ type: "error", message: SESSION_MESSAGE, active: true })
@@ -47,7 +49,7 @@ export default function Cards() {
     setOpenModal(!openModal);
   };
 
-  const onDragEnd = result => {
+  const onDragEnd = (result) => {
     let newData = cloneDeep(cards);
     if (
       isNull(result.destination) ||
@@ -57,7 +59,7 @@ export default function Cards() {
       return cards;
     } else if (selectedItems.length >= 1) {
       const selectedContainItem = selectedItems.some(
-        item => item._id === result.draggableId
+        (item) => item._id === result.draggableId
       );
 
       const position = result.destination.index;
@@ -71,7 +73,7 @@ export default function Cards() {
 
         CardsService.updateManyItems(
           result.destination.droppableId,
-          newSelectedItems.map(item => {
+          newSelectedItems.map((item) => {
             return {
               itemID: item._id,
               cardID: isNil(item.cardID)
@@ -91,7 +93,7 @@ export default function Cards() {
       } else {
         CardsService.updateManyItems(
           result.destination.droppableId,
-          selectedItems.map(item => {
+          selectedItems.map((item) => {
             return {
               itemID: item._id,
               cardID: isNil(item.cardID)
@@ -226,7 +228,7 @@ export default function Cards() {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   exampleWrapper: {
     position: "fixed",
     marginTop: theme.spacing(3),

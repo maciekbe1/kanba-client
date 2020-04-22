@@ -9,6 +9,7 @@
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
+    "@material-ui/pickers": "^3.2.10",
     "axios": "^0.19.2",
     "ckeditor5-build-classic-plus": "^13.0.0",
     "jodit": "^3.3.24",
