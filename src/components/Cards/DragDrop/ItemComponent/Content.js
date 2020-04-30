@@ -5,7 +5,15 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 
 import Description from "components/Cards/DragDrop/ItemComponent/Description";
-export default function Content({ content, cardID, itemID }) {
+export default function Content({
+  date,
+  status,
+  priority,
+  content,
+  cardID,
+  itemID,
+  onItemChange
+}) {
   return (
     <Box mb={2} className="card-item-content">
       <Grid container spacing={3}>
@@ -14,7 +22,12 @@ export default function Content({ content, cardID, itemID }) {
         </Grid>
         <Grid container item xs={3}>
           <Divider orientation="vertical" flexItem />
-          <Options />
+          <Options
+            date={date}
+            status={status}
+            priority={priority}
+            onItemChange={onItemChange}
+          />
         </Grid>
       </Grid>
     </Box>

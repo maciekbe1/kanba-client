@@ -17,14 +17,14 @@ export default function Title({ title, onTitleChange }) {
 
   useOutsideEvent(cardTitle);
 
-  const onMouseDown = e => {
+  const onMouseDown = (e) => {
     e.stopPropagation();
     cardTitle.current.contentEditable = true;
     cardTitle.current.focus();
     setEditable(true);
   };
 
-  const onKeyPress = e => {
+  const onKeyPress = (e) => {
     if (e.key === "Enter") {
       cardTitle.current.blur();
     }
@@ -36,12 +36,12 @@ export default function Title({ title, onTitleChange }) {
       cardTitle.current.textContent = cloneDeep(value);
     }
     if (cardTitle.current.textContent !== value) {
-      onTitleChange(cardTitle.current.textContent);
+      onTitleChange(cardTitle.current.textContent, "title");
       setValue(cardTitle.current.textContent);
     }
   };
 
-  const onPaste = e => {
+  const onPaste = (e) => {
     e.preventDefault();
     const text = e.clipboardData.getData("text");
     document.execCommand("insertText", false, text);

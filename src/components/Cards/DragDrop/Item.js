@@ -13,22 +13,20 @@ import * as CardsService from "services/CardsService";
 import { updateItem } from "actions/cardsActions";
 
 export default function DndItem({ item, index }) {
-  // const item = JSON.parse(itemObj);
   const [expand, setExpand] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
 
-  const onTitleChange = (title) => {
-    CardsService.updateItem(item.cardID, item._id, "title", title, token);
+  const onItemChange = (element, type) => {
+    CardsService.updateItem(item.cardID, item._id, type, element, token);
     dispatch(
       updateItem({
         itemID: item._id,
         cardID: item.cardID,
-        title
+        [type]: element
       })
     );
   };
-
   const itemToggle = useCallback(() => {
     setExpand(!expand);
   }, [expand]);
@@ -58,7 +56,7 @@ export default function DndItem({ item, index }) {
               <div {...provided.dragHandleProps} style={{ display: "flex" }}>
                 <DragHandleIcon />
               </div>
-              <Title title={item.title} onTitleChange={onTitleChange} />
+              <Title title={item.title} onTitleChange={onItemChange} />
             </Box>
             <ListItem button onClick={itemToggle} className="expand-button">
               {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -69,6 +67,11 @@ export default function DndItem({ item, index }) {
               content={item.content}
               itemID={item._id}
               cardID={item.cardID}
+              date={item.date}
+              status={item.status}
+              alert={item.alert}
+              priority={item.priority}
+              onItemChange={onItemChange}
             />
           </Collapse>
         </Box>

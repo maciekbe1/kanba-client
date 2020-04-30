@@ -25,8 +25,8 @@ export default function Actions({
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
 
-  const createCardItem = () => {
-    CardsService.createItem(cardID, data, token)
+  const createCardItem = async () => {
+    return await CardsService.createItem(cardID, data, token)
       .then((res) => {
         dispatch(
           createItem({
@@ -35,16 +35,18 @@ export default function Actions({
               title: data.title,
               content: data.content,
               cardID: cardID,
-              allert: data.allert,
+              status: data.status,
               priority: data.priority
             },
             itemID: res.data.id
           })
         );
+        return true;
       })
       .catch((error) => {
         setError(true);
         setMessage(error.response.data);
+        return false;
       });
   };
 
