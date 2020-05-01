@@ -5,6 +5,7 @@ import AppBar from "./AppBar";
 import Bar from "components/Layouts/Bar";
 import { withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
+import "../../assets/styles/global.scss";
 
 function initializeReactGA() {
   ReactGA.initialize(process.env.REACT_APP_TRACKING_ID, {

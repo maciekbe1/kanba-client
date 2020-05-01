@@ -12,12 +12,12 @@ export default (state = INITIAL_DATA, action) => {
     case "SET_CARDS_STATE": {
       return {
         ...state,
-        cardsState: action.cardsState
+        cardsState: new Card(action.cardsState).cards
       };
     }
 
     case "REMOVE_CARD": {
-      remove(state.cardsState, item => item._id === action.cardID);
+      remove(state.cardsState, (item) => item._id === action.cardID);
 
       return {
         ...state,
@@ -47,7 +47,7 @@ export default (state = INITIAL_DATA, action) => {
     case "REMOVE_ITEM": {
       remove(
         find(state.cardsState, { _id: action.payload.cardID }).list,
-        item => item._id === action.payload.itemID
+        (item) => item._id === action.payload.itemID
       );
       return {
         ...state,
@@ -60,7 +60,7 @@ export default (state = INITIAL_DATA, action) => {
       const value = Object.values(action.payload)[2];
       const obj = find(
         find(state.cardsState, { _id: action.payload.cardID }).list,
-        item => item._id === action.payload.itemID
+        (item) => item._id === action.payload.itemID
       );
       set(obj, [name], value);
 
@@ -72,7 +72,7 @@ export default (state = INITIAL_DATA, action) => {
 
     case "UPDATE_CARD": {
       const name = Object.keys(action.payload)[1];
-      const o = find(state.cardsState, { _id: action.payload.cardID });
+      const o = state.cardsState[action.payload.index];
       o[name] = action.payload[name];
       request(
         `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
@@ -86,7 +86,7 @@ export default (state = INITIAL_DATA, action) => {
         .then(() => {
           return;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
       return {

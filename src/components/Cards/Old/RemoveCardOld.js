@@ -1,4 +1,4 @@
-import React from "react";
+import React from "components/Cards/Actions/node_modules/react";
 import {
   Button,
   Dialog,
@@ -7,10 +7,13 @@ import {
   Slide,
   DialogTitle,
   DialogContentText
-} from "@material-ui/core";
-import { request } from "api/API";
-import { removeCard } from "actions/cardsActions";
-import { useDispatch, useSelector } from "react-redux";
+} from "components/Cards/Actions/node_modules/@material-ui/core";
+import { request } from "components/Cards/Actions/node_modules/api/API";
+import { removeCard } from "components/Cards/Actions/node_modules/actions/cardsActions";
+import {
+  useDispatch,
+  useSelector
+} from "components/Cards/Actions/node_modules/react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card } from "@material-ui/core";
-import DroppableContainer from "./DroppableContainer";
-import RemoveCard from "./RemoveCard";
+import DroppableContainer from "../DroppableContainer";
+import RemoveCard from "./RemoveCardOld";
 
 export default function DragDropComponent({ cards, onDragEnd, userID }) {
   const [dialog, setDialog] = useState(false);
@@ -12,11 +12,11 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
     setDialog(!dialog);
   };
 
-  const removeCard = card => {
+  const removeCard = (card) => {
     setCardID(card);
     setDialog(true);
   };
-  const getCardStyle = draggableStyle => ({
+  const getCardStyle = (draggableStyle) => ({
     margin: `0 0 8px 0`,
     ...draggableStyle
   });
@@ -24,11 +24,11 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
     <>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="all-cards" type="CARD">
-          {provided => (
+          {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {cards.map((card, key) => (
                 <Draggable key={card._id} draggableId={card._id} index={key}>
-                  {provided => (
+                  {(provided) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
@@ -41,7 +41,6 @@ export default function DragDropComponent({ cards, onDragEnd, userID }) {
                       >
                         <DroppableContainer
                           droppableId={card}
-                          list={cards[key].list}
                           removeCard={removeCard}
                           index={key}
                           dragHandleProps={provided.dragHandleProps}

@@ -26,18 +26,18 @@ import { makeStyles } from "@material-ui/core/styles";
 import DraggableItem from "./DraggableItem";
 import { updateCard } from "actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
-import CreateCardItem from "components/Cards/CreateCardItem";
+import CreateCardItem from "components/Cards/Old/CreateItemOld";
 
 const EXPAND_TEXT = "Rozwiń kartę";
 const COLLAPSED_TEXT = "Zwiń kartę";
 
 export default function DroppableContainer({
   droppableId,
-  list,
   removeCard,
-  dragHandleProps
+  dragHandleProps,
+  index
 }) {
-  const getListStyle = isDraggingOver => ({
+  const getListStyle = (isDraggingOver) => ({
     // background: isDraggingOver ? "#212121" : ""
   });
 
@@ -47,28 +47,25 @@ export default function DroppableContainer({
   const [createOpen, setCreateOpen] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
-  const token = useSelector(state => state.authReducer.token);
+  const token = useSelector((state) => state.authReducer.token);
   const expandClick = () => {
-    try {
-      dispatch(
-        updateCard({
-          cardID: droppableId._id,
-          expand: !droppableId.expand,
-          token
-        })
-      );
-      setValues(cardTitle.current.textContent);
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(
+      updateCard({
+        cardID: droppableId._id,
+        expand: !droppableId.expand,
+        token,
+        index
+      })
+    );
+    setValues(cardTitle.current.textContent);
   };
-  const mouseDownCardTitle = e => {
+  const mouseDownCardTitle = (e) => {
     e.stopPropagation();
     cardTitle.current.contentEditable = true;
     cardTitle.current.focus();
     setEditable(true);
   };
-  const keyPressCardTitle = e => {
+  const keyPressCardTitle = (e) => {
     if (e.key === "Enter") {
       cardTitle.current.blur();
     }
@@ -104,7 +101,7 @@ export default function DroppableContainer({
     }
   };
 
-  const cardTitleOnBlur = e => {
+  const cardTitleOnBlur = (e) => {
     setEditable(false);
     if (cardTitle.current.textContent.length === 0) {
       cardTitle.current.textContent = cloneDeep(values);
@@ -121,7 +118,7 @@ export default function DroppableContainer({
     }
   };
 
-  const onPaste = event => {
+  const onPaste = (event) => {
     event.preventDefault();
     const text = event.clipboardData.getData("text");
     document.execCommand("insertText", false, text);
@@ -139,7 +136,6 @@ export default function DroppableContainer({
         >
           <Box
             className={classes.cardContentBox}
-            onDoubleClick={expandClick}
             display="flex"
             flexDirection="column"
           >
@@ -148,6 +144,7 @@ export default function DroppableContainer({
               justifyContent="space-between"
               alignItems="center"
               {...dragHandleProps}
+              onDoubleClick={expandClick}
             >
               <Box
                 display="flex"
@@ -217,7 +214,7 @@ export default function DroppableContainer({
                   >
                     <Badge
                       color="primary"
-                      badgeContent={list.length}
+                      badgeContent={droppableId.list.length}
                       max={99}
                       anchorOrigin={{
                         vertical: "top",
@@ -266,8 +263,8 @@ export default function DroppableContainer({
           </Box>
           <Collapse in={droppableId.expand} timeout="auto" unmountOnExit>
             <List style={getListStyle(snapshot.isDraggingOver)}>
-              {list?.length > 0 ? (
-                list.map((item, key) => (
+              {droppableId.list?.length > 0 ? (
+                droppableId.list.map((item, key) => (
                   <DraggableItem
                     key={item._id}
                     item={item}
@@ -302,7 +299,7 @@ function useOutsideEvent(ref) {
   });
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   cardTitle: {
     fontWeight: "bold",
     "&:focus": {

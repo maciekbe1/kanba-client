@@ -4,10 +4,10 @@ export const setTabValue = tabValue => {
     tabValue: tabValue
   };
 };
-export const setDarkTheme = darkTheme => {
+export const setTheme = theme => {
   return {
-    type: "DARK_THEME",
-    darkTheme: darkTheme
+    type: "SET_THEME",
+    theme: theme
   };
 };
 export const setBackdrop = backdrop => {

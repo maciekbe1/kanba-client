@@ -10,11 +10,11 @@ import {
   CircularProgress
 } from "@material-ui/core";
 import { createItem } from "actions/cardsActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as CardsService from "services/CardsService";
-import Editor from "../Editor/Editor";
+import Editor from "components/Editor/Editor";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   button: {
     textTransform: "unset"
   },
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: "8px"
   }
 }));
-export default function CreateCardItem({ cardID, setCreateOpen }) {
+export default function CreateCardItem({ cardID, setCreateOpen, token }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
@@ -37,20 +37,26 @@ export default function CreateCardItem({ cardID, setCreateOpen }) {
   const [message, setMessage] = useState("");
   const [editorState, setEditorState] = useState("");
   const titleField = useRef();
-  const token = useSelector(state => state.authReducer.token);
+
   useEffect(() => {
     titleField.current.focus();
   }, []);
-  const addItemHandler = e => {
+  const addItemHandler = (e) => {
     e.preventDefault();
     setError(false);
     setLoading(true);
     CardsService.createItem(cardID._id, { title, content: editorState }, token)
-      .then(res => {
+      .then((res) => {
         dispatch(
           createItem({
             cardID: cardID._id,
-            values: { title, content: editorState, cardID: cardID._id },
+            values: {
+              title,
+              content: editorState,
+              cardID: cardID._id,
+              allert,
+              priority
+            },
             itemID: res.data.id
           })
         );
@@ -61,7 +67,7 @@ export default function CreateCardItem({ cardID, setCreateOpen }) {
         titleField.current.focus();
         setCreateOpen(false);
       })
-      .catch(error => {
+      .catch((error) => {
         setError(true);
         setLoading(false);
         setMessage(error.response.data);
@@ -78,7 +84,7 @@ export default function CreateCardItem({ cardID, setCreateOpen }) {
           id="standard-required"
           label="Tytuł"
           value={title}
-          onChange={e => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
           name="title"
           type="text"
         />
@@ -104,6 +110,7 @@ export default function CreateCardItem({ cardID, setCreateOpen }) {
             className={classes.button}
             size="small"
             style={{ marginRight: "10px" }}
+            disabled={loading}
           >
             {loading ? (
               <CircularProgress size={20} style={{ color: "red" }} />

@@ -1,0 +1,54 @@
+.card-component {
+  .card-navbar-component {
+    width: 100%;
+    .title-component {
+      .title {
+        font-weight: bold;
+        font-size: 2em;
+      }
+    }
+  }
+  .card-item {
+    margin-top: -1px;
+    background: inherit;
+    border: 1px solid rgb(204, 204, 204);
+    transition: margin 0.15s ease-in-out 0s;
+    &:hover {
+      background: rgb(239, 242, 245);
+    }
+    .expand-button {
+      padding: 5px;
+      border-radius: 50%;
+      width: auto;
+      height: min-content;
+    }
+    .card-item-content {
+      padding: 5px;
+    }
+  }
+  .card-item.expand {
+    &:hover {
+      background: inherit;
+    }
+    margin: 8px 0;
+    transition: margin 0.15s ease-in-out 0s;
+    box-shadow: rgba(37, 42, 49, 0.16) 0px 1px 4px 0px,
+      rgba(37, 42, 49, 0.12) 0px 4px 8px 0px;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid rgb(204, 204, 204);
+  }
+  .card-description {
+    .card-description-title {
+      margin-left: 4px;
+    }
+    .card-description-textbox {
+      padding: 4px;
+      border-radius: 5px;
+      min-height: 95px;
+      &:hover {
+        background: rgb(239, 242, 245);
+      }
+    }
+  }
+}

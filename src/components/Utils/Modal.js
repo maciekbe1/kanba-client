@@ -1,49 +1,42 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Modal, Grid } from "@material-ui/core";
+import React, { useState } from "react";
 
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import Button from "@material-ui/core/Button";
 
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
+function SimpleModal({ onDialogAccept, setError, activator, children }) {
+  const [open, setOpen] = useState(false);
+  const save = () => {
+    onDialogAccept().then((res) => {
+      setOpen(!res);
+      setError(!res);
+    });
   };
-}
-
-export default function SimpleModal({ openProps, modalHandler, children }) {
-  const [modalStyle] = React.useState(getModalStyle);
-
-  const handleClose = () => {
-    modalHandler();
+  const close = () => {
+    setError(false);
+    setOpen(false);
   };
-  const useStyles = makeStyles(theme => ({
-    paper: {
-      position: "absolute",
-      width: "fit-content",
-      backgroundColor: theme.palette.background.paper,
-      border: "1px solid #000",
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 2, 2),
-      overflow: "scroll",
-      maxHeight: "100%"
-    }
-  }));
-  const classes = useStyles();
-
   return (
-    <Modal open={openProps} onClose={handleClose}>
-      <Grid
-        container
-        display="flex"
-        justify="center"
-        style={modalStyle}
-        className={classes.paper}
+    <>
+      {activator({ setOpen })}
+      <Dialog
+        onClose={close}
+        open={open}
+        maxWidth="xl"
+        className="modal-general"
       >
-        <Grid item>{children}</Grid>
-      </Grid>
-    </Modal>
+        <DialogContent>{children}</DialogContent>
+        <DialogActions>
+          <Button onClick={close} color="primary" data-name="selected">
+            Nie
+          </Button>
+          <Button onClick={save} color="secondary" data-name="selected">
+            Tak
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
+export default SimpleModal;

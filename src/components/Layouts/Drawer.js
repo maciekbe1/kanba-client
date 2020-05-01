@@ -3,7 +3,7 @@ import * as UserService from "services/UserService";
 import { useDispatch } from "react-redux";
 import { signOut } from "actions/UserActions";
 import { useSelector } from "react-redux";
-import { setTabValue, setDarkTheme, setBar } from "actions/layoutActions";
+import { setTabValue, setTheme, setBar } from "actions/layoutActions";
 import { Link, useLocation } from "react-router-dom";
 import { findIndex } from "lodash";
 
@@ -34,20 +34,21 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Switch from "@material-ui/core/Switch";
 import Signout from "components/Auth/Signout";
+import { SESSION_MESSAGE } from "constants/index";
+import Avatar from "@material-ui/core/Avatar";
 
 const drawerWidth = 200;
-const SESSION_MESSAGE = "Sesja wygasła, zaloguj się ponownie";
 export default function MiniDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const darkTheme = useSelector(state => state.layoutReducer.darkTheme);
-  const token = useSelector(state => state.authReducer.token);
+  const themeType = useSelector(state => state.layoutReducer.theme);
+  const user = useSelector(state => state.authReducer);
   useEffect(() => {
     dispatch(setBar({ type: null, message: null, active: false }));
     const check = () => {
-      UserService.getMeService(token)
+      UserService.getMeService(user.token)
         .then()
         .catch(err => {
           dispatch(
@@ -62,7 +63,7 @@ export default function MiniDrawer(props) {
       window.removeEventListener("visibilitychange", check);
       check();
     };
-  }, [dispatch, token]);
+  }, [dispatch, user.token]);
 
   const tabs = [
     { icon: <HomeIcon />, label: "Główna", to: "/" },
@@ -94,7 +95,7 @@ export default function MiniDrawer(props) {
   };
 
   const handleThemeChange = () => {
-    dispatch(setDarkTheme(!darkTheme));
+    dispatch(setTheme(!themeType));
   };
 
   const menuOpen = Boolean(anchorEl);
@@ -146,7 +147,11 @@ export default function MiniDrawer(props) {
             color="inherit"
             className={classes.avatar}
           >
-            <AccountCircleIcon fontSize="large" />
+            {user.data.photo ? (
+              <Avatar alt={user.data.name} src={user.data.photo} />
+            ) : (
+              <AccountCircleIcon fontSize="large" />
+            )}
           </IconButton>
           <Menu
             id="menu-appbar"
@@ -164,7 +169,7 @@ export default function MiniDrawer(props) {
           >
             <MenuItem>
               Dark theme{" "}
-              <Switch checked={darkTheme} onChange={handleThemeChange} />
+              <Switch checked={themeType} onChange={handleThemeChange} />
             </MenuItem>
             <Signout setAnchorEl={setAnchorEl} />
           </Menu>

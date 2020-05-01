@@ -8,6 +8,14 @@ export const getCards = (userID, token) => {
   );
 };
 
+export const createCard = (data, token) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/create-card`,
+    data,
+    token
+  );
+};
+
 export const createItem = (cardID, item, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
@@ -36,7 +44,7 @@ export const updateItem = (cardID, itemID, key, value, token) => {
     {
       cardID,
       itemID,
-      item: { [key]: value } //rawContent || titleText
+      item: { [key]: value }
     },
     token
   );
@@ -89,6 +97,14 @@ export const removeSelectedItems = (token, selected) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/remove-many-items`,
     { selected },
+    token
+  );
+};
+
+export const removeCard = (cardID, userID, token) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/remove-card`,
+    { cardID, userID },
     token
   );
 };

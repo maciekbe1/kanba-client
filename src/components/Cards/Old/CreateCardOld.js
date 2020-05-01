@@ -11,9 +11,9 @@ import {
   CircularProgress
 } from "@material-ui/core";
 import { createCard } from "actions/cardsActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: "10px"
   },
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: "14px"
   }
 }));
-export default function CreateCard({ modalHandler, user }) {
+export default function CreateCard({ modalHandler, user, token }) {
   const classes = useStyles();
   const [values, setValues] = useState({
     user,
@@ -34,13 +34,12 @@ export default function CreateCard({ modalHandler, user }) {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
 
-  const token = useSelector(state => state.authReducer.token);
   const dispatch = useDispatch();
 
-  const handleChange = prop => event => {
+  const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
-  const createCardHandler = e => {
+  const createCardHandler = (e) => {
     e.preventDefault();
     setError(false);
     setLoading(true);
@@ -53,11 +52,11 @@ export default function CreateCard({ modalHandler, user }) {
       },
       token
     )
-      .then(res => {
+      .then((res) => {
         dispatch(createCard(res.data));
         modalHandler();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         setError(true);
         setLoading(false);
@@ -69,7 +68,11 @@ export default function CreateCard({ modalHandler, user }) {
       <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
         Utwórz kartę
       </Typography>
-      <form noValidate autoComplete="off" onSubmit={e => createCardHandler(e)}>
+      <form
+        noValidate
+        autoComplete="off"
+        onSubmit={(e) => createCardHandler(e)}
+      >
         <TextField
           fullWidth
           required
@@ -111,7 +114,12 @@ export default function CreateCard({ modalHandler, user }) {
           justifyContent="flex-end"
           className={classes.buttons}
         >
-          <Button variant="outlined" type="submit" className={classes.button}>
+          <Button
+            disabled={loading}
+            variant="outlined"
+            type="submit"
+            className={classes.button}
+          >
             {loading ? <CircularProgress size={20} /> : "Create"}
           </Button>
           <Button onClick={modalHandler} variant="outlined" color="secondary">

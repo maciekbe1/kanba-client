@@ -32,7 +32,7 @@ export default function DraggableItem({ item, index, cardID }) {
   const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
   const token = useSelector(state => state.authReducer.token);
   const dark = useSelector(state =>
-    state.layoutReducer.darkTheme ? "dark" : "light"
+    state.layoutReducer.theme ? "dark" : "light"
   );
   const useStyles = makeStyles(theme => ({
     listItem: {
@@ -114,7 +114,7 @@ export default function DraggableItem({ item, index, cardID }) {
 
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [editorState, setEditorState] = useState("");
   const [editable, setEditable] = useState(false);
   const [titleText, setTitleText] = useState();
