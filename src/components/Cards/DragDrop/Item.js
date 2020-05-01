@@ -75,7 +75,6 @@ export default function DndItem({ item, index }) {
               cardID={item.cardID}
               date={item.date}
               status={item.status}
-              alert={item.alert}
               priority={item.priority}
               onItemChange={onItemChange}
             />

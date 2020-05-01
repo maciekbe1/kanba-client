@@ -11,7 +11,6 @@ const getCardStyle = (draggableStyle) => ({
 });
 
 export default function DndCard({ card, index, onRemove }) {
-  console.log("card");
   return (
     <Draggable key={card._id} draggableId={card._id} index={index}>
       {(provided) => (
