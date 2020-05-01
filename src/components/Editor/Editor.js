@@ -10,7 +10,6 @@ export default function Editor({ content, setEditorContent }) {
       config={editorConfiguration}
       onChange={(event, editor) => {
         const data = editor.getData();
-        // console.log({ event, editor, data });
         setEditorContent(data);
       }}
     />
