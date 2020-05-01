@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card } from "@material-ui/core";
 import DroppableContainer from "../DroppableContainer";
-import RemoveCard from "./RemoveCard";
+import RemoveCard from "./RemoveCardOld";
 
 export default function DragDropComponent({ cards, onDragEnd, userID }) {
   const [dialog, setDialog] = useState(false);

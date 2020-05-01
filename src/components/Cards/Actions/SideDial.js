@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -7,13 +7,20 @@ import { useSelector, useDispatch } from "react-redux";
 import * as CardsService from "services/CardsService";
 import * as CardsHelper from "helper/CardsHelper";
 import { Typography } from "@material-ui/core";
+import SimpleModal from "components/Utils/Modal";
+import { setCards, setSelectedItems, createCard } from "actions/cardsActions";
+import CreateCard from "components/Cards/Actions/CreateCard";
 
-import { setCards, setSelectedItems } from "actions/cardsActions";
-export default function SideDial({ onCreateCard, onRemoveItems }) {
+export default function SideDial({ onRemoveItems }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
   const cards = useSelector((state) => state.cardsReducer.cardsState);
+  const userID = useSelector((state) => state.authReducer.data._id);
+
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
+  const [data, setData] = useState();
 
   const selectedItems = useSelector(
     (state) => state.cardsReducer.selectedItems
@@ -38,16 +45,43 @@ export default function SideDial({ onCreateCard, onRemoveItems }) {
       ))
     });
   };
+
+  const createCardHandle = async () => {
+    return await CardsService.createCard(data, token)
+      .then((res) => {
+        dispatch(createCard(res.data));
+        return true;
+      })
+      .catch((error) => {
+        setError(true);
+        setMessage(error.response.data);
+        return false;
+      });
+  };
   return (
     <div className={classes.dialWrapper}>
       {!selectedItems.length ? (
-        <SpeedDial
-          ariaLabel="create"
-          onClick={onCreateCard}
-          className={`${classes.speedDial} ${classes.speedDialAdd}`}
-          open={false}
-          icon={<SpeedDialIcon />}
-        />
+        <SimpleModal
+          onDialogAccept={createCardHandle}
+          error={error}
+          setError={setError}
+          activator={({ setOpen }) => (
+            <SpeedDial
+              ariaLabel="create"
+              onClick={() => setOpen(true)}
+              className={`${classes.speedDial} ${classes.speedDialAdd}`}
+              open={false}
+              icon={<SpeedDialIcon />}
+            />
+          )}
+        >
+          <CreateCard
+            error={error}
+            setData={setData}
+            message={message}
+            user={userID}
+          />
+        </SimpleModal>
       ) : (
         <SpeedDial
           ariaLabel="remove"

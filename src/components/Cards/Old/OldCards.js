@@ -5,7 +5,7 @@ import { setCards, updateCard, setSelectedItems } from "actions/cardsActions";
 import { setBar } from "actions/layoutActions";
 
 import CreateCard from "./CreateCardOld";
-import RemoveItems from "../Actions/RemoveItem";
+import RemoveItems from "./RemoveItemOld";
 import DragDropComponent from "./DragDropComponent";
 import Modal from "../../Utils/Modal";
 import { Typography } from "@material-ui/core";

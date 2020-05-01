@@ -8,6 +8,14 @@ export const getCards = (userID, token) => {
   );
 };
 
+export const createCard = (data, token) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/create-card`,
+    data,
+    token
+  );
+};
+
 export const createItem = (cardID, item, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
