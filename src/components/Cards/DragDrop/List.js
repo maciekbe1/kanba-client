@@ -8,7 +8,12 @@ export default function List({ card }) {
       {(provided) => (
         <div ref={provided.innerRef} {...provided.droppableProps}>
           {card.list.map((item, index) => (
-            <InnerItem key={item._id} item={item} index={index} />
+            <InnerItem
+              cardID={card._id}
+              key={item._id}
+              item={item}
+              index={index}
+            />
           ))}
           {provided.placeholder}
         </div>
@@ -17,6 +22,6 @@ export default function List({ card }) {
   );
 }
 
-const InnerItem = memo(function InnerItem({ item, index }) {
-  return <Item item={item} index={index} />;
+const InnerItem = memo(function InnerItem({ item, index, cardID }) {
+  return <Item item={item} index={index} cardID={cardID} />;
 });

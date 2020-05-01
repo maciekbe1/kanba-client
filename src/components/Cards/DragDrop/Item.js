@@ -12,18 +12,19 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import { updateItem } from "actions/cardsActions";
 import ItemCheckbox from "components/Cards/DragDrop/ItemComponent/ItemCheckbox";
-export default function DndItem({ item, index }) {
+
+export default function DndItem({ item, index, cardID }) {
   const [expand, setExpand] = useState(false);
 
   const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
 
   const onItemChange = (element, type) => {
-    CardsService.updateItem(item.cardID, item._id, type, element, token);
+    CardsService.updateItem(cardID, item._id, type, element, token);
     dispatch(
       updateItem({
         itemID: item._id,
-        cardID: item.cardID,
+        cardID: cardID,
         [type]: element
       })
     );
@@ -72,7 +73,7 @@ export default function DndItem({ item, index }) {
             <Content
               content={item.content}
               itemID={item._id}
-              cardID={item.cardID}
+              cardID={cardID}
               date={item.date}
               status={item.status}
               priority={item.priority}
