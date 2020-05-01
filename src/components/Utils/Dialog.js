@@ -5,8 +5,7 @@ import {
   DialogActions,
   DialogContent,
   Slide,
-  DialogTitle,
-  DialogContentText
+  DialogTitle
 } from "@material-ui/core";
 export default function DialogWindow({
   open,
@@ -25,11 +24,7 @@ export default function DialogWindow({
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogTitle id="alert-dialog-slide-title">{dialogTitle}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          {dialogText}
-        </DialogContentText>
-      </DialogContent>
+      <DialogContent>{dialogText}</DialogContent>
       <DialogActions>
         <Button onClick={onDialogClose} color="primary" data-name="selected">
           Nie

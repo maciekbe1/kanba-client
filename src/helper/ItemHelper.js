@@ -3,7 +3,7 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import AvTimerIcon from "@material-ui/icons/AvTimer";
 import { green, blue, grey } from "@material-ui/core/colors";
-
+import { isNil } from "lodash";
 class Status {
   constructor(color, icon, value, label) {
     this.color = color;
@@ -15,7 +15,7 @@ class Status {
 
 export default {
   statusStyler(status) {
-    if (status === null) {
+    if (isNil(status)) {
       const color = {
         background: "#fff",
         hover: "#fff",

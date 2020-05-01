@@ -11,9 +11,10 @@ import ListItem from "@material-ui/core/ListItem";
 import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import { updateItem } from "actions/cardsActions";
-
+import ItemCheckbox from "components/Cards/DragDrop/ItemComponent/ItemCheckbox";
 export default function DndItem({ item, index }) {
   const [expand, setExpand] = useState(false);
+
   const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
 
@@ -51,11 +52,16 @@ export default function DndItem({ item, index }) {
           )}
           className={`${"card-item"} ${expand ? "expand" : "collapsed"}`}
         >
-          <Box display="flex" justifyContent="space-between">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Box display="flex" alignItems="center">
               <div {...provided.dragHandleProps} style={{ display: "flex" }}>
                 <DragHandleIcon />
               </div>
+              <ItemCheckbox item={item} />
               <Title title={item.title} onTitleChange={onItemChange} />
             </Box>
             <ListItem button onClick={itemToggle} className="expand-button">

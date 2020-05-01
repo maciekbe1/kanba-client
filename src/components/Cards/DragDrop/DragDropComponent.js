@@ -9,15 +9,18 @@ import { cloneDeep, isNull, find, isNil } from "lodash";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setCards, updateCard, setSelectedItems } from "actions/cardsActions";
+import { isEmpty } from "lodash";
 
 export default function DragDropComponent({ onRemove }) {
-  const selectedItems = useSelector(state => state.cardsReducer.selectedItems);
+  const selectedItems = useSelector(
+    (state) => state.cardsReducer.selectedItems
+  );
   const dispatch = useDispatch();
-  const cards = useSelector(state => state.cardsReducer.cardsState);
-  const userID = useSelector(state => state.authReducer.data._id);
-  const token = useSelector(state => state.authReducer.token);
+  const cards = useSelector((state) => state.cardsReducer.cardsState);
+  const userID = useSelector((state) => state.authReducer.data._id);
+  const token = useSelector((state) => state.authReducer.token);
 
-  const onDragEnd = result => {
+  const onDragEnd = (result) => {
     let newData = cloneDeep(cards);
     if (
       isNull(result.destination) ||
@@ -27,7 +30,7 @@ export default function DragDropComponent({ onRemove }) {
       return cards;
     } else if (selectedItems.length >= 1) {
       const selectedContainItem = selectedItems.some(
-        item => item._id === result.draggableId
+        (item) => item._id === result.draggableId
       );
 
       const position = result.destination.index;
@@ -41,7 +44,7 @@ export default function DragDropComponent({ onRemove }) {
 
         CardsService.updateManyItems(
           result.destination.droppableId,
-          newSelectedItems.map(item => {
+          newSelectedItems.map((item) => {
             return {
               itemID: item._id,
               cardID: isNil(item.cardID)
@@ -61,7 +64,7 @@ export default function DragDropComponent({ onRemove }) {
       } else {
         CardsService.updateManyItems(
           result.destination.droppableId,
-          selectedItems.map(item => {
+          selectedItems.map((item) => {
             return {
               itemID: item._id,
               cardID: isNil(item.cardID)
@@ -139,10 +142,12 @@ export default function DragDropComponent({ onRemove }) {
     }
   };
 
-  return (
+  return isEmpty(cards) ? (
+    <div>Brak kart</div>
+  ) : (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="all-cards" type="CARD">
-        {provided => (
+        {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             <InnerCard cards={cards} onRemove={onRemove} />
             {provided.placeholder}

@@ -4,11 +4,12 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import StatusButton from "components/Cards/DragDrop/ItemComponent/StatusButton";
 import ItemHelper from "helper/ItemHelper";
+import { isNil } from "lodash";
 
 export default function PopoverMenu({ array, elem, onItemChange, type }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [element, setElement] = useState(
-    elem === null ? { value: 0, label: "Brak" } : elem
+    isNil(elem) ? { value: 0, label: "Brak" } : elem
   );
 
   const handleClick = (event) => {

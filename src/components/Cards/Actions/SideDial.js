@@ -1,15 +1,43 @@
-import React from "components/Cards/Actions/node_modules/react";
-import SpeedDialIcon from "components/Cards/Actions/node_modules/@material-ui/lab/SpeedDialIcon";
-import DeleteForeverIcon from "components/Cards/Actions/node_modules/@material-ui/icons/DeleteForever";
-import { makeStyles } from "components/Cards/Actions/node_modules/@material-ui/core/styles";
+import React from "react";
+import SpeedDial from "@material-ui/lab/SpeedDial";
+import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import { makeStyles } from "@material-ui/core/styles";
+import { useSelector, useDispatch } from "react-redux";
+import * as CardsService from "services/CardsService";
+import * as CardsHelper from "helper/CardsHelper";
+import { Typography } from "@material-ui/core";
 
-export default function SideDial({
-  onCreateCard,
-  onRemoveItems,
-  selectedItems
-}) {
+import { setCards, setSelectedItems } from "actions/cardsActions";
+export default function SideDial({ onCreateCard, onRemoveItems }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.authReducer.token);
+  const cards = useSelector((state) => state.cardsReducer.cardsState);
 
+  const selectedItems = useSelector(
+    (state) => state.cardsReducer.selectedItems
+  );
+  const removeAction = () => {
+    onRemoveItems({
+      remove: () => {
+        const newCards = CardsHelper.removeSelectedItems(cards, selectedItems);
+        const selected = selectedItems.map((item) => {
+          return {
+            itemID: item._id,
+            cardID: item.cardID
+          };
+        });
+        CardsService.removeSelectedItems(token, selected);
+        dispatch(setCards({ cards: newCards }));
+        dispatch(setSelectedItems([]));
+      },
+      dialogTitle: "Czy chcesz usunąć zadania?",
+      dialogText: selectedItems.map((item, index) => (
+        <Typography key={index}>{item.title}</Typography>
+      ))
+    });
+  };
   return (
     <div className={classes.dialWrapper}>
       {!selectedItems.length ? (
@@ -23,7 +51,7 @@ export default function SideDial({
       ) : (
         <SpeedDial
           ariaLabel="remove"
-          onClick={onRemoveItems}
+          onClick={removeAction}
           className={`${classes.speedDial} ${classes.speedDialRemove}`}
           open={false}
           data-name="selected"
@@ -33,7 +61,7 @@ export default function SideDial({
     </div>
   );
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   dialWrapper: {
     position: "fixed",
     marginTop: theme.spacing(3),

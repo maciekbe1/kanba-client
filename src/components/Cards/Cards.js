@@ -6,10 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import { CARDS_PROBLEM_MESSAGE } from "constants/index";
 import CardsView from "components/Cards/CardsView";
-
-import Container from "@material-ui/core/Container";
-
-export default function TestCards() {
+export default function Cards() {
   const userID = useSelector((state) => state.authReducer.data._id);
   const token = useSelector((state) => state.authReducer.token);
   const [pending, setPending] = useState(true);
@@ -21,15 +18,11 @@ export default function TestCards() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  return (
-    <Container>
-      {pending ? <div>loading</div> : <InnerCardView pending={pending} />}
-    </Container>
-  );
+  return pending ? <div>Ładuję...</div> : <InnerCardView />;
 }
 
-const InnerCardView = memo(function InnerComponent({ pending }) {
-  return <CardsView pending={pending} />;
+const InnerCardView = memo(function InnerComponent() {
+  return <CardsView />;
 });
 
 function fetchCards(dispatch, userID, token, setPending) {

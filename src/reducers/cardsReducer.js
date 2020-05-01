@@ -12,7 +12,7 @@ export default (state = INITIAL_DATA, action) => {
     case "SET_CARDS_STATE": {
       return {
         ...state,
-        cardsState: action.cardsState
+        cardsState: new Card(action.cardsState).cards
       };
     }
 

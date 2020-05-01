@@ -5,7 +5,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
 import moment from "moment";
-import "moment/locale/pl";
 import { STATUSES, PRIORITES } from "constants/index";
 
 import PopoverMenu from "components/Cards/DragDrop/ItemComponent/PopoverMenu";
@@ -17,7 +16,7 @@ export default function Options({ status, date, priority, onItemChange }) {
       <List disablePadding>
         <ListItem style={{ textAlign: "right" }} divider disableGutters>
           <ListItemText secondary="Utworzone" />
-          <ListItemText primary={moment(date).format("LL")} inset />
+          <ListItemText primary={moment(date).format("DD/MM/YYYY")} inset />
         </ListItem>
 
         <ListItem divider disableGutters>

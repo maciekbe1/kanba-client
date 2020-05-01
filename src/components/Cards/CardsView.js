@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from "react";
-import { isEmpty } from "lodash";
 import DragDropComponent from "components/Cards/DragDrop/DragDropComponent";
-import { useSelector } from "react-redux";
+
 import RemoveDialog from "components/Cards/RemoveDialog";
+import Container from "@material-ui/core/Container";
+import SideDial from "components/Cards/Actions/SideDial";
 
 export default function CardsView() {
-  const cards = useSelector((state) => state.cardsReducer.cardsState);
   const [dialog, setDialog] = useState(false);
   const [data, setData] = useState();
 
@@ -15,16 +15,17 @@ export default function CardsView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onClose = useCallback(() => {
+  const onClose = () => {
     setDialog(!dialog);
-  }, [dialog]);
+  };
 
-  return isEmpty(cards) ? (
-    <p>nie masz list</p>
-  ) : (
+  return (
     <>
-      <DragDropComponent onRemove={onRemove} />
-      <RemoveDialog open={dialog} onClose={onClose} data={data} />
+      <Container>
+        <DragDropComponent onRemove={onRemove} />
+        <RemoveDialog open={dialog} onClose={onClose} data={data} />
+      </Container>
+      <SideDial onRemoveItems={onRemove} />
     </>
   );
 }
