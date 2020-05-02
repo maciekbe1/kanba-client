@@ -2,9 +2,13 @@ import React from "react";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import AvTimerIcon from "@material-ui/icons/AvTimer";
-import { green, blue, grey } from "@material-ui/core/colors";
+import { green, blue, grey, orange, red } from "@material-ui/core/colors";
 import { isNil } from "lodash";
-class Status {
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+
+class StyledInfo {
   constructor(color, icon, value, label) {
     this.color = color;
     this.icon = icon;
@@ -14,7 +18,7 @@ class Status {
 }
 
 export default {
-  statusStyler(status) {
+  statusButtonStyler(status) {
     if (isNil(status)) {
       const color = {
         background: "#fff",
@@ -22,7 +26,7 @@ export default {
         text: "default"
       };
       const icon = null;
-      return new Status(color, icon, 0, "Brak");
+      return new StyledInfo(color, icon, 0, "Brak");
     }
     switch (status.value) {
       case 0: {
@@ -32,7 +36,7 @@ export default {
           text: "default"
         };
         const icon = null;
-        return new Status(color, icon, 0, "Brak");
+        return new StyledInfo(color, icon, 0, "Brak");
       }
       case 1: {
         const color = {
@@ -41,7 +45,7 @@ export default {
           text: "primary"
         };
         const icon = <PauseCircleOutlineIcon />;
-        return new Status(color, icon, status.value, status.label);
+        return new StyledInfo(color, icon, status.value, status.label);
       }
 
       case 2: {
@@ -51,7 +55,7 @@ export default {
           text: "primary"
         };
         const icon = <AvTimerIcon />;
-        return new Status(color, icon, status.value, status.label);
+        return new StyledInfo(color, icon, status.value, status.label);
       }
 
       case 3: {
@@ -61,19 +65,42 @@ export default {
           text: "primary"
         };
         const icon = <CheckCircleOutlineIcon />;
-        return new Status(color, icon, status.value, status.label);
+        return new StyledInfo(color, icon, status.value, status.label);
       }
 
       default:
         break;
     }
   },
-  priorityStyler(priority) {
-    priority.color = {
+  priorityButtonStyler(priority) {
+    const color = {
       background: "#fff",
-      hover: "#fff",
-      text: "default"
+      hover: grey[50]
     };
+    if (isNil(priority)) {
+      const icon = null;
+      return new StyledInfo(color, icon, 0, "Brak");
+    }
+    switch (priority.value) {
+      case 0: {
+        const icon = null;
+        return new StyledInfo(color, icon, 0, "Brak");
+      }
+      case 1: {
+        const icon = <ArrowUpwardIcon style={{ color: red[600] }} />;
+        return new StyledInfo(color, icon, priority.value, priority.label);
+      }
+      case 2: {
+        const icon = <ArrowForwardIcon style={{ color: orange[600] }} />;
+        return new StyledInfo(color, icon, priority.value, priority.label);
+      }
+      case 3: {
+        const icon = <ArrowDownwardIcon style={{ color: green[800] }} />;
+        return new StyledInfo(color, icon, priority.value, priority.label);
+      }
+      default:
+        break;
+    }
     return priority;
   }
 };

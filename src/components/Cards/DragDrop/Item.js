@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import { updateItem } from "actions/cardsActions";
 import ItemCheckbox from "components/Cards/DragDrop/ItemComponent/ItemCheckbox";
-
+import ItemInfo from "components/Cards/DragDrop/ItemComponent/ItemInfo";
 export default function DndItem({ item, index, cardID }) {
   const [expand, setExpand] = useState(false);
 
@@ -65,9 +65,16 @@ export default function DndItem({ item, index, cardID }) {
               <ItemCheckbox item={item} />
               <Title title={item.title} onTitleChange={onItemChange} />
             </Box>
-            <ListItem button onClick={itemToggle} className="expand-button">
-              {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </ListItem>
+            <Box display="flex">
+              <ListItem className="expand-button">
+                {expand ? null : (
+                  <ItemInfo status={item.status} priority={item.priority} />
+                )}
+              </ListItem>
+              <ListItem button onClick={itemToggle} className="expand-button">
+                {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </ListItem>
+            </Box>
           </Box>
           <Collapse in={expand} timeout="auto" unmountOnExit>
             <Content

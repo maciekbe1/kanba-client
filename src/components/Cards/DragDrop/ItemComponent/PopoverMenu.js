@@ -27,7 +27,9 @@ export default function PopoverMenu({ array, elem, onItemChange, type }) {
       <div onClick={handleClick}>
         <StatusButton
           element={
-            type === "status" ? ItemHelper.statusStyler(element) : element
+            type === "status"
+              ? ItemHelper.statusButtonStyler(element)
+              : ItemHelper.priorityButtonStyler(element)
           }
         >
           {element.label}

@@ -25,6 +25,9 @@
     .card-item-content {
       padding: 5px;
     }
+    .item-info-container {
+      display: flex;
+    }
   }
   .card-item.expand {
     &:hover {
