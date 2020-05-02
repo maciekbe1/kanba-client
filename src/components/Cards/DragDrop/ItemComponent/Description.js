@@ -40,7 +40,7 @@ export default function Description({ content, cardID, itemID }) {
   };
 
   const onSetEdit = (e) => {
-    if (e.target.nodeName !== "A") {
+    if (!window.getSelection().toString() && e.target.nodeName !== "A") {
       setEdit(true);
     }
   };
