@@ -17,10 +17,10 @@ export default function Content({
   return (
     <Box mb={2} className="card-item-content">
       <Grid container spacing={3}>
-        <Grid item xs={9}>
+        <Grid item xs={9} sm={7} md={8} lg={9}>
           <Description content={content} cardID={cardID} itemID={itemID} />
         </Grid>
-        <Grid container item xs={3}>
+        <Grid container item xs={3} sm={5} md={4} lg={3}>
           <Divider orientation="vertical" flexItem />
           <Options
             date={date}

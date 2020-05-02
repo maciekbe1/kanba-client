@@ -23,7 +23,7 @@ export default function Options({ status, date, priority, onItemChange }) {
           <ListItemText secondary="Status" />
           <PopoverMenu
             array={STATUSES}
-            elem={ItemHelper.statusStyler(status)}
+            elem={ItemHelper.statusButtonStyler(status)}
             onItemChange={onItemChange}
             type="status"
           />
@@ -33,7 +33,7 @@ export default function Options({ status, date, priority, onItemChange }) {
           <ListItemText secondary="Priorytet" />
           <PopoverMenu
             array={PRIORITES}
-            elem={priority}
+            elem={ItemHelper.priorityButtonStyler(priority)}
             onItemChange={onItemChange}
             type="priority"
           />
