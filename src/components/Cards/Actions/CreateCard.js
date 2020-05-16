@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
   Typography,
-  Box,
   FormControl,
   FormHelperText
 } from "@material-ui/core";
@@ -72,13 +71,13 @@ export default function CreateCard({ setData, error, message, user }) {
         style={{ margin: "5px 0 10px 0" }}
       />
       {error ? (
-        <Box>
+        <div>
           <FormControl style={{ marginBottom: "20px" }}>
             <FormHelperText className={classes.error} id="my-helper-text">
               {message}
             </FormHelperText>
           </FormControl>
-        </Box>
+        </div>
       ) : null}
     </>
   );

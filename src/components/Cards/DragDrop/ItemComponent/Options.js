@@ -12,7 +12,7 @@ import ItemHelper from "helper/ItemHelper";
 
 export default function Options({ status, date, priority, onItemChange }) {
   return (
-    <div style={{ margin: "0 auto" }}>
+    <div>
       <List disablePadding>
         <ListItem style={{ textAlign: "right" }} divider disableGutters>
           <ListItemText secondary="Utworzone" />

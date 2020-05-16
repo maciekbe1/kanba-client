@@ -3,8 +3,11 @@ import Card from "model/Card";
 import { request } from "api/API";
 
 const INITIAL_DATA = {
+  isCardsLoaded: false,
+  selectedItems: [],
   cardsState: [],
-  selectedItems: []
+  isContentOpen: false,
+  itemContentData: null
 };
 
 export default (state = INITIAL_DATA, action) => {
@@ -99,6 +102,29 @@ export default (state = INITIAL_DATA, action) => {
       return {
         ...state,
         selectedItems: action.payload
+      };
+    }
+
+    case "SET_CARDS_LOADED": {
+      return {
+        ...state,
+        isCardsLoaded: action.payload
+      };
+    }
+
+    case "OPEN_CARD_CONTENT": {
+      return {
+        ...state,
+        isContentOpen: true,
+        itemContentData: action.payload.item
+      };
+    }
+
+    case "CLOSE_CARD_CONTENT": {
+      return {
+        ...state,
+        isContentOpen: false,
+        itemContentData: null
       };
     }
     default:

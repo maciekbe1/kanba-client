@@ -1,35 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
 import Options from "components/Cards/DragDrop/ItemComponent/Options";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-
+import Card from "@material-ui/core/Card";
 import Description from "components/Cards/DragDrop/ItemComponent/Description";
-export default function Content({
-  date,
-  status,
-  priority,
-  content,
-  cardID,
-  itemID,
-  onItemChange
-}) {
+
+import { Resizable } from "re-resizable";
+import Title from "components/Common/Title";
+import CloseIcon from "@material-ui/icons/Close";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import Attachments from "components/Cards/DragDrop/ItemComponent/Attachments";
+import { useSelector, useDispatch } from "react-redux";
+import * as CardsService from "services/CardsService";
+import { updateItem, closeCardContent } from "actions/cardsActions";
+
+export default function Content() {
+  const isOpen = useSelector((state) => state.cardsReducer.isContentOpen);
+  return isOpen ? <ContentView /> : null;
+}
+
+function ContentView() {
+  const [width, setWidth] = useState();
+  const dispatch = useDispatch();
+  const item = useSelector((state) => state.cardsReducer.itemContentData);
+  const token = useSelector((state) => state.authReducer.token);
+
+  const onItemChange = (element, type) => {
+    CardsService.updateItem(item.cardID, item._id, type, element, token);
+    dispatch(
+      updateItem({
+        itemID: item._id,
+        cardID: item.cardID,
+        [type]: element
+      })
+    );
+  };
+  const onClose = () => {
+    dispatch(closeCardContent());
+  };
+
   return (
-    <Box mb={2} className="card-item-content">
-      <Grid container spacing={3}>
-        <Grid item xs={9} sm={7} md={8} lg={9}>
-          <Description content={content} cardID={cardID} itemID={itemID} />
-        </Grid>
-        <Grid container item xs={3} sm={5} md={4} lg={3}>
-          <Divider orientation="vertical" flexItem />
+    <Resizable
+      defaultSize={{
+        width: "60%"
+      }}
+      minWidth="50%"
+      maxWidth="80%"
+      className="card-item-content-wraper"
+      onResizeStop={(e, direction, ref, d) => {
+        setWidth(width + d.width);
+      }}
+    >
+      <Card className="card-item-content">
+        <div className="card-item-title-container">
+          <Title title={item.title} onTitleChange={onItemChange} />
+          <Tooltip title="Zamknij" placement="top">
+            <IconButton variant="contained" color="default" onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <div className="flex space-between">
+          <Attachments />
           <Options
-            date={date}
-            status={status}
-            priority={priority}
+            date={item.date}
+            status={item.status}
+            priority={item.priority}
             onItemChange={onItemChange}
           />
-        </Grid>
-      </Grid>
-    </Box>
+        </div>
+        <Description
+          content={item.content}
+          cardID={item.cardID}
+          itemID={item._id}
+        />
+      </Card>
+    </Resizable>
   );
 }

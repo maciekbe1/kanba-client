@@ -1,7 +1,6 @@
 import React from "react";
 import Title from "components/Common/Title";
 import Actions from "components/Cards/DragDrop/CardComponent/Actions";
-import Box from "@material-ui/core/Box";
 import { removeCard, updateCard } from "actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
@@ -45,17 +44,13 @@ export default function Navbar({ card, index, onRemove, provided }) {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="space-between"
-      className="card-navbar-component"
-    >
-      <Box display="flex" alignItems="center">
+    <div className="card-navbar-component">
+      <div className="flex align-center">
         <div {...provided.dragHandleProps} style={{ display: "flex" }}>
           <DragIndicatorIcon />
         </div>
         <Title title={card.title} onTitleChange={onTitleChange} />
-      </Box>
+      </div>
       <Actions
         expand={card.expand}
         listLength={card.list.length}
@@ -63,6 +58,6 @@ export default function Navbar({ card, index, onRemove, provided }) {
         onToggle={onToggle}
         cardID={card._id}
       />
-    </Box>
+    </div>
   );
 }

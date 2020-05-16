@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Box from "@material-ui/core/Box";
+
 import Tooltip from "@material-ui/core/Tooltip";
 import Badge from "@material-ui/core/Badge";
 import IconButton from "@material-ui/core/IconButton";
@@ -51,7 +51,7 @@ export default function Actions({
   };
 
   return (
-    <Box display="flex">
+    <div className="card-component-navbar-actions">
       <Tooltip title={expand ? CARD_COLLAPSED : CARD_EXPANDED} placement="top">
         <IconButton
           aria-label={expand ? "expandLess" : "expandMore"}
@@ -91,6 +91,6 @@ export default function Actions({
           <DeleteIcon />
         </IconButton>
       </Tooltip>
-    </Box>
+    </div>
   );
 }

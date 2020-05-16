@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Editor from "components/Editor/Editor";
 import EditorButtons from "components/Editor/EditorButtons";
-import Box from "@material-ui/core/Box";
+
 import parse from "react-html-parser";
 import { cloneDeep } from "lodash";
 import { useSelector, useDispatch } from "react-redux";
@@ -54,9 +54,8 @@ export default function Description({ content, cardID, itemID }) {
           <EditorButtons save={onSaveContent} cancel={onCancelContent} />
         </>
       ) : (
-        <Box
-          className="card-description-textbox"
-          width={1}
+        <div
+          className="card-description-textbox w-100"
           onClick={(e) => onSetEdit(e)}
         >
           {editorContent ? (
@@ -64,7 +63,7 @@ export default function Description({ content, cardID, itemID }) {
           ) : (
             <span style={{ color: "#cfcfcf" }}>Dodaj treść</span>
           )}
-        </Box>
+        </div>
       )}
     </div>
   );

@@ -1,6 +1,12 @@
 .card-component {
   .card-navbar-component {
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .card-component-navbar-actions {
+      display: flex;
+      align-items: center;
+    }
     .title-component {
       .title {
         font-weight: bold;
@@ -22,11 +28,13 @@
       width: auto;
       height: min-content;
     }
-    .card-item-content {
-      padding: 5px;
-    }
     .item-info-container {
       display: flex;
+      .item-icon {
+        color: #fff;
+        width: 24px;
+        height: 24px;
+      }
     }
   }
   .card-item.expand {
@@ -45,10 +53,34 @@
     .card-description-title {
       margin-left: 4px;
     }
+  }
+}
+.card-item-content-wraper {
+  margin-left: 1rem;
+  .card-item-content {
+    padding: 16px;
+    overflow: auto;
+    height: calc(100vh - 116px);
+    .card-item-title-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      .title {
+        font-weight: bold;
+        font-size: 2em;
+      }
+      button {
+        height: min-content;
+      }
+    }
+    .item-attachments-container {
+      padding: 10px 0;
+    }
     .card-description-textbox {
       padding: 4px;
       border-radius: 5px;
       min-height: 95px;
+      word-break: break-word;
       &:hover {
         background: rgb(239, 242, 245);
       }

@@ -148,7 +148,11 @@ export default function DragDropComponent({ onRemove }) {
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="all-cards" type="CARD">
         {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            style={{ flex: "1 1 auto", overflow: "auto" }}
+          >
             <InnerCard cards={cards} onRemove={onRemove} />
             {provided.placeholder}
           </div>

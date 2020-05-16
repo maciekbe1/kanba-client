@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
 import { Done, Clear } from "@material-ui/icons";
 import { cloneDeep } from "lodash";
 
@@ -59,7 +58,7 @@ export default function Title({ title, onTitleChange }) {
   };
 
   return (
-    <Box position="relative" className="title-component">
+    <div className="title-component">
       <Typography
         ref={cardTitle}
         onMouseDown={onMouseDown}
@@ -72,13 +71,7 @@ export default function Title({ title, onTitleChange }) {
         {title}
       </Typography>
       {editable ? (
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          position="absolute"
-          right="0px"
-          className="icons-wrapper"
-        >
+        <div className="icons-wrapper">
           <Button
             size="small"
             onMouseDown={onClikcAccept}
@@ -103,9 +96,9 @@ export default function Title({ title, onTitleChange }) {
           >
             <Clear className="icon" />
           </Button>
-        </Box>
+        </div>
       ) : null}
-    </Box>
+    </div>
   );
 }
 

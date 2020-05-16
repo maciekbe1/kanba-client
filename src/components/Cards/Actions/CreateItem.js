@@ -14,9 +14,14 @@ import Select from "react-select";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    marginTop: theme.spacing(1),
-    width: 200
-  }
+    [theme.breakpoints.down("sm")]: {
+      width: 130
+    },
+    [theme.breakpoints.up("md")]: {
+      width: 200
+    }
+  },
+  prioritySelect: { marginTop: theme.spacing(1) }
 }));
 
 export default function CreateItem({ setData, error, message }) {
@@ -67,9 +72,9 @@ export default function CreateItem({ setData, error, message }) {
           <Editor content={editorContent} setEditorContent={setEditorContent} />
         </Grid>
 
-        <Grid container item xs={3}>
+        <Grid item xs={3}>
           <Box display="flex" flexDirection="column">
-            <FormControl>
+            <FormControl className={classes.formControl}>
               <Select
                 value={selectedStatus}
                 onChange={statusChange}
@@ -83,7 +88,9 @@ export default function CreateItem({ setData, error, message }) {
                 menuPortalTarget={document.body}
               />
             </FormControl>
-            <FormControl className={classes.formControl}>
+            <FormControl
+              className={`${classes.prioritySelect} ${classes.formControl}`}
+            >
               <Select
                 value={selectedPriority}
                 onChange={priorityChange}
