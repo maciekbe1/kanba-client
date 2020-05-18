@@ -19,9 +19,6 @@
     background: inherit;
     border: 1px solid rgb(204, 204, 204);
     transition: margin 0.15s ease-in-out 0s;
-    &:hover {
-      background: rgb(239, 242, 245);
-    }
     .expand-button {
       padding: 5px;
       border-radius: 50%;
@@ -59,7 +56,7 @@
   margin-left: 1rem;
   .card-item-content {
     padding: 16px;
-    overflow: auto;
+    overflow-y: auto;
     height: calc(100vh - 116px);
     .card-item-title-container {
       width: 100%;
@@ -81,9 +78,31 @@
       border-radius: 5px;
       min-height: 95px;
       word-break: break-word;
-      &:hover {
-        background: rgb(239, 242, 245);
-      }
+    }
+  }
+}
+
+.light {
+  .card-item {
+    &:hover {
+      background: rgb(239, 242, 245);
+    }
+  }
+  .card-description-textbox {
+    &:hover {
+      background: rgb(239, 242, 245);
+    }
+  }
+}
+.dark {
+  .card-item {
+    &:hover {
+      background: #616161;
+    }
+  }
+  .card-description-textbox {
+    &:hover {
+      background: #616161;
     }
   }
 }

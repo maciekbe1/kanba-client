@@ -43,14 +43,14 @@ export default function MiniDrawer(props) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const themeType = useSelector(state => state.layoutReducer.theme);
-  const user = useSelector(state => state.authReducer);
+  const themeType = useSelector((state) => state.layoutReducer.theme);
+  const user = useSelector((state) => state.authReducer);
   useEffect(() => {
     dispatch(setBar({ type: null, message: null, active: false }));
     const check = () => {
       UserService.getMeService(user.token)
         .then()
-        .catch(err => {
+        .catch((err) => {
           dispatch(
             setBar({ type: "error", message: SESSION_MESSAGE, active: true })
           );
@@ -70,7 +70,7 @@ export default function MiniDrawer(props) {
     { icon: <PermDataSetting />, label: "Projekty", to: "/projects" },
     { icon: <ViewDay />, label: "Karty", to: "/cards" }
   ];
-  const tabValue = findIndex(tabs, function(item) {
+  const tabValue = findIndex(tabs, function (item) {
     return item.to === pathname;
   });
   const [open, setOpen] = useState(false);
@@ -86,7 +86,7 @@ export default function MiniDrawer(props) {
   const handleChange = (event, newValue) => {
     dispatch(setTabValue(newValue));
   };
-  const handleMenu = event => {
+  const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -246,7 +246,7 @@ export default function MiniDrawer(props) {
           ))}
         </List>
       </Drawer>
-      <main className={classes.content}>
+      <main className={`${classes.content} ${theme.palette.type}`}>
         <div className={classes.toolbar} />
         {props.children}
       </main>
@@ -254,7 +254,7 @@ export default function MiniDrawer(props) {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex"
   },

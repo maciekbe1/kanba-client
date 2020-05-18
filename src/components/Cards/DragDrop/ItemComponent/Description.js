@@ -3,7 +3,7 @@ import Editor from "components/Editor/Editor";
 import EditorButtons from "components/Editor/EditorButtons";
 
 import parse from "react-html-parser";
-import { cloneDeep } from "lodash";
+
 import { useSelector, useDispatch } from "react-redux";
 import { updateItem } from "actions/cardsActions";
 import * as CardsService from "services/CardsService";
@@ -11,17 +11,18 @@ import * as CardsService from "services/CardsService";
 export default function Description({ content, cardID, itemID }) {
   const [edit, setEdit] = useState(false);
   const [editorContent, setEditorContent] = useState("");
-  const [memoContent, setMemoContent] = useState(content);
+  const [memoContent, setMemoContent] = useState();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
 
   useEffect(() => {
     setEditorContent(content);
+    setMemoContent(content);
   }, [content]);
 
   const onSaveContent = () => {
     setEdit(!edit);
-    if (editorContent !== cloneDeep(content)) {
+    if (editorContent !== memoContent) {
       setMemoContent(editorContent);
       CardsService.updateItem(cardID, itemID, "content", editorContent, token);
       dispatch(

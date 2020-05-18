@@ -34,6 +34,7 @@ function ContentView() {
       })
     );
   };
+
   const onClose = () => {
     dispatch(closeCardContent());
   };
@@ -42,6 +43,16 @@ function ContentView() {
     <Resizable
       defaultSize={{
         width: "60%"
+      }}
+      enable={{
+        top: false,
+        right: false,
+        bottom: false,
+        left: true,
+        topRight: false,
+        bottomRight: false,
+        bottomLeft: false,
+        topLeft: false
       }}
       minWidth="50%"
       maxWidth="80%"

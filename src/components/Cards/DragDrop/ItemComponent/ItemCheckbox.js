@@ -3,7 +3,7 @@ import { setSelectedItems } from "actions/cardsActions";
 import Checkbox from "@material-ui/core/Checkbox";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function ItemCheckbox({ item }) {
+export default React.memo(function ItemCheckbox({ item }) {
   const selectedItems = useSelector(
     (state) => state.cardsReducer.selectedItems
   );
@@ -25,4 +25,4 @@ export default function ItemCheckbox({ item }) {
       checked={selectedItems.some((i) => i._id === item._id)}
     />
   );
-}
+});

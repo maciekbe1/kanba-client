@@ -6,7 +6,11 @@ export default function List({ card }) {
   return (
     <Droppable droppableId={card._id} type="LIST">
       {(provided) => (
-        <div ref={provided.innerRef} {...provided.droppableProps}>
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          style={{ minHeight: "20px" }}
+        >
           {card.list.map((item, index) => (
             <InnerItem
               cardID={card._id}
