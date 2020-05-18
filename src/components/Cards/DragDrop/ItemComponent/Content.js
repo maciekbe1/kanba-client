@@ -33,6 +33,12 @@ function ContentView() {
         [type]: element
       })
     );
+    if (type === "title") {
+      const elem = document.querySelector(
+        `.card-item[data-rbd-draggable-id="${item._id}"] p`
+      );
+      elem.textContent = element;
+    }
   };
 
   const onClose = () => {

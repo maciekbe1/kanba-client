@@ -16,7 +16,7 @@ import ItemInfo from "components/Cards/DragDrop/ItemComponent/ItemInfo";
 export default function DndItem({ item, index, cardID }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
-
+  const isOpen = useSelector((state) => state.cardsReducer.isContentOpen);
   const onItemChange = (element, type) => {
     CardsService.updateItem(cardID, item._id, type, element, token);
     dispatch(
@@ -26,6 +26,13 @@ export default function DndItem({ item, index, cardID }) {
         [type]: element
       })
     );
+
+    if (isOpen && type === "title") {
+      const elem = document.querySelector(
+        `.card-item-content .title-component p`
+      );
+      elem.textContent = element;
+    }
   };
 
   const openItem = useCallback(() => {

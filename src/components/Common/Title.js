@@ -20,6 +20,7 @@ export default function Title({ title, onTitleChange }) {
     e.stopPropagation();
     ref.current.contentEditable = true;
     ref.current.focus();
+    setValue(ref.current.textContent);
     setEditable(true);
   };
 
