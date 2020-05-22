@@ -1,1 +1,1 @@
-Simpy task manager. Engoy https://www.kanba.pl/cards
+Simpy task manager. Enjoy https://www.kanba.pl/cards
