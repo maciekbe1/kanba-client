@@ -21,17 +21,15 @@ export default function CardsView() {
   };
 
   return (
-    <>
-      <Container
-        maxWidth="xl"
-        style={{ display: "flex", height: "calc(100vh - 112px)" }}
-      >
-        <DragDropComponent onRemove={onRemove} />
-        <Content />
-      </Container>
+    <Container
+      maxWidth="xl"
+      style={{ display: "flex", height: "calc(100vh - 112px)" }}
+    >
+      <DragDropComponent onRemove={onRemove} />
+      <Content />
       <RemoveDialog open={dialog} onClose={onClose} data={data} />
       <InnerSideDial onRemoveItems={onRemove} />
-    </>
+    </Container>
   );
 }
 

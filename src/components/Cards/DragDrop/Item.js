@@ -1,43 +1,23 @@
 import React, { useCallback } from "react";
-
 import { Draggable } from "react-beautiful-dnd";
 
-import Title from "components/Common/Title";
+import { useDispatch } from "react-redux";
+import { openCardContent } from "actions/cardsActions";
+
 import DragHandleIcon from "@material-ui/icons/DragHandle";
-
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import { useDispatch, useSelector } from "react-redux";
-import * as CardsService from "services/CardsService";
-import { updateItem, openCardContent } from "actions/cardsActions";
 import ItemCheckbox from "components/Cards/DragDrop/ItemComponent/ItemCheckbox";
-import ItemInfo from "components/Cards/DragDrop/ItemComponent/ItemInfo";
 
-export default function DndItem({ item, index, cardID }) {
+export default function DndItem({ item, index, info, title }) {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.authReducer.token);
-  const isOpen = useSelector((state) => state.cardsReducer.isContentOpen);
-  const onItemChange = (element, type) => {
-    CardsService.updateItem(cardID, item._id, type, element, token);
-    dispatch(
-      updateItem({
-        itemID: item._id,
-        cardID: cardID,
-        [type]: element
-      })
-    );
 
-    if (isOpen && type === "title") {
-      const elem = document.querySelector(
-        `.card-item-content .title-component p`
-      );
-      elem.textContent = element;
-    }
-  };
-
-  const openItem = useCallback(() => {
-    dispatch(openCardContent({ item }));
-  }, [item, dispatch]);
+  const openItem = useCallback(
+    (e) => {
+      if (e.target.classList.contains("card-item-container")) {
+        dispatch(openCardContent({ item }));
+      }
+    },
+    [item, dispatch]
+  );
 
   const getItemStyle = (draggableStyle, isOver) => {
     return {
@@ -57,23 +37,19 @@ export default function DndItem({ item, index, cardID }) {
             provided.draggableProps.style,
             snapshot.isDragging
           )}
-          className={`${"card-item"}`}
+          className="card-item"
+          onClick={openItem}
         >
-          <div className="flex align-center space-between">
+          <div className="flex align-center space-between card-item-container">
             <div className="flex align-center">
               <div {...provided.dragHandleProps} style={{ display: "flex" }}>
                 <DragHandleIcon />
               </div>
               <ItemCheckbox item={item} />
-              <Title title={item.title} onTitleChange={onItemChange} />
+              {title}
             </div>
             <div className="flex">
-              <ListItem className="expand-button">
-                <ItemInfo status={item.status} priority={item.priority} />
-              </ListItem>
-              <ListItem button onClick={openItem} className="expand-button">
-                <ChevronRight />
-              </ListItem>
+              <div className="card-item-icons">{info}</div>
             </div>
           </div>
         </div>

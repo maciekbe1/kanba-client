@@ -19,18 +19,22 @@
     background: inherit;
     border: 1px solid rgb(204, 204, 204);
     transition: margin 0.15s ease-in-out 0s;
-    .expand-button {
-      padding: 5px;
-      border-radius: 50%;
-      width: auto;
-      height: min-content;
-    }
-    .item-info-container {
-      display: flex;
-      .item-icon {
-        color: #fff;
-        width: 24px;
-        height: 24px;
+    .card-item-container {
+      cursor: pointer;
+      .card-item-icons {
+        padding: 5px;
+        border-radius: 50%;
+        width: auto;
+        height: min-content;
+      }
+      .item-info-container {
+        display: flex;
+        margin-right: 10px;
+        .item-icon {
+          color: #fff;
+          width: 24px;
+          height: 24px;
+        }
       }
     }
   }
