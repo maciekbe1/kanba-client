@@ -83,7 +83,11 @@ export default function CreateItem({ setData, error, message }) {
                 isSearchable={false}
                 isClearable
                 styles={{
-                  menuPortal: (base) => ({ ...base, zIndex: 9999 })
+                  menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  option: (provided, state) => ({
+                    ...provided,
+                    color: "#000"
+                  })
                 }}
                 menuPortalTarget={document.body}
               />
@@ -98,7 +102,13 @@ export default function CreateItem({ setData, error, message }) {
                 placeholder={"Priorytet"}
                 isSearchable={false}
                 isClearable
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                styles={{
+                  menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  option: (provided, state) => ({
+                    ...provided,
+                    color: "#000"
+                  })
+                }}
                 menuPortalTarget={document.body}
               />
             </FormControl>
