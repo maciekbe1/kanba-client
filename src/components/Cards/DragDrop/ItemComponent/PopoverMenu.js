@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -8,9 +8,11 @@ import { isNil } from "lodash";
 
 export default function PopoverMenu({ array, elem, onItemChange, type }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [element, setElement] = useState(
-    isNil(elem) ? { value: 0, label: "Brak" } : elem
-  );
+  const [element, setElement] = useState({ value: 0, label: "Brak" });
+
+  useEffect(() => {
+    setElement(isNil(elem) ? { value: 0, label: "Brak" } : elem);
+  }, [elem, setElement]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,7 +34,7 @@ export default function PopoverMenu({ array, elem, onItemChange, type }) {
               : ItemHelper.priorityButtonStyler(element)
           }
         >
-          {element.label}
+          {element?.label}
         </StatusButton>
       </div>
       <Menu
@@ -51,7 +53,7 @@ export default function PopoverMenu({ array, elem, onItemChange, type }) {
               key={element.value}
               onClick={() => elementChange(element)}
             >
-              {element.label}
+              {element?.label}
             </MenuItem>
           );
         })}

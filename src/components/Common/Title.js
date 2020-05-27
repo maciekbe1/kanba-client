@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
 import { Done, Clear } from "@material-ui/icons";
 import { cloneDeep } from "lodash";
 
@@ -9,35 +8,36 @@ export default function Title({ title, onTitleChange }) {
   const [value, setValue] = useState();
   const [editable, setEditable] = useState(false);
 
-  const cardTitle = useRef();
+  const ref = useRef();
 
   useEffect(() => {
-    setValue(cardTitle.current.textContent);
-  }, []);
+    setValue(title);
+  }, [title]);
 
-  useOutsideEvent(cardTitle);
+  useOutsideEvent(ref);
 
   const onMouseDown = (e) => {
     e.stopPropagation();
-    cardTitle.current.contentEditable = true;
-    cardTitle.current.focus();
+    ref.current.contentEditable = true;
+    ref.current.focus();
+    setValue(ref.current.textContent);
     setEditable(true);
   };
 
   const onKeyPress = (e) => {
     if (e.key === "Enter") {
-      cardTitle.current.blur();
+      ref.current.blur();
     }
   };
 
   const onBlur = () => {
     setEditable(false);
-    if (cardTitle.current.textContent.length === 0) {
-      cardTitle.current.textContent = cloneDeep(value);
+    if (ref.current.textContent.length === 0) {
+      ref.current.textContent = cloneDeep(value);
     }
-    if (cardTitle.current.textContent !== value) {
-      onTitleChange(cardTitle.current.textContent, "title");
-      setValue(cardTitle.current.textContent);
+    if (ref.current.textContent !== value) {
+      onTitleChange(ref.current.textContent, "title");
+      setValue(ref.current.textContent);
     }
   };
 
@@ -48,20 +48,20 @@ export default function Title({ title, onTitleChange }) {
   };
 
   const onClikcAccept = () => {
-    cardTitle.current.blur();
+    ref.current.blur();
   };
 
   const onClikcDiscard = () => {
-    cardTitle.current.textContent = cloneDeep(value);
-    cardTitle.current.contentEditable = false;
+    ref.current.textContent = cloneDeep(value);
+    ref.current.contentEditable = false;
     setEditable(false);
-    cardTitle.current.blur();
+    ref.current.blur();
   };
 
   return (
-    <Box position="relative" className="title-component">
+    <div className="title-component">
       <Typography
-        ref={cardTitle}
+        ref={ref}
         onMouseDown={onMouseDown}
         onKeyPress={onKeyPress}
         tabIndex="0"
@@ -72,13 +72,7 @@ export default function Title({ title, onTitleChange }) {
         {title}
       </Typography>
       {editable ? (
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          position="absolute"
-          right="0px"
-          className="icons-wrapper"
-        >
+        <div className="icons-wrapper">
           <Button
             size="small"
             onMouseDown={onClikcAccept}
@@ -103,9 +97,9 @@ export default function Title({ title, onTitleChange }) {
           >
             <Clear className="icon" />
           </Button>
-        </Box>
+        </div>
       ) : null}
-    </Box>
+    </div>
   );
 }
 

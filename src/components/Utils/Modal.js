@@ -23,7 +23,7 @@ function SimpleModal({ onDialogAccept, setError, activator, children }) {
       <Dialog
         onClose={close}
         open={open}
-        maxWidth="xl"
+        maxWidth="md"
         className="modal-general"
       >
         <DialogContent>{children}</DialogContent>

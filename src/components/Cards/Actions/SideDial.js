@@ -8,7 +8,12 @@ import * as CardsService from "services/CardsService";
 import * as CardsHelper from "helper/CardsHelper";
 import { Typography } from "@material-ui/core";
 import SimpleModal from "components/Utils/Modal";
-import { setCards, setSelectedItems, createCard } from "actions/cardsActions";
+import {
+  setCards,
+  setSelectedItems,
+  createCard,
+  closeCardContent
+} from "actions/cardsActions";
 import CreateCard from "components/Cards/Actions/CreateCard";
 
 export default function SideDial({ onRemoveItems }) {
@@ -17,6 +22,7 @@ export default function SideDial({ onRemoveItems }) {
   const token = useSelector((state) => state.authReducer.token);
   const cards = useSelector((state) => state.cardsReducer.cardsState);
   const userID = useSelector((state) => state.authReducer.data._id);
+  const content = useSelector((state) => state.cardsReducer.itemContentData);
 
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -30,6 +36,9 @@ export default function SideDial({ onRemoveItems }) {
       remove: () => {
         const newCards = CardsHelper.removeSelectedItems(cards, selectedItems);
         const selected = selectedItems.map((item) => {
+          if (item._id === content._id) {
+            dispatch(closeCardContent());
+          }
           return {
             itemID: item._id,
             cardID: item.cardID

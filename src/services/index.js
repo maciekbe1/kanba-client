@@ -9,3 +9,6 @@ export const isMobileDevice = () => {
     navigator.userAgent.indexOf("IEMobile") !== -1
   );
 };
+export const useQuery = (useLocation) => {
+  return new URLSearchParams(useLocation().search);
+};
