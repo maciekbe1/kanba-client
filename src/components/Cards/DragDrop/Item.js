@@ -6,13 +6,17 @@ import { openCardContent } from "actions/cardsActions";
 
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import ItemCheckbox from "components/Cards/DragDrop/ItemComponent/ItemCheckbox";
+import ItemInfo from "components/Cards/DragDrop/ItemComponent/ItemInfo";
 
-export default function DndItem({ item, index, info, title }) {
+export default function DndItem({ item, index }) {
   const dispatch = useDispatch();
 
   const openItem = useCallback(
     (e) => {
-      if (e.target.classList.contains("card-item-container")) {
+      if (
+        e.target.classList.contains("card-item-container") ||
+        e.target.classList.contains("item-title-text")
+      ) {
         dispatch(openCardContent({ item }));
       }
     },
@@ -22,7 +26,7 @@ export default function DndItem({ item, index, info, title }) {
   const getItemStyle = (draggableStyle, isOver) => {
     return {
       padding: "0 0 0 3px",
-      background: isOver ? "rgb(239, 242, 245)" : "",
+      background: isOver ? "#ccc" : "",
       ...draggableStyle
     };
   };
@@ -46,10 +50,12 @@ export default function DndItem({ item, index, info, title }) {
                 <DragHandleIcon />
               </div>
               <ItemCheckbox item={item} />
-              {title}
+              <span className="item-title-text">{item.title}</span>
             </div>
             <div className="flex">
-              <div className="card-item-icons">{info}</div>
+              <div className="card-item-icons">
+                <ItemInfo status={item.status} priority={item.priority} />
+              </div>
             </div>
           </div>
         </div>

@@ -87,7 +87,7 @@ export default function DragDropComponent({ onRemove }) {
       result.destination.droppableId === result.source.droppableId
     ) {
       try {
-        CardsService.updateCardPosition(result, token);
+        CardsService.cardItemChange(result, token);
         const newCards = CardsHelper.cardItemChange(newData, result);
         dispatch(
           setCards({
@@ -153,7 +153,14 @@ export default function DragDropComponent({ onRemove }) {
             ref={provided.innerRef}
             style={{ flex: "1 1 auto", overflow: "auto" }}
           >
-            <InnerCard cards={cards} onRemove={onRemove} />
+            {cards.map((card, index) => (
+              <InnerCard
+                card={JSON.stringify(card)}
+                key={card._id}
+                index={index}
+                onRemove={onRemove}
+              />
+            ))}
             {provided.placeholder}
           </div>
         )}
@@ -161,8 +168,6 @@ export default function DragDropComponent({ onRemove }) {
     </DragDropContext>
   );
 }
-const InnerCard = memo(function InnerCard({ cards, onRemove }) {
-  return cards.map((card, index) => (
-    <Card card={card} key={card._id} index={index} onRemove={onRemove} />
-  ));
+const InnerCard = memo(function InnerCard({ card, onRemove, index }) {
+  return <Card card={JSON.parse(card)} index={index} onRemove={onRemove} />;
 });

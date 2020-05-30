@@ -7,7 +7,7 @@ export const cardItemChange = (cards, result) => {
     result.splice(endIndex, 0, removed);
     return result;
   };
-  cards.map(card => {
+  cards.map((card) => {
     const data = reorder(
       card.list,
       result.source.index,
@@ -22,10 +22,10 @@ export const cardItemChange = (cards, result) => {
 };
 
 export const cardItemShared = (cards, result) => {
-  let start = find(cards, o => {
+  let start = find(cards, (o) => {
     return o._id === result.source.droppableId;
   });
-  let end = find(cards, o => {
+  let end = find(cards, (o) => {
     return o._id === result.destination.droppableId;
   });
   const [removed] = start.list.splice(result.source.index, 1);
@@ -42,11 +42,11 @@ export const cardChange = (cards, result) => {
 
 export const cardItemsSelectedChange = (cards, result, selected) => {
   const destinationCard = cards.find(
-    card => card._id === result.destination.droppableId
+    (card) => card._id === result.destination.droppableId
   );
 
-  cards.forEach(card => {
-    selected.forEach(s => {
+  cards.forEach((card) => {
+    selected.forEach((s) => {
       remove(card.list, ["_id", s._id]);
       s.cardID = result.destination.droppableId;
     });
@@ -58,8 +58,8 @@ export const cardItemsSelectedChange = (cards, result, selected) => {
 };
 
 export const removeSelectedItems = (cards, selectedItems) => {
-  cards.forEach(card => {
-    selectedItems.forEach(s => {
+  cards.forEach((card) => {
+    selectedItems.forEach((s) => {
       remove(card.list, ["_id", s._id]);
     });
   });
