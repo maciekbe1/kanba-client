@@ -6,17 +6,25 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 
-export default function Navbar({ card, index, onRemove, provided }) {
+export default function Navbar({
+  cardID,
+  listLength,
+  cardTitle,
+  cardExpand,
+  index,
+  onRemove,
+  provided
+}) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer);
 
   const onRemoveCard = () => {
     onRemove({
       dialogTitle: "Napewno chcesz usunac karte?",
-      dialogText: card.title,
+      dialogText: cardTitle,
       remove: () => {
-        CardsService.removeCard(card._id, user.data._id, user.token);
-        dispatch(removeCard({ cardID: card._id }));
+        CardsService.removeCard(cardID, user.data._id, user.token);
+        dispatch(removeCard({ cardID }));
       }
     });
   };
@@ -24,7 +32,7 @@ export default function Navbar({ card, index, onRemove, provided }) {
   const onTitleChange = (title) => {
     dispatch(
       updateCard({
-        cardID: card._id,
+        cardID,
         title: title,
         token: user.token,
         index
@@ -35,8 +43,8 @@ export default function Navbar({ card, index, onRemove, provided }) {
   const onToggle = () => {
     dispatch(
       updateCard({
-        cardID: card._id,
-        expand: !card.expand,
+        cardID,
+        expand: !cardExpand,
         token: user.token,
         index
       })
@@ -49,14 +57,14 @@ export default function Navbar({ card, index, onRemove, provided }) {
         <div {...provided.dragHandleProps} style={{ display: "flex" }}>
           <DragIndicatorIcon />
         </div>
-        <Title title={card.title} onTitleChange={onTitleChange} />
+        <Title title={cardTitle} onTitleChange={onTitleChange} />
       </div>
       <Actions
-        expand={card.expand}
-        listLength={card.list.length}
+        expand={cardExpand}
+        listLength={listLength}
         onRemoveCard={onRemoveCard}
         onToggle={onToggle}
-        cardID={card._id}
+        cardID={cardID}
       />
     </div>
   );

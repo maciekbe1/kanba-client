@@ -22,13 +22,16 @@ export default function DndCard({ card, index, onRemove }) {
         >
           <CardContent>
             <Navbar
-              card={card}
+              cardID={card._id}
+              cardTitle={card.title}
+              cardExpand={card.expand}
+              listLength={card.list.length}
               index={index}
               onRemove={onRemove}
               provided={provided}
             />
             <Collapse in={card.expand} timeout="auto" unmountOnExit>
-              <List card={card} />
+              <InnerList card={JSON.stringify(card)} />
             </Collapse>
           </CardContent>
         </Card>
@@ -36,3 +39,6 @@ export default function DndCard({ card, index, onRemove }) {
     </Draggable>
   );
 }
+const InnerList = React.memo(function InnerList({ card }) {
+  return <List card={JSON.parse(card)} />;
+});

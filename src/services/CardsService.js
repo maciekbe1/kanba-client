@@ -24,7 +24,7 @@ export const createItem = (cardID, item, token) => {
   );
 };
 
-export const updateCardPosition = (result, token) => {
+export const cardItemChange = (result, token) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
     {
