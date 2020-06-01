@@ -151,7 +151,11 @@ export default function DragDropComponent({ onRemove }) {
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ flex: "1 1 auto", overflow: "auto" }}
+            style={{
+              flex: "1 1 auto",
+              overflowY: "auto",
+              height: "calc(100vh - 112px)"
+            }}
           >
             {cards.map((card, index) => (
               <InnerCard

@@ -21,10 +21,7 @@ export default function CardsView() {
   };
 
   return (
-    <Container
-      maxWidth="xl"
-      style={{ display: "flex", height: "calc(100vh - 112px)" }}
-    >
+    <Container maxWidth="xl" style={{ display: "flex" }}>
       <DragDropComponent onRemove={onRemove} />
       <Content />
       <RemoveDialog open={dialog} onClose={onClose} data={data} />
