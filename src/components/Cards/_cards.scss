@@ -92,6 +92,9 @@
       background: rgb(239, 242, 245);
     }
   }
+  .card-item-selected {
+    background: rgb(239, 242, 245);
+  }
   .card-description-textbox {
     &:hover {
       background: rgb(239, 242, 245);
@@ -103,6 +106,9 @@
     &:hover {
       background: #616161;
     }
+  }
+  .card-item-selected {
+    background: #616161;
   }
   .card-description-textbox {
     &:hover {
