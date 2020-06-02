@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Options from "components/Cards/DragDrop/ItemComponent/Options";
+import Options from "components/Cards/Content/Options";
 import Card from "@material-ui/core/Card";
-import Description from "components/Cards/DragDrop/ItemComponent/Description";
+import Description from "components/Cards/Content/Description";
 
 import { Resizable } from "re-resizable";
 import Title from "components/Common/Title";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import Attachments from "components/Cards/DragDrop/ItemComponent/Attachments";
+import Attachments from "components/Cards/Content/Attachments";
 import { useSelector, useDispatch } from "react-redux";
 import * as CardsService from "services/CardsService";
 import { updateItem, closeCardContent } from "actions/cardsActions";
