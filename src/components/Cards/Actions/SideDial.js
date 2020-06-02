@@ -36,7 +36,7 @@ export default function SideDial({ onRemoveItems }) {
       remove: () => {
         const newCards = CardsHelper.removeSelectedItems(cards, selectedItems);
         const selected = selectedItems.map((item) => {
-          if (item._id === content._id) {
+          if (item._id === content?._id) {
             dispatch(closeCardContent());
           }
           return {
