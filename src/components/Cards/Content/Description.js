@@ -51,7 +51,10 @@ export default function Description({ content, cardID, itemID }) {
       <p className="card-description-title">Opis</p>
       {edit ? (
         <>
-          <Editor content={editorContent} setEditorContent={setEditorContent} />
+          <Editor
+            content={editorContent ? editorContent : ""}
+            setEditorContent={setEditorContent}
+          />
           <EditorButtons save={onSaveContent} cancel={onCancelContent} />
         </>
       ) : (

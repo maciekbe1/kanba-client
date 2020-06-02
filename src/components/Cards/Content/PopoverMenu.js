@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import StatusButton from "components/Cards/DragDrop/ItemComponent/StatusButton";
+import StatusButton from "components/Cards/Content/StatusButton";
 import ItemHelper from "helper/ItemHelper";
 import { isNil } from "lodash";
 
