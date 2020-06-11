@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import DragDropComponent from "components/Cards/DragDrop/DragDropComponent";
+import RemoveDialog from "components/Cards/CardDialogs/RemoveDialog";
+import SideDial from "components/Cards/CardDialogs/SideDial";
+import ItemContent from "components/Cards/ItemContent";
 
-import RemoveDialog from "components/Cards/RemoveDialog";
 import Container from "@material-ui/core/Container";
-import SideDial from "components/Cards/Actions/SideDial";
-import Content from "components/Cards/Content";
 
 export default function CardsView() {
   const [dialog, setDialog] = useState(false);
@@ -23,7 +23,7 @@ export default function CardsView() {
   return (
     <Container maxWidth="xl" style={{ display: "flex" }}>
       <DragDropComponent onRemove={onRemove} />
-      <Content />
+      <ItemContent />
       <RemoveDialog open={dialog} onClose={onClose} data={data} />
       <InnerSideDial onRemoveItems={onRemove} />
     </Container>

@@ -4,8 +4,8 @@ import EditorButtons from "components/Editor/EditorButtons";
 
 import parse from "react-html-parser";
 
-import { useSelector, useDispatch } from "react-redux";
-import { updateItem } from "actions/cardsActions";
+import { useDispatch } from "react-redux";
+import { updateItem } from "store/actions/cardsActions";
 import * as CardsService from "services/CardsService";
 
 export default function Description({ content, cardID, itemID }) {
@@ -13,7 +13,6 @@ export default function Description({ content, cardID, itemID }) {
   const [editorContent, setEditorContent] = useState("");
   const [memoContent, setMemoContent] = useState();
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.authReducer.token);
 
   useEffect(() => {
     setEditorContent(content);
@@ -24,7 +23,7 @@ export default function Description({ content, cardID, itemID }) {
     setEdit(!edit);
     if (editorContent !== memoContent) {
       setMemoContent(editorContent);
-      CardsService.updateItem(cardID, itemID, "content", editorContent, token);
+      CardsService.updateItem(cardID, itemID, "content", editorContent);
       dispatch(
         updateItem({
           itemID: itemID,

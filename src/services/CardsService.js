@@ -1,30 +1,43 @@
-import { request } from "api/API";
+import { request, sendFile } from "api/API";
+import store from "store/store";
 
-export const getCards = (userID, token) => {
+export const getCards = (userID) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/get-user-cards`,
     { userID },
-    token
+    store.getState().authReducer.token
   );
 };
 
-export const createCard = (data, token) => {
+export const createCard = (data) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/create-card`,
     data,
-    token
+    store.getState().authReducer.token
   );
 };
 
-export const createItem = (cardID, item, token) => {
+export const createItem = (cardID, item) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
     { cardID, item },
-    token
+    store.getState().authReducer.token
   );
 };
 
-export const cardItemChange = (result, token) => {
+export const updateCard = (card, cardID, type, name) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
+    {
+      card: { [name]: card[name] },
+      cardID,
+      type
+    },
+    store.getState().authReducer.token
+  );
+};
+
+export const cardItemChange = (result) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
     {
@@ -35,10 +48,10 @@ export const cardItemChange = (result, token) => {
       },
       type: "inside_list"
     },
-    token
+    store.getState().authReducer.token
   );
 };
-export const updateItem = (cardID, itemID, key, value, token) => {
+export const updateItem = (cardID, itemID, key, value) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-item`,
     {
@@ -46,10 +59,10 @@ export const updateItem = (cardID, itemID, key, value, token) => {
       itemID,
       item: { [key]: value }
     },
-    token
+    store.getState().authReducer.token
   );
 };
-export const cardItemShared = (start, end, result, token) => {
+export const cardItemShared = (start, end, result) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
     {
@@ -61,27 +74,22 @@ export const cardItemShared = (start, end, result, token) => {
       },
       type: "all_lists"
     },
-    token
+    store.getState().authReducer.token
   );
 };
 
-export const removeCardItem = (cardID, itemID, token) => {
+export const removeCardItem = (cardID, itemID) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/remove-card-item`,
     {
       cardID,
       itemID
     },
-    token
+    store.getState().authReducer.token
   );
 };
 
-export const updateManyItems = (
-  destination,
-  selectedItems,
-  position,
-  token
-) => {
+export const updateManyItems = (destination, selectedItems, position) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-many-items`,
     {
@@ -89,22 +97,38 @@ export const updateManyItems = (
       selectedItems,
       position
     },
-    token
+    store.getState().authReducer.token
   );
 };
 
-export const removeSelectedItems = (token, selected) => {
+export const removeSelectedItems = (selected) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/remove-many-items`,
     { selected },
-    token
+    store.getState().authReducer.token
   );
 };
 
-export const removeCard = (cardID, userID, token) => {
+export const removeCard = (cardID, userID) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/remove-card`,
     { cardID, userID },
-    token
+    store.getState().authReducer.token
+  );
+};
+
+export const uploadFileToItem = (formData) => {
+  return sendFile(
+    `${process.env.REACT_APP_SERVER}/api/cards/upload-file`,
+    formData,
+    store.getState().authReducer.token
+  );
+};
+
+export const removeFileFromItem = (fileName, cardID, itemID, fileID) => {
+  return request(
+    `${process.env.REACT_APP_SERVER}/api/cards/remove-file`,
+    { fileName, cardID, itemID, fileID },
+    store.getState().authReducer.token
   );
 };

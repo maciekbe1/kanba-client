@@ -1,7 +1,6 @@
 import { remove, find, set } from "lodash";
 import Card from "model/Card";
-import { request } from "api/API";
-
+import Content from "model/Content";
 const INITIAL_DATA = {
   isCardsLoaded: false,
   selectedItems: [],
@@ -38,8 +37,7 @@ export default (state = INITIAL_DATA, action) => {
 
     case "CREATE_ITEM": {
       find(state.cardsState, { _id: action.payload.cardID }).list.push({
-        _id: action.payload.itemID,
-        ...action.payload.values
+        ...action.payload
       });
       return {
         ...state,
@@ -77,21 +75,7 @@ export default (state = INITIAL_DATA, action) => {
       const name = Object.keys(action.payload)[1];
       const o = state.cardsState[action.payload.index];
       o[name] = action.payload[name];
-      request(
-        `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
-        {
-          card: { [name]: action.payload[name] },
-          cardID: action.payload.cardID,
-          type: action.payload.type
-        },
-        action.payload.token
-      )
-        .then(() => {
-          return;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+
       return {
         ...state,
         cardsState: new Card(state.cardsState).cards
@@ -125,6 +109,37 @@ export default (state = INITIAL_DATA, action) => {
         ...state,
         isContentOpen: false,
         itemContentData: null
+      };
+    }
+
+    case "ADD_ATTACHMENT": {
+      find(state.cardsState, {
+        _id: action.payload.cardID
+      }).list[0].attachments.push(action.payload.file);
+      state.itemContentData.attachments.push(action.payload.file);
+      return {
+        ...state,
+        cardsState: new Card(state.cardsState).cards,
+        itemContentData: new Content(state.itemContentData).data
+      };
+    }
+
+    case "REMOVE_ATTACHMENT": {
+      remove(
+        find(state.cardsState, {
+          _id: action.payload.cardID
+        }).list[0].attachments,
+        (file) => file._id === action.payload.fileID
+      );
+      remove(
+        state.itemContentData.attachments,
+        (file) => file._id === action.payload.fileID
+      );
+
+      return {
+        ...state,
+        cardsState: new Card(state.cardsState).cards,
+        itemContentData: new Content(state.itemContentData).data
       };
     }
     default:

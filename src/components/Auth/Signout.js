@@ -1,12 +1,12 @@
 import React from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { GoogleLogout } from "react-google-login";
-import { signOut } from "actions/UserActions";
+import { signOut } from "store/actions/UserActions";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Signout({ setAnchorEl }) {
   const dispatch = useDispatch();
-  const loginType = useSelector(state => state.authReducer.byGoogle);
+  const loginType = useSelector((state) => state.authReducer.byGoogle);
   const logoutHandler = () => {
     setAnchorEl(null);
     dispatch(signOut());

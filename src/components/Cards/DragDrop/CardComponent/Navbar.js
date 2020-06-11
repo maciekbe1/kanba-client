@@ -1,7 +1,7 @@
 import React from "react";
 import Title from "components/Common/Title";
-import Actions from "components/Cards/DragDrop/CardComponent/Actions";
-import { removeCard, updateCard } from "actions/cardsActions";
+import Actions from "components/Cards/DragDrop/CardComponent/CardMenu";
+import { removeCard, updateCard } from "store/actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
@@ -23,7 +23,7 @@ export default function Navbar({
       dialogTitle: "Napewno chcesz usunac karte?",
       dialogText: cardTitle,
       remove: () => {
-        CardsService.removeCard(cardID, user.data._id, user.token);
+        CardsService.removeCard(cardID, user.data._id);
         dispatch(removeCard({ cardID }));
       }
     });

@@ -1,12 +1,14 @@
 import React from "react";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   Slide,
   DialogTitle
 } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import ClearIcon from "@material-ui/icons/Clear";
+import CheckIcon from "@material-ui/icons/Check";
 export default function DialogWindow({
   open,
   onDialogClose,
@@ -26,12 +28,20 @@ export default function DialogWindow({
       <DialogTitle id="alert-dialog-slide-title">{dialogTitle}</DialogTitle>
       <DialogContent>{dialogText}</DialogContent>
       <DialogActions>
-        <Button onClick={onDialogClose} color="primary" data-name="selected">
-          Nie
-        </Button>
-        <Button onClick={onDialogAccept} color="secondary" data-name="selected">
-          Tak
-        </Button>
+        <IconButton
+          onClick={onDialogClose}
+          color="secondary"
+          aria-label="reject"
+        >
+          <ClearIcon />
+        </IconButton>
+        <IconButton
+          onClick={onDialogAccept}
+          color="primary"
+          aria-label="accept"
+        >
+          <CheckIcon />
+        </IconButton>
       </DialogActions>
     </Dialog>
   );
