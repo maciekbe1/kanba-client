@@ -1,24 +1,26 @@
 import React, { useState } from "react";
-import Options from "components/Cards/Content/Options";
-import Card from "@material-ui/core/Card";
-import Description from "components/Cards/Content/Description";
 
 import { Resizable } from "re-resizable";
-import Title from "components/Common/Title";
+import Card from "@material-ui/core/Card";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import Attachments from "components/Cards/Content/Attachments";
+
 import { useSelector, useDispatch } from "react-redux";
-import * as CardsService from "services/CardsService";
 import {
   updateItem,
-  closeCardContent,
+  closeItemContent,
   addAttachment,
   removeAttachment
 } from "store/actions/cardsActions";
+import * as CardsService from "services/CardsService";
 
-export default function Content() {
+import Title from "components/Common/Title";
+import Description from "components/Cards/CardItemContent/ItemDescription";
+import Attachments from "components/Cards/CardItemContent/ItemAttachments";
+import Options from "components/Cards/CardItemContent/ItemOptions";
+
+export default function ItemContent() {
   const isOpen = useSelector((state) => state.cardsReducer.isContentOpen);
   return isOpen ? <ContentView /> : null;
 }
@@ -41,7 +43,7 @@ function ContentView() {
   };
 
   const onClose = () => {
-    dispatch(closeCardContent());
+    dispatch(closeItemContent());
   };
   const onUpload = async (e, input) => {
     const upload = e.target.files[0];

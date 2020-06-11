@@ -7,7 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import moment from "moment";
 import { STATUSES, PRIORITES } from "constants/cards";
 
-import PopoverMenu from "components/Cards/Content/PopoverMenu";
+import PopoverMenu from "components/Cards/CardItemContent/ItemPopoverMenu";
 import ItemHelper from "helper/ItemHelper";
 
 export default function Options({ status, date, priority, onItemChange }) {

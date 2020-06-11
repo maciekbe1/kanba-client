@@ -12,7 +12,7 @@ import {
   setCards,
   setSelectedItems,
   createCard,
-  closeCardContent
+  closeItemContent
 } from "store/actions/cardsActions";
 import CreateCard from "components/Cards/CardDialogs/CreateCardDialog";
 
@@ -36,7 +36,7 @@ export default function SideDial({ onRemoveItems }) {
         const newCards = CardsHelper.removeSelectedItems(cards, selectedItems);
         const selected = selectedItems.map((item) => {
           if (item._id === content?._id) {
-            dispatch(closeCardContent());
+            dispatch(closeItemContent());
           }
           return {
             itemID: item._id,

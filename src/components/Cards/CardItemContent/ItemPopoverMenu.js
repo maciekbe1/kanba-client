@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import StatusButton from "components/Cards/Content/StatusButton";
-import ItemHelper from "helper/ItemHelper";
+
 import { isNil } from "lodash";
+import ItemHelper from "helper/ItemHelper";
+
+import StatusButton from "components/Cards/CardItemContent/ItemStatusButton";
 
 export default function PopoverMenu({ array, elem, onItemChange, type }) {
   const [anchorEl, setAnchorEl] = React.useState(null);

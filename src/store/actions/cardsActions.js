@@ -49,12 +49,12 @@ export const setCardsLoaded = (payload) => ({
   payload
 });
 
-export const openCardContent = (payload) => ({
+export const openItemContent = (payload) => ({
   type: "OPEN_CARD_CONTENT",
   payload
 });
 
-export const closeCardContent = (payload) => ({
+export const closeItemContent = (payload) => ({
   type: "CLOSE_CARD_CONTENT",
   payload
 });
