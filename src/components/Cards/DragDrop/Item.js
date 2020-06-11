@@ -2,30 +2,20 @@ import React, { useCallback } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { useDispatch, useSelector } from "react-redux";
-import { openCardContent } from "actions/cardsActions";
+import { openCardContent } from "store/actions/cardsActions";
 
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import ItemCheckbox from "components/Cards/DragDrop/ItemComponent/ItemCheckbox";
 import ItemInfo from "components/Cards/DragDrop/ItemComponent/ItemInfo";
 
+const selectedItemSelector = (contentID, itemID) => {
+  return contentID?._id === itemID;
+};
 export default function DndItem({ item, index }) {
-  const selected = useSelector((state) => state.cardsReducer.itemContentData);
-  return (
-    <ItemComponent
-      item={item}
-      index={index}
-      selected={selected?._id === item._id}
-    />
+  const selected = useSelector((state) =>
+    selectedItemSelector(state.cardsReducer.itemContentData, item._id)
   );
-}
-
-const ItemComponent = React.memo(function ItemComponent({
-  item,
-  index,
-  selected
-}) {
   const dispatch = useDispatch();
-
   const openItem = useCallback(
     (e) => {
       if (
@@ -77,4 +67,4 @@ const ItemComponent = React.memo(function ItemComponent({
       )}
     </Draggable>
   );
-});
+}

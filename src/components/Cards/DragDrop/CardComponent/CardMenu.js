@@ -6,12 +6,13 @@ import IconButton from "@material-ui/core/IconButton";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
-import CreateItem from "components/Cards/Actions/CreateItem";
+import CreateItem from "components/Cards/CardDialogs/CreateItemDialog";
 import SimpleModal from "components/Utils/Modal";
 import * as CardsService from "services/CardsService";
-import { useSelector, useDispatch } from "react-redux";
-import { createItem } from "actions/cardsActions";
-import { CARD_COLLAPSED, CARD_EXPANDED } from "constants/index";
+import { useDispatch } from "react-redux";
+import { createItem } from "store/actions/cardsActions";
+import { CARD_COLLAPSED, CARD_EXPANDED } from "constants/cards";
+
 export default function Actions({
   expand,
   listLength,
@@ -19,28 +20,15 @@ export default function Actions({
   onToggle,
   cardID
 }) {
-  const token = useSelector((state) => state.authReducer.token);
   const [data, setData] = useState();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
 
   const createCardItem = async () => {
-    return await CardsService.createItem(cardID, data, token)
+    return await CardsService.createItem(cardID, data)
       .then((res) => {
-        dispatch(
-          createItem({
-            cardID: cardID,
-            values: {
-              title: data.title,
-              content: data.content,
-              cardID: cardID,
-              status: data.status,
-              priority: data.priority
-            },
-            itemID: res.data.id
-          })
-        );
+        dispatch(createItem(res.data.item));
         return true;
       })
       .catch((error) => {

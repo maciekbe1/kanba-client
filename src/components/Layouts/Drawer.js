@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import * as UserService from "services/UserService";
 import { useDispatch } from "react-redux";
-import { signOut } from "actions/UserActions";
+import { signOut } from "store/actions/UserActions";
 import { useSelector } from "react-redux";
-import { setTabValue, setTheme, setBar } from "actions/layoutActions";
+import { setTabValue, setTheme, setBar } from "store/actions/layoutActions";
 import { Link, useLocation } from "react-router-dom";
 import { findIndex } from "lodash";
 
@@ -34,7 +34,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Switch from "@material-ui/core/Switch";
 import Signout from "components/Auth/Signout";
-import { SESSION_MESSAGE } from "constants/index";
+import { SESSION_MESSAGE } from "constants/user";
 import Avatar from "@material-ui/core/Avatar";
 
 const drawerWidth = 200;

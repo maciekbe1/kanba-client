@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { setSelectedItems } from "actions/cardsActions";
+import { setSelectedItems } from "store/actions/cardsActions";
 import Checkbox from "@material-ui/core/Checkbox";
 import { useDispatch, useSelector } from "react-redux";
 

@@ -1,12 +1,18 @@
+import * as CardsService from "services/CardsService";
+
 export const setCards = ({ cards }) => ({
   type: "SET_CARDS_STATE",
   cardsState: cards
 });
 
-export const updateCard = (payload) => ({
-  type: "UPDATE_CARD",
-  payload
-});
+export const updateCard = (payload) => {
+  const name = Object.keys(payload)[1];
+  CardsService.updateCard(payload, payload.cardID, payload.type, name);
+  return {
+    type: "UPDATE_CARD",
+    payload
+  };
+};
 
 export const removeCard = ({ cardID }) => ({
   type: "REMOVE_CARD",
@@ -50,5 +56,15 @@ export const openCardContent = (payload) => ({
 
 export const closeCardContent = (payload) => ({
   type: "CLOSE_CARD_CONTENT",
+  payload
+});
+
+export const addAttachment = (payload) => ({
+  type: "ADD_ATTACHMENT",
+  payload
+});
+
+export const removeAttachment = (payload) => ({
+  type: "REMOVE_ATTACHMENT",
   payload
 });

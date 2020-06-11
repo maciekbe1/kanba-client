@@ -7,8 +7,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from "@material-ui/core/Grid";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { STATUSES } from "constants/index";
-import { PRIORITES } from "constants/index";
+import { STATUSES, PRIORITES } from "constants/cards";
 
 import Select from "react-select";
 

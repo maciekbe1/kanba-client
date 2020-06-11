@@ -1,47 +1,121 @@
-import React, { useState } from "react";
-import { useDropzone } from "react-dropzone";
-// import { useSelector } from "react-redux";
-// import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
 
-export default function Attachments() {
-  const [files, setFiles] = useState([]);
-  // const token = useSelector((state) => state.authReducer.token);
-  const { getRootProps, getInputProps } = useDropzone({
-    noKeyboard: true,
-    onDrop: (acceptedFiles) => {
-      // console.log(acceptedFiles);
-      // axios({
-      //   method: "POST",
-      //   url: `${process.env.REACT_APP_SERVER}/api/cards/upload`,
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //     "x-auth-token": token
-      //   },
-      //   data: { user: "1", card: "1", item: "1", files: acceptedFiles }
-      // })
-      //   .then((res) => console.log(res))
-      //   .catch((err) => console.log(err));
-      setFiles(acceptedFiles);
-    }
-  });
-  // const style = useMemo(
-  //   () => ({
-  //     ...(isDragActive ? activeStyle : {}),
-  //     ...(isDragAccept ? acceptStyle : {}),
-  //     ...(isDragReject ? rejectStyle : {})
-  //   }),
-  //   [isDragActive, isDragReject, isDragAccept]
-  // );
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import Badge from "@material-ui/core/Badge";
+import CancelIcon from "@material-ui/icons/Cancel";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+export default function Attachments({
+  onUpload,
+  onRemove,
+  attachments,
+  pending
+}) {
+  const input = useRef();
   return (
-    <div className="item-attachments-container">
-      <div {...getRootProps({ className: "dropzone" })}>
-        <input {...getInputProps()} />
-        dołącz plik
+    <div className="content-attachments-container">
+      <div>
+        <form>
+          <input type="file" onChange={(e) => onUpload(e, input)} ref={input} />
+          <Button
+            size="small"
+            variant="contained"
+            color="default"
+            startIcon={<CloudUploadIcon />}
+            onClick={() => input.current.click()}
+            disabled={pending}
+          >
+            Upload
+          </Button>
+        </form>
       </div>
-      <p className="card-description-title">załączniki</p>
-      {files.map((file, index) => {
-        return file.path;
-      })}
+      <div className="content-attachment-files">
+        {attachments?.map((file, i) => {
+          return (
+            <FileContent
+              key={i}
+              file={file}
+              onRemove={onRemove}
+              pending={pending}
+            />
+          );
+        })}
+        {pending ? <FileLoading /> : null}
+      </div>
     </div>
   );
+}
+
+const FileContent = ({ file, onRemove }) => {
+  const [hoverRef, isHovered] = useHover();
+  return (
+    <div className="badge-content" ref={hoverRef}>
+      <Badge
+        overlap="circle"
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        invisible={!isHovered}
+        badgeContent={
+          <CancelIcon
+            htmlColor="#f44336"
+            style={{
+              background: "#fff",
+              borderRadius: "50%",
+              cursor: "pointer"
+            }}
+            onClick={() => onRemove(file._id, file.storageName)}
+          />
+        }
+      >
+        {file.mimetype.includes("image") ? (
+          <Avatar variant="rounded" src={file.fileLocation}></Avatar>
+        ) : (
+          <Avatar variant="rounded">
+            <InsertDriveFileIcon />
+          </Avatar>
+        )}
+      </Badge>
+    </div>
+  );
+};
+
+const FileLoading = () => {
+  return (
+    <div className="badge-content">
+      <Avatar variant="rounded">
+        <CircularProgress color="secondary" />
+      </Avatar>
+    </div>
+  );
+};
+function useHover() {
+  const [value, setValue] = useState(false);
+
+  const ref = useRef(null);
+
+  const handleMouseOver = () => setValue(true);
+  const handleMouseOut = () => setValue(false);
+
+  useEffect(
+    () => {
+      const node = ref.current;
+      if (node) {
+        node.addEventListener("mouseover", handleMouseOver);
+        node.addEventListener("mouseout", handleMouseOut);
+
+        return () => {
+          node.removeEventListener("mouseover", handleMouseOver);
+          node.removeEventListener("mouseout", handleMouseOut);
+        };
+      }
+    },
+    [] // Recall only if ref changes
+  );
+
+  return [ref, value];
 }

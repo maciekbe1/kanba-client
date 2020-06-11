@@ -13,13 +13,12 @@ import {
   setSelectedItems,
   createCard,
   closeCardContent
-} from "actions/cardsActions";
-import CreateCard from "components/Cards/Actions/CreateCard";
+} from "store/actions/cardsActions";
+import CreateCard from "components/Cards/CardDialogs/CreateCardDialog";
 
 export default function SideDial({ onRemoveItems }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.authReducer.token);
   const cards = useSelector((state) => state.cardsReducer.cardsState);
   const userID = useSelector((state) => state.authReducer.data._id);
   const content = useSelector((state) => state.cardsReducer.itemContentData);
@@ -44,7 +43,7 @@ export default function SideDial({ onRemoveItems }) {
             cardID: item.cardID
           };
         });
-        CardsService.removeSelectedItems(token, selected);
+        CardsService.removeSelectedItems(selected);
         dispatch(setCards({ cards: newCards }));
         dispatch(setSelectedItems([]));
       },
@@ -56,7 +55,7 @@ export default function SideDial({ onRemoveItems }) {
   };
 
   const createCardHandle = async () => {
-    return await CardsService.createCard(data, token)
+    return await CardsService.createCard(data)
       .then((res) => {
         dispatch(createCard(res.data));
         return true;

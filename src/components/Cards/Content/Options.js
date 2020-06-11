@@ -5,7 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
 import moment from "moment";
-import { STATUSES, PRIORITES } from "constants/index";
+import { STATUSES, PRIORITES } from "constants/cards";
 
 import PopoverMenu from "components/Cards/Content/PopoverMenu";
 import ItemHelper from "helper/ItemHelper";

@@ -3,7 +3,7 @@ import DragDropComponent from "components/Cards/DragDrop/DragDropComponent";
 
 import RemoveDialog from "components/Cards/RemoveDialog";
 import Container from "@material-ui/core/Container";
-import SideDial from "components/Cards/Actions/SideDial";
+import SideDial from "components/Cards/CardDialogs/SideDial";
 import Content from "components/Cards/Content";
 
 export default function CardsView() {

@@ -2,17 +2,17 @@ import React from "react";
 import { GoogleLogin } from "react-google-login";
 import * as UserService from "services/UserService";
 import { useDispatch, useSelector } from "react-redux";
-import { signIn } from "actions/UserActions";
+import { signIn } from "store/actions/UserActions";
 
 export default function GoogleAuth() {
   const dispatch = useDispatch();
-  const isAuth = useSelector(state => state.authReducer.isAuth);
+  const isAuth = useSelector((state) => state.authReducer.isAuth);
 
-  const responseGoogle = response => {
+  const responseGoogle = (response) => {
     const id_token = response.getAuthResponse().id_token;
-    UserService.signInGoogleService(id_token).then(res => {
+    UserService.signInGoogleService(id_token).then((res) => {
       const token = res.data;
-      UserService.getMeService(token).then(res => {
+      UserService.getMeService(token).then((res) => {
         dispatch(
           signIn({
             isAuth: true,

@@ -8,7 +8,11 @@ import * as CardsHelper from "helper/CardsHelper";
 import { cloneDeep, isNull, find, isNil } from "lodash";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setCards, updateCard, setSelectedItems } from "actions/cardsActions";
+import {
+  setCards,
+  updateCard,
+  setSelectedItems
+} from "store/actions/cardsActions";
 import { isEmpty } from "lodash";
 
 export default function DragDropComponent({ onRemove }) {
@@ -18,7 +22,6 @@ export default function DragDropComponent({ onRemove }) {
   const dispatch = useDispatch();
   const cards = useSelector((state) => state.cardsReducer.cardsState);
   const userID = useSelector((state) => state.authReducer.data._id);
-  const token = useSelector((state) => state.authReducer.token);
 
   const onDragEnd = (result) => {
     let newData = cloneDeep(cards);
@@ -52,8 +55,7 @@ export default function DragDropComponent({ onRemove }) {
                 : item.cardID
             };
           }),
-          position,
-          token
+          position
         );
         const newCards = CardsHelper.cardItemsSelectedChange(
           cards,
@@ -72,8 +74,7 @@ export default function DragDropComponent({ onRemove }) {
                 : item.cardID
             };
           }),
-          position,
-          token
+          position
         );
         const newCards = CardsHelper.cardItemsSelectedChange(
           cards,
@@ -87,7 +88,7 @@ export default function DragDropComponent({ onRemove }) {
       result.destination.droppableId === result.source.droppableId
     ) {
       try {
-        CardsService.cardItemChange(result, token);
+        CardsService.cardItemChange(result);
         const newCards = CardsHelper.cardItemChange(newData, result);
         dispatch(
           setCards({
@@ -106,7 +107,7 @@ export default function DragDropComponent({ onRemove }) {
           cards,
           result
         );
-        CardsService.cardItemShared(start, end, result, token);
+        CardsService.cardItemShared(start, end, result);
         dispatch(
           setCards({
             cards: newCards
@@ -132,7 +133,6 @@ export default function DragDropComponent({ onRemove }) {
               destination: result.destination.index
             },
             type: "all_cards",
-            token,
             index: result.source.index
           })
         );

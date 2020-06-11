@@ -11,7 +11,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Attachments from "components/Cards/Content/Attachments";
 import { useSelector, useDispatch } from "react-redux";
 import * as CardsService from "services/CardsService";
-import { updateItem, closeCardContent } from "actions/cardsActions";
+import {
+  updateItem,
+  closeCardContent,
+  addAttachment,
+  removeAttachment
+} from "store/actions/cardsActions";
 
 export default function Content() {
   const isOpen = useSelector((state) => state.cardsReducer.isContentOpen);
@@ -20,12 +25,12 @@ export default function Content() {
 
 function ContentView() {
   const [width, setWidth] = useState();
+  const [pending, setPending] = useState(false);
   const dispatch = useDispatch();
   const item = useSelector((state) => state.cardsReducer.itemContentData);
-  const token = useSelector((state) => state.authReducer.token);
 
   const onItemChange = (element, type) => {
-    CardsService.updateItem(item.cardID, item._id, type, element, token);
+    CardsService.updateItem(item.cardID, item._id, type, element);
     dispatch(
       updateItem({
         itemID: item._id,
@@ -38,7 +43,42 @@ function ContentView() {
   const onClose = () => {
     dispatch(closeCardContent());
   };
-
+  const onUpload = async (e, input) => {
+    const upload = e.target.files[0];
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", upload);
+    formData.append("cardID", item.cardID);
+    formData.append("itemID", item._id);
+    setPending(true);
+    CardsService.uploadFileToItem(formData)
+      .then((res) => {
+        dispatch(
+          addAttachment({
+            cardID: item.cardID,
+            itemID: item._id,
+            file: res.data
+          })
+        );
+        setPending(false);
+        input.current.value = null;
+      })
+      .catch((err) => {
+        input.current.value = null;
+        setPending(false);
+      });
+  };
+  const onRemove = (fileID, fileName) => {
+    CardsService.removeFileFromItem(fileName, item.cardID, item._id, fileID)
+      .then((res) => {
+        dispatch(
+          removeAttachment({ cardID: item.cardID, itemID: item._id, fileID })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Resizable
       defaultSize={{
@@ -71,7 +111,12 @@ function ContentView() {
           </Tooltip>
         </div>
         <div className="flex space-between">
-          <Attachments />
+          <Attachments
+            onUpload={onUpload}
+            onRemove={onRemove}
+            attachments={item.attachments}
+            pending={pending}
+          />
           <Options
             date={item.date}
             status={item.status}
