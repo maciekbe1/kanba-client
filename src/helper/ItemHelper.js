@@ -102,5 +102,31 @@ export default {
         break;
     }
     return priority;
+  },
+  findItem(itemID, cards) {
+    function dfs(obj, targetId) {
+      if (obj._id === targetId) {
+        return obj;
+      }
+      if (obj.list) {
+        for (let item of obj.list) {
+          let check = dfs(item, targetId);
+          if (check) {
+            return check;
+          }
+        }
+      }
+      return null;
+    }
+
+    let result = null;
+
+    for (let obj of cards) {
+      result = dfs(obj, itemID);
+      if (result) {
+        break;
+      }
+    }
+    return result;
   }
 };
