@@ -112,13 +112,11 @@ export default (state = INITIAL_DATA, action) => {
     }
 
     case "ADD_ATTACHMENT": {
-      ItemHelper.findItem(
-        action.payload.itemID,
-        state.cardsState
-      ).attachments.push(action.payload.file);
+      const item = ItemHelper.findItem(action.payload.itemID, state.cardsState);
+      item.attachments.push(action.payload.file);
       return {
         ...state,
-        cardsState: new Card(state.cardsState).cards
+        cardsState: state.cardsState
       };
     }
 
@@ -127,7 +125,7 @@ export default (state = INITIAL_DATA, action) => {
       remove(item.attachments, (file) => file._id === action.payload.fileID);
       return {
         ...state,
-        cardsState: new Card(state.cardsState).cards
+        cardsState: state.cardsState
       };
     }
     default:
