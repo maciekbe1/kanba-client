@@ -50,12 +50,12 @@ export const setCardsLoaded = (payload) => ({
 });
 
 export const openItemContent = (payload) => ({
-  type: "OPEN_CARD_CONTENT",
+  type: "OPEN_ITEM_CONTENT",
   payload
 });
 
 export const closeItemContent = (payload) => ({
-  type: "CLOSE_CARD_CONTENT",
+  type: "CLOSE_ITEM_CONTENT",
   payload
 });
 

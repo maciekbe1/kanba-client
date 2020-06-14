@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { updateItem } from "store/actions/cardsActions";
 import * as CardsService from "services/CardsService";
 
-export default function Description({ content, cardID, itemID }) {
+export default function Description({ content, itemID }) {
   const [edit, setEdit] = useState(false);
   const [editorContent, setEditorContent] = useState("");
   const [memoContent, setMemoContent] = useState();
@@ -23,11 +23,10 @@ export default function Description({ content, cardID, itemID }) {
     setEdit(!edit);
     if (editorContent !== memoContent) {
       setMemoContent(editorContent);
-      CardsService.updateItem(cardID, itemID, "content", editorContent);
+      CardsService.updateItem(itemID, "content", editorContent);
       dispatch(
         updateItem({
           itemID: itemID,
-          cardID: cardID,
           content: editorContent
         })
       );

@@ -51,11 +51,10 @@ export const cardItemChange = (result) => {
     store.getState().authReducer.token
   );
 };
-export const updateItem = (cardID, itemID, key, value) => {
+export const updateItem = (itemID, key, value) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/update-item`,
     {
-      cardID,
       itemID,
       item: { [key]: value }
     },
@@ -125,10 +124,10 @@ export const uploadFileToItem = (formData) => {
   );
 };
 
-export const removeFileFromItem = (fileName, cardID, itemID, fileID) => {
+export const removeFileFromItem = (fileName, itemID, fileID) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/remove-file`,
-    { fileName, cardID, itemID, fileID },
+    { fileName, itemID, fileID },
     store.getState().authReducer.token
   );
 };

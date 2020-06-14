@@ -23,10 +23,10 @@ export default function DndItem({ item, index }) {
         e.target.classList.contains("item-title-text") ||
         e.target.classList.contains("card-item-action")
       ) {
-        dispatch(openItemContent({ item }));
+        dispatch(openItemContent({ itemID: item._id }));
       }
     },
-    [item, dispatch]
+    [item._id, dispatch]
   );
 
   const getItemStyle = (provided, snapshot) => {

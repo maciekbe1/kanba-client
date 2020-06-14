@@ -1,6 +1,7 @@
 import { remove, find, set } from "lodash";
 import Card from "model/Card";
-import Content from "model/Content";
+import ItemHelper from "helper/ItemHelper";
+
 const INITIAL_DATA = {
   isCardsLoaded: false,
   selectedItems: [],
@@ -57,12 +58,9 @@ export default (state = INITIAL_DATA, action) => {
     }
 
     case "UPDATE_ITEM": {
-      const name = Object.keys(action.payload)[2];
-      const value = Object.values(action.payload)[2];
-      const obj = find(
-        find(state.cardsState, { _id: action.payload.cardID }).list,
-        (item) => item._id === action.payload.itemID
-      );
+      const name = Object.keys(action.payload)[1];
+      const value = Object.values(action.payload)[1];
+      const obj = ItemHelper.findItem(action.payload.itemID, state.cardsState);
       set(obj, [name], value);
 
       return {
@@ -96,15 +94,16 @@ export default (state = INITIAL_DATA, action) => {
       };
     }
 
-    case "OPEN_CARD_CONTENT": {
+    case "OPEN_ITEM_CONTENT": {
+      const item = ItemHelper.findItem(action.payload.itemID, state.cardsState);
       return {
         ...state,
         isContentOpen: true,
-        itemContentData: action.payload.item
+        itemContentData: item
       };
     }
 
-    case "CLOSE_CARD_CONTENT": {
+    case "CLOSE_ITEM_CONTENT": {
       return {
         ...state,
         isContentOpen: false,
@@ -113,33 +112,22 @@ export default (state = INITIAL_DATA, action) => {
     }
 
     case "ADD_ATTACHMENT": {
-      find(state.cardsState, {
-        _id: action.payload.cardID
-      }).list[0].attachments.push(action.payload.file);
-      state.itemContentData.attachments.push(action.payload.file);
+      ItemHelper.findItem(
+        action.payload.itemID,
+        state.cardsState
+      ).attachments.push(action.payload.file);
       return {
         ...state,
-        cardsState: new Card(state.cardsState).cards,
-        itemContentData: new Content(state.itemContentData).data
+        cardsState: new Card(state.cardsState).cards
       };
     }
 
     case "REMOVE_ATTACHMENT": {
-      remove(
-        find(state.cardsState, {
-          _id: action.payload.cardID
-        }).list[0].attachments,
-        (file) => file._id === action.payload.fileID
-      );
-      remove(
-        state.itemContentData.attachments,
-        (file) => file._id === action.payload.fileID
-      );
-
+      const item = ItemHelper.findItem(action.payload.itemID, state.cardsState);
+      remove(item.attachments, (file) => file._id === action.payload.fileID);
       return {
         ...state,
-        cardsState: new Card(state.cardsState).cards,
-        itemContentData: new Content(state.itemContentData).data
+        cardsState: new Card(state.cardsState).cards
       };
     }
     default:
