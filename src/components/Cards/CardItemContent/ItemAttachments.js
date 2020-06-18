@@ -67,7 +67,7 @@ export default function Attachments({ itemID, attachments }) {
         </form>
       </div>
       <div className="content-attachment-files">
-        {attachments.map((file, k) => (
+        {attachments?.map((file, k) => (
           <div key={k} className="badge-content">
             <ItemFile file={file} onRemove={onRemove} removing={removing} />
           </div>
