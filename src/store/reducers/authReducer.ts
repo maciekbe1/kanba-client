@@ -3,7 +3,7 @@ const INITIAL_DATA = {
   data: null,
   token: null
 };
-export default (state = INITIAL_DATA, action) => {
+export default (state: any = INITIAL_DATA, action: any) => {
   switch (action.type) {
     case "SIGNIN_USER":
       return {

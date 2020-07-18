@@ -9,10 +9,17 @@ import { STATUSES, PRIORITES } from "constants/cards";
 
 import PopoverMenu from "components/Cards/CardItemContent/ItemPopoverMenu";
 import ItemHelper from "helper/ItemHelper";
+import ItemLabels from "components/Cards/CardItemContent/ItemLabels";
 
-export default function Options({ status, date, priority, onItemChange }) {
+export default function Options({
+  status,
+  date,
+  priority,
+  onItemChange,
+  labels
+}) {
   return (
-    <div>
+    <div style={{ width: "204px" }}>
       <List disablePadding>
         <ListItem style={{ textAlign: "right" }} divider disableGutters>
           <ListItemText secondary="Utworzone" />
@@ -37,6 +44,9 @@ export default function Options({ status, date, priority, onItemChange }) {
             onItemChange={onItemChange}
             type="priority"
           />
+        </ListItem>
+        <ListItem disableGutters>
+          <ItemLabels labels={labels || []} />
         </ListItem>
       </List>
     </div>

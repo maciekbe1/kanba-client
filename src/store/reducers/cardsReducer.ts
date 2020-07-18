@@ -71,7 +71,7 @@ export default (state = INITIAL_DATA, action) => {
 
     case "UPDATE_CARD": {
       const name = Object.keys(action.payload)[1];
-      const o = state.cardsState[action.payload.index];
+      const o: any = state.cardsState[action.payload.index];
       o[name] = action.payload[name];
 
       return {

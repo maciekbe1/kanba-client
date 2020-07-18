@@ -8,7 +8,7 @@ const INITIAL_DATA = {
     active: false
   }
 };
-export default (state = INITIAL_DATA, action) => {
+export default (state: any = INITIAL_DATA, action: any) => {
   switch (action.type) {
     case "DRAWER_TAB_VALUE":
       return {

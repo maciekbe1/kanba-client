@@ -3,14 +3,16 @@ import ItemHelper from "helper/ItemHelper";
 import Avatar from "@material-ui/core/Avatar";
 import { isNil } from "lodash";
 import Tooltip from "@material-ui/core/Tooltip";
-export default function ItemInfo({ status, priority }) {
+
+export default function ItemInfo({ status, priority, date }) {
   const statusStyles = {
     backgroundColor: ItemHelper.statusButtonStyler(status)?.color?.background,
     marginLeft: "8px"
   };
   const priorityStyles = {
     backgroundColor: ItemHelper.priorityButtonStyler(priority)?.color
-      ?.background
+      ?.background,
+    marginLeft: "8px"
   };
 
   return (

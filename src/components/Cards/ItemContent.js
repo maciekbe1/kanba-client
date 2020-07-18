@@ -13,8 +13,7 @@ import * as CardsService from "services/CardsService";
 import Title from "components/Common/Title";
 import Description from "components/Cards/CardItemContent/ItemDescription";
 import Attachments from "components/Cards/CardItemContent/ItemAttachments";
-import Options from "components/Cards/CardItemContent/ItemOptions";
-
+import ItemSiteBar from "components/Cards/CardItemContent/ItemSiteBar";
 export default function ItemContent() {
   const isOpen = useSelector((state) => state.cardsReducer.isContentOpen);
   return isOpen ? <ContentView /> : null;
@@ -72,11 +71,12 @@ function ContentView() {
         </div>
         <div className="flex space-between">
           <Attachments itemID={item._id} attachments={item.attachments} />
-          <Options
+          <ItemSiteBar
             date={item.date}
             status={item.status}
             priority={item.priority}
             onItemChange={onItemChange}
+            labels={item.labels || null}
           />
         </div>
         <Description content={item.content} itemID={item._id} />

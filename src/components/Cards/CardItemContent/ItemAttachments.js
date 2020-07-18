@@ -60,7 +60,6 @@ export default function Attachments({ itemID, attachments }) {
             color="default"
             startIcon={<CloudUploadIcon />}
             onClick={() => input.current.click()}
-            // disabled={pending}
           >
             Upload
           </Button>
