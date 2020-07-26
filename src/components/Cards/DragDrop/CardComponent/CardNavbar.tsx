@@ -1,7 +1,11 @@
 import React from "react";
 import Title from "components/Common/Title";
-import Actions from "components/Cards/DragDrop/CardComponent/CardMenu";
-import { removeCard, updateCard } from "store/actions/cardsActions";
+import CardMenu from "components/Cards/DragDrop/CardComponent/CardMenu";
+import {
+  removeCard,
+  updateCard,
+  closeItemContent
+} from "store/actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
@@ -16,7 +20,8 @@ export default function Navbar({
   provided
 }) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.authReducer);
+  const user = useSelector((state: any) => state.authReducer);
+  const item = useSelector((state: any) => state.cardsReducer.itemContentData);
 
   const onRemoveCard = () => {
     onRemove({
@@ -24,6 +29,9 @@ export default function Navbar({
       dialogText: cardTitle,
       remove: () => {
         CardsService.removeCard(cardID, user.data._id);
+        if (item?.cardID === cardID) {
+          dispatch(closeItemContent());
+        }
         dispatch(removeCard({ cardID }));
       }
     });
@@ -59,7 +67,7 @@ export default function Navbar({
         </div>
         <Title title={cardTitle} onTitleChange={onTitleChange} />
       </div>
-      <Actions
+      <CardMenu
         expand={cardExpand}
         listLength={listLength}
         onRemoveCard={onRemoveCard}

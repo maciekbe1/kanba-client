@@ -1,6 +1,7 @@
-import { remove, find, set } from "lodash";
+import { remove, set } from "lodash";
 import Card from "model/Card";
 import ItemHelper from "helper/ItemHelper";
+import * as CardsHelper from "helper/CardsHelper";
 
 const INITIAL_DATA = {
   isCardsLoaded: false,
@@ -10,7 +11,7 @@ const INITIAL_DATA = {
   itemContentData: null
 };
 
-export default (state = INITIAL_DATA, action) => {
+export default (state = INITIAL_DATA, action: any) => {
   switch (action.type) {
     case "SET_CARDS_STATE": {
       return {
@@ -20,7 +21,7 @@ export default (state = INITIAL_DATA, action) => {
     }
 
     case "REMOVE_CARD": {
-      remove(state.cardsState, (item) => item._id === action.cardID);
+      remove(state.cardsState, (item: any) => item._id === action.cardID);
 
       return {
         ...state,
@@ -37,7 +38,9 @@ export default (state = INITIAL_DATA, action) => {
     }
 
     case "CREATE_ITEM": {
-      find(state.cardsState, { _id: action.payload.cardID }).list.push({
+      const obj = CardsHelper.findCard(action.payload.cardID, state.cardsState);
+
+      obj?.list.push({
         ...action.payload
       });
       return {
@@ -47,10 +50,8 @@ export default (state = INITIAL_DATA, action) => {
     }
 
     case "REMOVE_ITEM": {
-      remove(
-        find(state.cardsState, { _id: action.payload.cardID }).list,
-        (item) => item._id === action.payload.itemID
-      );
+      const obj = CardsHelper.findCard(action.payload.cardID, state.cardsState);
+      remove(obj?.list, (item: any) => item._id === action.payload.itemID);
       return {
         ...state,
         cardsState: new Card(state.cardsState).cards
@@ -125,7 +126,10 @@ export default (state = INITIAL_DATA, action) => {
 
     case "REMOVE_ATTACHMENT": {
       const item = ItemHelper.findItem(action.payload.itemID, state.cardsState);
-      remove(item.attachments, (file) => file._id === action.payload.fileID);
+      remove(
+        item.attachments,
+        (file: any) => file._id === action.payload.fileID
+      );
       return {
         ...state,
         cardsState: new Card(state.cardsState).cards

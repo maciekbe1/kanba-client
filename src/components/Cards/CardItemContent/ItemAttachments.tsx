@@ -1,6 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addAttachment, removeAttachment } from "store/actions/cardsActions";
+import { useDropzone } from "react-dropzone";
 
 import * as CardsService from "services/CardsService";
 
@@ -12,32 +13,31 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import ItemFile from "components/Cards/CardItemContent/ItemFile";
 
 export default function Attachments({ itemID, attachments }) {
-  const input = useRef();
-  const [pending, setPending] = useState();
+  const [pending, setPending] = useState(false);
   const dispatch = useDispatch();
   const [removing, setRemoving] = useState(false);
-  const onUpload = (e) => {
-    e.preventDefault();
-    const upload = e.target.files[0];
-    const formData = new FormData();
-    formData.append("file", upload);
-    formData.append("itemID", itemID);
-    input.current.value = null;
+  const { getRootProps, getInputProps, open } = useDropzone({
+    noClick: true,
+    noKeyboard: true,
+    multiple: false,
+    onDrop: (acceptedFiles) => {
+      const formData = new FormData();
+      formData.append("file", acceptedFiles[0]);
+      formData.append("itemID", itemID);
+      setPending(true);
+      CardsService.addFileToItem(formData).then((res) => {
+        dispatch(
+          addAttachment({
+            itemID: res.data.itemID,
+            file: res.data.file
+          })
+        );
+        setPending(false);
+      });
+    }
+  });
 
-    setPending(true);
-
-    CardsService.uploadFileToItem(formData).then((res) => {
-      dispatch(
-        addAttachment({
-          itemID: res.data.itemID,
-          file: res.data.file
-        })
-      );
-      setPending(false);
-    });
-  };
-
-  const onRemove = (fileID, fileName) => {
+  const onRemove = (fileID: string, fileName: string) => {
     setRemoving(true);
     CardsService.removeFileFromItem(fileName, itemID, fileID)
       .then(() => {
@@ -49,28 +49,27 @@ export default function Attachments({ itemID, attachments }) {
       });
   };
 
+  const files = attachments?.map((file: any, k: number) => (
+    <div key={k} className="badge-content">
+      <ItemFile file={file} onRemove={onRemove} removing={removing} />
+    </div>
+  ));
   return (
     <div className="content-attachments-container">
-      <div>
-        <form>
-          <input type="file" onChange={onUpload} ref={input} />
-          <Button
-            size="small"
-            variant="contained"
-            color="default"
-            startIcon={<CloudUploadIcon />}
-            onClick={() => input.current.click()}
-          >
-            Upload
-          </Button>
-        </form>
+      <div {...getRootProps({ className: "dropzone" })}>
+        <input {...getInputProps()} />
+        <Button
+          size="small"
+          variant="contained"
+          color="default"
+          startIcon={<CloudUploadIcon />}
+          onClick={open}
+        >
+          Click or Drop
+        </Button>
       </div>
       <div className="content-attachment-files">
-        {attachments?.map((file, k) => (
-          <div key={k} className="badge-content">
-            <ItemFile file={file} onRemove={onRemove} removing={removing} />
-          </div>
-        ))}
+        {files}
         {pending ? <FileLoading /> : null}
       </div>
     </div>

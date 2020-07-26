@@ -116,7 +116,7 @@ export const removeCard = (cardID, userID) => {
   );
 };
 
-export const uploadFileToItem = (formData) => {
+export const addFileToItem = (formData) => {
   return sendFile(
     `${process.env.REACT_APP_SERVER}/api/cards/upload-file`,
     formData,

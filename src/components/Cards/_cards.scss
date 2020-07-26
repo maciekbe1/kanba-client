@@ -8,6 +8,7 @@
       align-items: center;
     }
     .title-component {
+      margin-bottom: 5px;
       .title {
         font-weight: bold;
         font-size: 2em;
@@ -82,6 +83,9 @@
         width: -webkit-fill-available;
         flex-wrap: wrap;
         .badge-content {
+          &:first-child {
+            margin: 5px 5px 5px 0;
+          }
           margin: 5px;
           .MuiAvatar-root {
             width: 72px;

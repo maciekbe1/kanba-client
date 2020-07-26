@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@material-ui/core";
 import { Draggable } from "react-beautiful-dnd";
 import List from "components/Cards/DragDrop/List";
-import Navbar from "components/Cards/DragDrop/CardComponent/Navbar";
+import CardNavbar from "components/Cards/DragDrop/CardComponent/CardNavbar";
 import Collapse from "@material-ui/core/Collapse";
 
 const getCardStyle = (draggableStyle) => ({
@@ -21,7 +21,7 @@ export default function DndCard({ card, index, onRemove }) {
           className="card-component"
         >
           <CardContent>
-            <Navbar
+            <CardNavbar
               cardID={card._id}
               cardTitle={card.title}
               cardExpand={card.expand}

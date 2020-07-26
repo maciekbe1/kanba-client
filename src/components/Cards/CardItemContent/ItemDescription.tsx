@@ -11,7 +11,7 @@ import * as CardsService from "services/CardsService";
 export default function Description({ content, itemID }) {
   const [edit, setEdit] = useState(false);
   const [editorContent, setEditorContent] = useState("");
-  const [memoContent, setMemoContent] = useState();
+  const [memoContent, setMemoContent] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,8 +38,8 @@ export default function Description({ content, itemID }) {
     setEditorContent(memoContent);
   };
 
-  const onSetEdit = (e) => {
-    if (!window.getSelection().toString() && e.target.nodeName !== "A") {
+  const onSetEdit = (e: any) => {
+    if (e.target.nodeName !== "A") {
       setEdit(true);
     }
   };
