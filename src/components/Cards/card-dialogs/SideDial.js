@@ -14,7 +14,7 @@ import {
   createCard,
   closeItemContent
 } from "store/actions/cardsActions";
-import CreateCard from "components/Cards/CardDialogs/CreateCardDialog";
+import CreateCard from "components/Cards/card-dialogs/CreateCardDialog";
 
 export default function SideDial({ onRemoveItems }) {
   const classes = useStyles();

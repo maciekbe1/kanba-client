@@ -11,9 +11,9 @@ import { updateItem, closeItemContent } from "store/actions/cardsActions";
 import * as CardsService from "services/CardsService";
 
 import Title from "components/Common/Title";
-import Description from "components/Cards/CardItemContent/ItemDescription";
-import Attachments from "components/Cards/CardItemContent/ItemAttachments";
-import ItemSiteBar from "components/Cards/CardItemContent/ItemSiteBar";
+import Description from "components/Cards/card-item-content/ItemDescription";
+import Attachments from "components/Cards/card-item-content/ItemAttachments";
+import ItemSiteBar from "components/Cards/card-item-content/ItemSideBar";
 export default function ItemContent() {
   const isOpen = useSelector((state) => state.cardsReducer.isContentOpen);
   return isOpen ? <ContentView /> : null;
@@ -76,7 +76,7 @@ function ContentView() {
             status={item.status}
             priority={item.priority}
             onItemChange={onItemChange}
-            labels={item.labels || null}
+            tags={item.labels || null}
           />
         </div>
         <Description content={item.content} itemID={item._id} />

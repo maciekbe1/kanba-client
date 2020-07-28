@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import Card from "components/Cards/DragDrop/Card";
+import Card from "components/Cards/card-drag-drop/Card";
 
 import * as CardsService from "services/CardsService";
 import * as CardsHelper from "helper/CardsHelper";

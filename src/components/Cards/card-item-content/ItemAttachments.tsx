@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import ItemFile from "components/Cards/CardItemContent/ItemFile";
+import ItemFile from "components/Cards/card-item-content/ItemFile";
 
 export default function Attachments({ itemID, attachments }) {
   const [pending, setPending] = useState(false);

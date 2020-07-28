@@ -7,16 +7,16 @@ import ListItemText from "@material-ui/core/ListItemText";
 import moment from "moment";
 import { STATUSES, PRIORITES } from "constants/cards";
 
-import PopoverMenu from "components/Cards/CardItemContent/ItemPopoverMenu";
+import PopoverMenu from "components/Cards/card-item-content/ItemPopoverMenu";
 import ItemHelper from "helper/ItemHelper";
-import ItemLabels from "components/Cards/CardItemContent/ItemLabels";
+import ItemTags from "components/Cards/card-item-content/ItemTags";
 
-export default function Options({
+export default function ItemSideBar({
   status,
   date,
   priority,
   onItemChange,
-  labels
+  tags
 }) {
   return (
     <div style={{ width: "204px" }}>
@@ -46,7 +46,7 @@ export default function Options({
           />
         </ListItem>
         <ListItem disableGutters>
-          <ItemLabels labels={labels || []} />
+          <ItemTags tags={tags || []} />
         </ListItem>
       </List>
     </div>

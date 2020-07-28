@@ -6,7 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { isNil } from "lodash";
 import ItemHelper from "helper/ItemHelper";
 
-import StatusButton from "components/Cards/CardItemContent/ItemStatusButton";
+import StatusButton from "components/Cards/card-item-content/ItemStatusButton";
 
 export default function PopoverMenu({ array, elem, onItemChange, type }) {
   const [anchorEl, setAnchorEl] = React.useState(null);

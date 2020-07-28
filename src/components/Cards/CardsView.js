@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
-import DragDropComponent from "components/Cards/DragDrop/DragDropComponent";
-import RemoveDialog from "components/Cards/CardDialogs/RemoveDialog";
-import SideDial from "components/Cards/CardDialogs/SideDial";
+import DragDropComponent from "components/Cards/card-drag-drop/DragDropComponent";
+import RemoveDialog from "components/Cards/card-dialogs/RemoveDialog";
+import SideDial from "components/Cards/card-dialogs/SideDial";
 import ItemContent from "components/Cards/ItemContent";
 
 import Container from "@material-ui/core/Container";

@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import Item from "components/Cards/DragDrop/Item";
+import Item from "components/Cards/card-drag-drop/Item";
 import { Droppable } from "react-beautiful-dnd";
 
 export default function List({ card }) {

@@ -6,7 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
-import CreateItem from "components/Cards/CardDialogs/CreateItemDialog";
+import CreateItem from "components/Cards/card-dialogs/CreateItemDialog";
 import SimpleModal from "components/Utils/Modal";
 import * as CardsService from "services/CardsService";
 import { useDispatch } from "react-redux";

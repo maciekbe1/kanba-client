@@ -3,17 +3,17 @@ import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 
-export default function ItemLabels({ labels }) {
+export default function ItemTags({ tags }) {
   return (
     <div style={{ marginTop: "10px", width: "inherit" }}>
       <Autocomplete
         multiple
         id="tags-filled"
         size="small"
-        options={labels.map((option: any) => option)}
+        options={tags.map((option: any) => option)}
         filterSelectedOptions={true}
         freeSolo
-        value={labels.map((label: any) => label)}
+        value={tags.map((label: any) => label)}
         renderTags={(value, getTagProps) =>
           value.map((option, index) => (
             <Chip
@@ -26,7 +26,7 @@ export default function ItemLabels({ labels }) {
           ))
         }
         renderInput={(params) => (
-          <TextField {...params} variant="outlined" label="Labels" />
+          <TextField {...params} variant="outlined" label="Tags" />
         )}
       />
     </div>

@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { openItemContent } from "store/actions/cardsActions";
 
 import DragHandleIcon from "@material-ui/icons/DragHandle";
-import ItemCheckbox from "components/Cards/DragDrop/ItemComponent/ItemCheckbox";
-import ItemInfo from "components/Cards/DragDrop/ItemComponent/ItemInfo";
+import ItemCheckbox from "components/Cards/card-drag-drop/item-component/ItemCheckbox";
+import ItemInfo from "components/Cards/card-drag-drop/item-component/ItemInfo";
 
 const selectedItemSelector = (contentID, itemID) => {
   return contentID?._id === itemID;

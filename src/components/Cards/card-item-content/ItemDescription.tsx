@@ -17,6 +17,7 @@ export default function Description({ content, itemID }) {
   useEffect(() => {
     setEditorContent(content);
     setMemoContent(content);
+    setEdit(false);
   }, [content]);
 
   const onSaveContent = () => {
@@ -52,6 +53,7 @@ export default function Description({ content, itemID }) {
           <Editor
             content={editorContent ? editorContent : ""}
             setEditorContent={setEditorContent}
+            isEdit={edit}
           />
           <EditorButtons save={onSaveContent} cancel={onCancelContent} />
         </>

@@ -1,6 +1,6 @@
 import React from "react";
 import Title from "components/Common/Title";
-import CardMenu from "components/Cards/DragDrop/CardComponent/CardMenu";
+import CardMenu from "components/Cards/card-drag-drop/card-component/CardMenu";
 import {
   removeCard,
   updateCard,
