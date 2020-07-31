@@ -1,30 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import Drawer from "./Drawer";
 import AppBar from "./AppBar";
 import Bar from "components/Layouts/Bar";
-import { withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
 import "../../assets/styles/global.scss";
 
+interface Props {
+  isAuth: boolean;
+  children: any;
+}
+
 function initializeReactGA() {
-  ReactGA.initialize(process.env.REACT_APP_TRACKING_ID, {
+  const trackingID: string = process.env.REACT_APP_TRACKING_ID!;
+  ReactGA.initialize(trackingID, {
     gaOptions: {
       siteSpeedSampleRate: 100
     }
   });
   ReactGA.pageview(window.location.pathname + window.location.search);
 }
-export default withRouter(function Layout({ isAuth, children, location }) {
-  const [currentPath, setCurrentPath] = useState(location.pathname);
-
+export default function Layout({ isAuth, children }: Props): JSX.Element {
   useEffect(() => {
-    const { pathname } = location;
-
-    setCurrentPath(pathname);
-    initializeReactGA(currentPath);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+    initializeReactGA();
+  }, []);
 
   if (isAuth) {
     return (
@@ -41,4 +40,4 @@ export default withRouter(function Layout({ isAuth, children, location }) {
       </AppBar>
     );
   }
-});
+}
