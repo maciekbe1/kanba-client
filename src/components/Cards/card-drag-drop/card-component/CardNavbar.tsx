@@ -9,7 +9,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-
+import { UserTypes } from "store/types";
+interface RootState {
+  authReducer: UserTypes;
+}
 export default function Navbar({
   cardID,
   listLength,
@@ -20,7 +23,7 @@ export default function Navbar({
   provided
 }) {
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.authReducer);
+  const user = useSelector((state: RootState) => state.authReducer);
   const item = useSelector((state: any) => state.cardsReducer.itemContentData);
 
   const onRemoveCard = () => {
@@ -37,7 +40,7 @@ export default function Navbar({
     });
   };
 
-  const onTitleChange = (title) => {
+  const onTitleChange = (title: string) => {
     dispatch(
       updateCard({
         cardID,

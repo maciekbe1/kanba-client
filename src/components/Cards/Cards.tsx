@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import { CARDS_PROBLEM_MESSAGE } from "constants/cards";
 import CardsView from "components/Cards/CardsView";
-import { UserTypes } from "store/types";
+import { UserTypes, CardsTypes } from "store/types";
 
 interface RootState {
   authReducer: UserTypes;
-  cardsReducer: any;
+  cardsReducer: CardsTypes;
 }
 
 export default function Cards(): JSX.Element {

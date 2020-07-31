@@ -5,7 +5,7 @@ export const setCards = ({ cards }) => ({
   cardsState: cards
 });
 
-export const updateCard = (payload) => {
+export const updateCard = (payload: any) => {
   const name = Object.keys(payload)[1];
   CardsService.updateCard(payload, payload.cardID, payload.type, name);
   return {
@@ -19,52 +19,51 @@ export const removeCard = ({ cardID }) => ({
   cardID
 });
 
-export const createCard = (values) => ({
+export const createCard = (payload: any) => ({
   type: "CREATE_CARD",
-  payload: values
+  payload
 });
 
-export const createItem = (payload) => ({
+export const createItem = (payload: any) => ({
   type: "CREATE_ITEM",
   payload
 });
 
-export const removeItem = (payload) => ({
+export const removeItem = (payload: any) => ({
   type: "REMOVE_ITEM",
   payload
 });
 
-export const updateItem = (payload) => ({
+export const updateItem = (payload: any) => ({
   type: "UPDATE_ITEM",
   payload
 });
 
-export const setSelectedItems = (payload) => ({
+export const setSelectedItems = (payload: any) => ({
   type: "SELECTED_ITEMS",
   payload
 });
 
-export const setCardsLoaded = (payload) => ({
+export const setCardsLoaded = (payload: boolean) => ({
   type: "SET_CARDS_LOADED",
   payload
 });
 
-export const openItemContent = (payload) => ({
+export const openItemContent = (payload: any) => ({
   type: "OPEN_ITEM_CONTENT",
   payload
 });
 
-export const closeItemContent = (payload) => ({
-  type: "CLOSE_ITEM_CONTENT",
-  payload
+export const closeItemContent = () => ({
+  type: "CLOSE_ITEM_CONTENT"
 });
 
-export const addAttachment = (payload) => ({
+export const addAttachment = (payload: any) => ({
   type: "ADD_ATTACHMENT",
   payload
 });
 
-export const removeAttachment = (payload) => ({
+export const removeAttachment = (payload: any) => ({
   type: "REMOVE_ATTACHMENT",
   payload
 });
