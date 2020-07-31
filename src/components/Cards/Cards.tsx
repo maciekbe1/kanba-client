@@ -6,11 +6,19 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
 import { CARDS_PROBLEM_MESSAGE } from "constants/cards";
 import CardsView from "components/Cards/CardsView";
+import { UserTypes } from "store/types";
 
-export default function Cards() {
-  const userID = useSelector((state) => state.authReducer.data._id);
+interface RootState {
+  authReducer: UserTypes;
+  cardsReducer: any;
+}
+
+export default function Cards(): JSX.Element {
+  const userID = useSelector(
+    ({ authReducer }: RootState) => authReducer.data._id
+  );
   const isCardsLoaded = useSelector(
-    (state) => state.cardsReducer.isCardsLoaded
+    ({ cardsReducer }: RootState) => cardsReducer.isCardsLoaded
   );
   const dispatch = useDispatch();
 
@@ -20,7 +28,7 @@ export default function Cards() {
   return isCardsLoaded ? <CardsView /> : <div>Ładuję...</div>;
 }
 
-function fetchCards(dispatch, userID, setCardsLoaded) {
+function fetchCards(dispatch: any, userID: string, setCardsLoaded: any) {
   CardsService.getCards(userID)
     .then((res) => {
       dispatch(setCards({ cards: res.data }));
