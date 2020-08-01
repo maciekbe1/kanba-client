@@ -70,7 +70,7 @@ export default function Actions({
       <SimpleModal
         onDialogAccept={createCardItem}
         setError={setError}
-        activator={({ setOpen }) => (
+        activator={({ setOpen }: any) => (
           <Tooltip title="Dodaj pozycje do karty" placement="top">
             <IconButton aria-label="add" onClick={() => setOpen(true)}>
               <AddIcon />

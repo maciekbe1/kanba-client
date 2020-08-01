@@ -1,6 +1,6 @@
 import * as CardsService from "services/CardsService";
 
-export const setCards = ({ cards }) => ({
+export const setCards = ({ cards }: { cards: Array<any> }) => ({
   type: "SET_CARDS_STATE",
   cardsState: cards
 });
@@ -14,7 +14,7 @@ export const updateCard = (payload: any) => {
   };
 };
 
-export const removeCard = ({ cardID }) => ({
+export const removeCard = ({ cardID }: { cardID: string }) => ({
   type: "REMOVE_CARD",
   cardID
 });

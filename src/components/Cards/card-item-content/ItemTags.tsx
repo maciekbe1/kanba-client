@@ -3,7 +3,10 @@ import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 
-export default function ItemTags({ tags }) {
+interface Props {
+  tags: Array<any>;
+}
+export default function ItemTags({ tags }: Props) {
   return (
     <div style={{ marginTop: "10px", width: "inherit" }}>
       <Autocomplete

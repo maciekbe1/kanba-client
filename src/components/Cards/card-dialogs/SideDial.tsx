@@ -15,21 +15,36 @@ import {
   closeItemContent
 } from "store/actions/cardsActions";
 import CreateCard from "components/Cards/card-dialogs/CreateCardDialog";
+import { UserTypes, CardsTypes } from "store/types";
 
-export default function SideDial({ onRemoveItems }) {
+interface RootState {
+  authReducer: UserTypes;
+  cardsReducer: CardsTypes;
+}
+interface Props {
+  onRemoveItems: any;
+}
+
+export default function SideDial({ onRemoveItems }: Props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const cards = useSelector((state) => state.cardsReducer.cardsState);
-  const userID = useSelector((state) => state.authReducer.data._id);
-  const content = useSelector((state) => state.cardsReducer.itemContentData);
+  const cards = useSelector(
+    (state: RootState) => state.cardsReducer.cardsState
+  );
+  const userID = useSelector((state: RootState) => state.authReducer.data._id);
+  const content = useSelector(
+    (state: RootState) => state.cardsReducer.itemContentData
+  );
 
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [data, setData] = useState();
 
   const selectedItems = useSelector(
-    (state) => state.cardsReducer.selectedItems
+    (state: RootState) => state.cardsReducer.selectedItems
   );
+
+  const icon: JSX.Element = <DeleteForeverIcon />;
   const removeAction = () => {
     onRemoveItems({
       remove: () => {
@@ -71,9 +86,8 @@ export default function SideDial({ onRemoveItems }) {
       {!selectedItems.length ? (
         <SimpleModal
           onDialogAccept={createCardHandle}
-          error={error}
           setError={setError}
-          activator={({ setOpen }) => (
+          activator={({ setOpen }: any) => (
             <SpeedDial
               ariaLabel="create"
               onClick={() => setOpen(true)}
@@ -97,7 +111,7 @@ export default function SideDial({ onRemoveItems }) {
           className={`${classes.speedDial} ${classes.speedDialRemove}`}
           open={false}
           data-name="selected"
-          icon={<DeleteForeverIcon data-name="selected" edge="end" />}
+          icon={icon}
         />
       )}
     </div>

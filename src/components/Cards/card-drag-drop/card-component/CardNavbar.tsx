@@ -13,6 +13,16 @@ import { UserTypes } from "store/types";
 interface RootState {
   authReducer: UserTypes;
 }
+interface Props {
+  cardID: string;
+  listLength: number;
+  cardTitle: string;
+  cardExpand: boolean;
+  index: number;
+  onRemove: Function;
+  provided: any;
+}
+
 export default function Navbar({
   cardID,
   listLength,
@@ -21,7 +31,7 @@ export default function Navbar({
   index,
   onRemove,
   provided
-}) {
+}: Props) {
   const dispatch = useDispatch();
   const userID: string = useSelector(
     (state: RootState) => state.authReducer.data._id

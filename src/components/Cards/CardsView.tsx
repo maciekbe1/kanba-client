@@ -6,6 +6,9 @@ import ItemContent from "components/Cards/ItemContent";
 
 import Container from "@material-ui/core/Container";
 
+interface Props {
+  onRemoveItems: Function;
+}
 export default function CardsView() {
   const [dialog, setDialog] = useState(false);
   const [data, setData] = useState();
@@ -30,6 +33,8 @@ export default function CardsView() {
   );
 }
 
-const InnerSideDial = React.memo(function InnerSideDial({ onRemoveItems }) {
+const InnerSideDial = React.memo(function InnerSideDial({
+  onRemoveItems
+}: Props) {
   return <SideDial onRemoveItems={onRemoveItems} />;
 });

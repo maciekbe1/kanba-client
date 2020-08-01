@@ -8,7 +8,12 @@ import { useDispatch } from "react-redux";
 import { updateItem } from "store/actions/cardsActions";
 import * as CardsService from "services/CardsService";
 
-export default function Description({ content, itemID }) {
+interface Props {
+  content: any;
+  itemID: string;
+}
+
+export default function Description({ content, itemID }: Props) {
   const [edit, setEdit] = useState(false);
   const [editorContent, setEditorContent] = useState("");
   const [memoContent, setMemoContent] = useState("");

@@ -4,7 +4,15 @@ import { Route } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function RedirectRoute({ component: Component, ...rest }) {
+interface Props {
+  component: any;
+  path: string;
+}
+
+export default function RedirectRoute({
+  component: Component,
+  ...rest
+}: Props) {
   const { isAuth } = useSelector(({ authReducer }: any) => authReducer);
 
   return (

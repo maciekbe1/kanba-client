@@ -12,7 +12,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import ItemFile from "components/Cards/card-item-content/ItemFile";
 
-export default function Attachments({ itemID, attachments }) {
+interface Props {
+  itemID: string;
+  attachments: Array<any>;
+}
+
+export default function Attachments({ itemID, attachments }: Props) {
   const [pending, setPending] = useState(false);
   const dispatch = useDispatch();
   const [removing, setRemoving] = useState(false);

@@ -5,7 +5,13 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import Avatar from "@material-ui/core/Avatar";
 
-export default function ItemFile({ file, onRemove, removing }) {
+interface Props {
+  file: any;
+  onRemove: Function;
+  removing: boolean;
+}
+
+export default function ItemFile({ file, onRemove, removing }: Props) {
   const [hovered, eventHandlers] = useHover();
 
   return (

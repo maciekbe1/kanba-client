@@ -13,6 +13,9 @@ interface LoginUserAction {
 interface CardsLoadedAction {
   type: typeof SET_CARDS_LOADED;
   isCardsLoaded: boolean;
+  cardsState: Array<any>;
+  itemContentData: any;
+  selectedItems: Array<any>;
 }
 
 export type UserTypes = LoginUserAction;

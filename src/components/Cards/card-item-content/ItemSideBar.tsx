@@ -11,13 +11,21 @@ import PopoverMenu from "components/Cards/card-item-content/ItemPopoverMenu";
 import ItemHelper from "helper/ItemHelper";
 import ItemTags from "components/Cards/card-item-content/ItemTags";
 
+interface Props {
+  status: any;
+  date: any;
+  priority: any;
+  onItemChange: Function;
+  tags?: Array<any>;
+}
+
 export default function ItemSideBar({
   status,
   date,
   priority,
   onItemChange,
   tags
-}) {
+}: Props) {
   return (
     <div style={{ width: "204px" }}>
       <List disablePadding>
