@@ -13,13 +13,21 @@ import { useDispatch } from "react-redux";
 import { createItem } from "store/actions/cardsActions";
 import { CARD_COLLAPSED, CARD_EXPANDED } from "constants/cards";
 
+interface Props {
+  expand: boolean;
+  listLength: number;
+  onRemoveCard: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onToggle: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  cardID: string;
+}
+
 export default function Actions({
   expand,
   listLength,
   onRemoveCard,
   onToggle,
   cardID
-}) {
+}: Props) {
   const [data, setData] = useState();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
@@ -61,7 +69,6 @@ export default function Actions({
 
       <SimpleModal
         onDialogAccept={createCardItem}
-        error={error}
         setError={setError}
         activator={({ setOpen }) => (
           <Tooltip title="Dodaj pozycje do karty" placement="top">

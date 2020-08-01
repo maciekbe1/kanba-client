@@ -23,7 +23,12 @@ export default function Navbar({
   provided
 }) {
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.authReducer);
+  const userID: string = useSelector(
+    (state: RootState) => state.authReducer.data._id
+  );
+  const token: string = useSelector(
+    (state: RootState) => state.authReducer.token
+  );
   const item = useSelector((state: any) => state.cardsReducer.itemContentData);
 
   const onRemoveCard = () => {
@@ -31,7 +36,7 @@ export default function Navbar({
       dialogTitle: "Napewno chcesz usunac karte?",
       dialogText: cardTitle,
       remove: () => {
-        CardsService.removeCard(cardID, user.data._id);
+        CardsService.removeCard(cardID, userID);
         if (item?.cardID === cardID) {
           dispatch(closeItemContent());
         }
@@ -45,7 +50,7 @@ export default function Navbar({
       updateCard({
         cardID,
         title: title,
-        token: user.token,
+        token,
         index
       })
     );
@@ -56,7 +61,7 @@ export default function Navbar({
       updateCard({
         cardID,
         expand: !cardExpand,
-        token: user.token,
+        token,
         index
       })
     );
