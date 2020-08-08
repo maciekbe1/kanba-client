@@ -14,16 +14,29 @@ import {
   setSelectedItems
 } from "store/actions/cardsActions";
 import { isEmpty } from "lodash";
+import { CardsTypes, UserTypes } from "store/types";
 
-export default function DragDropComponent({ onRemove }) {
+interface Props {
+  onRemove: Function;
+  card: string;
+  index: number;
+}
+
+interface ReduxState {
+  cardsReducer: CardsTypes;
+  authReducer: UserTypes;
+}
+export default function DragDropComponent({ onRemove }: Props) {
   const selectedItems = useSelector(
-    (state) => state.cardsReducer.selectedItems
+    (state: ReduxState) => state.cardsReducer.selectedItems
   );
   const dispatch = useDispatch();
-  const cards = useSelector((state) => state.cardsReducer.cardsState);
-  const userID = useSelector((state) => state.authReducer.data._id);
+  const cards = useSelector(
+    (state: ReduxState) => state.cardsReducer.cardsState
+  );
+  const userID = useSelector((state: ReduxState) => state.authReducer.data._id);
 
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: any) => {
     let newData = cloneDeep(cards);
     if (
       isNull(result.destination) ||
@@ -143,7 +156,7 @@ export default function DragDropComponent({ onRemove }) {
   };
 
   return isEmpty(cards) ? (
-    <div>Brak kart</div>
+    <div className="no-cards">Brak kart</div>
   ) : (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="all-cards" type="CARD">
@@ -172,6 +185,6 @@ export default function DragDropComponent({ onRemove }) {
     </DragDropContext>
   );
 }
-const InnerCard = memo(function InnerCard({ card, onRemove, index }) {
+const InnerCard = memo(function InnerCard({ card, onRemove, index }: Props) {
   return <Card card={JSON.parse(card)} index={index} onRemove={onRemove} />;
 });
