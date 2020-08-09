@@ -5,10 +5,10 @@ export default function EditorButtons({ save, cancel }) {
   return (
     <div className="editor-buttons-container">
       <Button size="small" variant="contained" color="primary" onClick={save}>
-        Zapisz
+        Save
       </Button>
       <Button size="small" onClick={cancel} variant="text">
-        Anuluj
+        Cancel
       </Button>
     </div>
   );

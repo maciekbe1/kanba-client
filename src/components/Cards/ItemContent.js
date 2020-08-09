@@ -11,9 +11,9 @@ import { updateItem, closeItemContent } from "store/actions/cardsActions";
 import * as CardsService from "services/CardsService";
 
 import Title from "components/Common/Title";
-import Description from "components/Cards/CardItemContent/ItemDescription";
-import Attachments from "components/Cards/CardItemContent/ItemAttachments";
-import Options from "components/Cards/CardItemContent/ItemOptions";
+import Description from "components/Cards/content-item/ItemDescription";
+import Attachments from "components/Cards/content-item/ItemAttachments";
+import ItemSiteBar from "components/Cards/content-item/ItemSideBar";
 
 export default function ItemContent() {
   const isOpen = useSelector((state) => state.cardsReducer.isContentOpen);
@@ -56,15 +56,15 @@ function ContentView() {
       }}
       minWidth="50%"
       maxWidth="80%"
-      className="card-item-content-wraper"
+      className="item-content-wraper"
       onResizeStop={(e, direction, ref, d) => {
         setWidth(width + d.width);
       }}
     >
-      <Card className="card-item-content">
-        <div className="card-item-title-container">
+      <Card className="item-content-card">
+        <div className="item-content-title">
           <Title title={item.title} onTitleChange={onItemChange} />
-          <Tooltip title="Zamknij" placement="top">
+          <Tooltip title="Close" placement="top">
             <IconButton variant="contained" color="default" onClick={onClose}>
               <CloseIcon />
             </IconButton>
@@ -72,11 +72,12 @@ function ContentView() {
         </div>
         <div className="flex space-between">
           <Attachments itemID={item._id} attachments={item.attachments} />
-          <Options
+          <ItemSiteBar
             date={item.date}
             status={item.status}
             priority={item.priority}
             onItemChange={onItemChange}
+            tags={item.labels || null}
           />
         </div>
         <Description content={item.content} itemID={item._id} />

@@ -1,3 +1,5 @@
+@import "./content-item/content-item";
+
 .card-component {
   .card-navbar-component {
     width: 100%;
@@ -8,6 +10,7 @@
       align-items: center;
     }
     .title-component {
+      margin-bottom: 5px;
       .title {
         font-weight: bold;
         font-size: 2em;
@@ -56,52 +59,6 @@
     }
   }
 }
-.card-item-content-wraper {
-  margin-left: 1rem;
-  .card-item-content {
-    padding: 16px;
-    overflow-y: auto;
-    height: calc(100vh - 116px);
-    .card-item-title-container {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      .title {
-        font-weight: bold;
-        font-size: 2em;
-      }
-      button {
-        height: min-content;
-      }
-    }
-    .content-attachments-container {
-      padding: 10px 0;
-      .content-attachment-files {
-        margin-top: 10px;
-        display: flex;
-        width: -webkit-fill-available;
-        flex-wrap: wrap;
-        .badge-content {
-          margin: 5px;
-          .MuiAvatar-root {
-            width: 72px;
-            height: 72px;
-          }
-          .MuiBadge-anchorOriginBottomRightCircle {
-            right: 5%;
-            bottom: 5%;
-          }
-        }
-      }
-    }
-    .card-description-textbox {
-      padding: 4px;
-      border-radius: 5px;
-      min-height: 95px;
-      word-break: break-word;
-    }
-  }
-}
 
 .light {
   .card-item {
@@ -142,4 +99,7 @@ input[type="file"] {
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
+}
+#tags-filled {
+  min-width: auto;
 }

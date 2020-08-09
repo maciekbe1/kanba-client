@@ -21,7 +21,7 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import Typography from "@material-ui/core/Typography";
 import GoogleAuth from "components/Auth/GoogleAuth";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: "10px"
   },
@@ -44,16 +44,16 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handleChange = prop => event => {
+  const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
-  const handleMouseDownPassword = event => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  const signUpHandler = e => {
+  const signUpHandler = (e) => {
     e.preventDefault();
     API.request(`${process.env.REACT_APP_SERVER}/api/users/signUp`, {
       name: values.name,
@@ -63,7 +63,7 @@ export default function Signup() {
       .then(() => {
         setSuccess(true);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err.response.data);
       });
   };
@@ -75,7 +75,7 @@ export default function Signup() {
             <form
               align="center"
               autoComplete="off"
-              onSubmit={e => signUpHandler(e)}
+              onSubmit={(e) => signUpHandler(e)}
             >
               <h5>Dołącz do nas</h5>
               <h1>Utwórz swoje konto</h1>
@@ -187,7 +187,7 @@ export default function Signup() {
               variant="h2"
               gutterBottom
             >
-              Konto zostało utworzone.
+              Account was created.
             </Typography>
             <Typography align="center" variant="subtitle1">
               Dziękujemy za rejestracje. Wysłaliśmy link weryfikacyjny na twoją

@@ -65,3 +65,9 @@ export const removeSelectedItems = (cards, selectedItems) => {
   });
   return cards;
 };
+
+export const findCard = (cardID, cards) => {
+  return find(cards, (o) => {
+    return o._id === cardID;
+  });
+};
