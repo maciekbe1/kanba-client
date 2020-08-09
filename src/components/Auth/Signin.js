@@ -86,7 +86,7 @@ function Signin() {
       <Grid container display="flex" justify="center">
         <Grid item lg={4} xs={8}>
           <form align="center" onSubmit={(e) => signInHandler(e)}>
-            <h1>Zaloguj się</h1>
+            <h1>Sign In</h1>
             <Box display="flex" alignItems="center">
               <Mail color="primary" style={{ marginRight: "10px" }} />
               <FormControl fullWidth style={{ marginBottom: "20px" }}>
@@ -107,7 +107,7 @@ function Signin() {
               <Lock color="primary" style={{ marginRight: "10px" }} />
               <FormControl fullWidth style={{ marginBottom: "20px" }}>
                 <InputLabel htmlFor="standard-adornment-password">
-                  Hasło
+                  Password
                 </InputLabel>
                 <Input
                   id="standard-adornment-password"
@@ -135,7 +135,7 @@ function Signin() {
             </Box>
             <Link href="/reset-password">
               <Typography variant="caption" display="block" gutterBottom>
-                Zapomniałeś hasła?
+                Forgot password?
               </Typography>
             </Link>
             {error ? (
@@ -160,13 +160,13 @@ function Signin() {
                 {loading ? (
                   <CircularProgress size={20} color="secondary" />
                 ) : (
-                  "Zaloguj"
+                  "Sign In"
                 )}
               </Button>
             </Box>
           </form>
           <Box my={2}>
-            <Typography align="center">Lub</Typography>
+            <Typography align="center">Or</Typography>
           </Box>
           <Box display="flex" justifyContent="center">
             <GoogleAuth />

@@ -53,7 +53,7 @@ export default function CreateItem({ setData, error, message }) {
           required
           error={error}
           id="standard-required"
-          label="Tytuł"
+          label="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           name="title"
@@ -98,7 +98,7 @@ export default function CreateItem({ setData, error, message }) {
                 value={selectedPriority}
                 onChange={priorityChange}
                 options={PRIORITES}
-                placeholder={"Priorytet"}
+                placeholder={"Priority"}
                 isSearchable={false}
                 isClearable
                 styles={{

@@ -5,12 +5,11 @@ import { useDropzone } from "react-dropzone";
 
 import * as CardsService from "services/CardsService";
 
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import AttachmentDialog from "components/Cards/content-item/AttachmentDialog";
 
-import ItemFile from "components/Cards/card-item-content/ItemFile";
+import ItemFile from "components/Cards/content-item/ItemFile";
 
 interface Props {
   itemID: string;
@@ -18,9 +17,17 @@ interface Props {
 }
 
 export default function Attachments({ itemID, attachments }: Props) {
-  const [pending, setPending] = useState(false);
+  const [, setPending] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [index, setIndex] = useState(0);
+  const openDialog = (number: number) => {
+    setIndex(number);
+    setDialogIsOpen(true);
+  };
   const dispatch = useDispatch();
-  const [removing, setRemoving] = useState(false);
+  //TODO -> set attachment state and controll it by hook
+  //what is when add attachment behind attachment as fast as
+  //the first newly added is not responsed yet
   const { getRootProps, getInputProps, open } = useDropzone({
     noClick: true,
     noKeyboard: true,
@@ -43,22 +50,17 @@ export default function Attachments({ itemID, attachments }: Props) {
   });
 
   const onRemove = (fileID: string, fileName: string) => {
-    setRemoving(true);
+    setPending(true);
     CardsService.removeFileFromItem(fileName, itemID, fileID)
       .then(() => {
         dispatch(removeAttachment({ itemID, fileID }));
-        setRemoving(false);
+        setPending(false);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const files = attachments?.map((file: any, k: number) => (
-    <div key={k} className="badge-content">
-      <ItemFile file={file} onRemove={onRemove} removing={removing} />
-    </div>
-  ));
   return (
     <div className="content-attachments-container">
       <div {...getRootProps({ className: "dropzone" })}>
@@ -74,19 +76,20 @@ export default function Attachments({ itemID, attachments }: Props) {
         </Button>
       </div>
       <div className="content-attachment-files">
-        {files}
-        {pending ? <FileLoading /> : null}
+        {attachments?.map((file: any, k: number) => (
+          <div key={k} onClick={() => openDialog(k)}>
+            <ItemFile file={file} onRemove={onRemove} />
+          </div>
+        ))}
       </div>
+      {attachments?.length ? (
+        <AttachmentDialog
+          isOpen={dialogIsOpen}
+          setDialogIsOpen={setDialogIsOpen}
+          attachments={attachments}
+          index={index}
+        />
+      ) : null}
     </div>
   );
 }
-
-const FileLoading = () => {
-  return (
-    <div className="badge-content">
-      <Avatar variant="rounded">
-        <CircularProgress color="secondary" />
-      </Avatar>
-    </div>
-  );
-};

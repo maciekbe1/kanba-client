@@ -62,7 +62,7 @@ export default function SideDial({ onRemoveItems }: Props) {
         dispatch(setCards({ cards: newCards }));
         dispatch(setSelectedItems([]));
       },
-      dialogTitle: "Czy chcesz usunąć zadania?",
+      dialogTitle: "do you want to delete the items below?",
       dialogText: selectedItems.map((item, index) => (
         <Typography key={index}>{item.title}</Typography>
       ))

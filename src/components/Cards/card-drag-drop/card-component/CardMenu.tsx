@@ -71,7 +71,7 @@ export default function Actions({
         onDialogAccept={createCardItem}
         setError={setError}
         activator={({ setOpen }: any) => (
-          <Tooltip title="Dodaj pozycje do karty" placement="top">
+          <Tooltip title="Add item" placement="top">
             <IconButton aria-label="add" onClick={() => setOpen(true)}>
               <AddIcon />
             </IconButton>
@@ -81,7 +81,7 @@ export default function Actions({
         <CreateItem error={error} setData={setData} message={message} />
       </SimpleModal>
 
-      <Tooltip title="Usuń kartę" placement="top">
+      <Tooltip title="Remove" placement="top">
         <IconButton aria-label="delete" onClick={onRemoveCard}>
           <DeleteIcon />
         </IconButton>

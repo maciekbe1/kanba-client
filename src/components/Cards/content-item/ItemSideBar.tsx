@@ -7,9 +7,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import moment from "moment";
 import { STATUSES, PRIORITES } from "constants/cards";
 
-import PopoverMenu from "components/Cards/card-item-content/ItemPopoverMenu";
+import PopoverMenu from "components/Cards/content-item/ItemPopoverMenu";
 import ItemHelper from "helper/ItemHelper";
-import ItemTags from "components/Cards/card-item-content/ItemTags";
+// import ItemTags from "components/Cards/content-item/ItemTags";
 
 interface Props {
   status: any;
@@ -30,7 +30,7 @@ export default function ItemSideBar({
     <div style={{ width: "204px" }}>
       <List disablePadding>
         <ListItem style={{ textAlign: "right" }} divider disableGutters>
-          <ListItemText secondary="Utworzone" />
+          <ListItemText secondary="Created" />
           <ListItemText primary={moment(date).format("DD/MM/YYYY")} inset />
         </ListItem>
 
@@ -45,7 +45,7 @@ export default function ItemSideBar({
         </ListItem>
 
         <ListItem divider disableGutters>
-          <ListItemText secondary="Priorytet" />
+          <ListItemText secondary="Priority" />
           <PopoverMenu
             array={PRIORITES}
             elem={ItemHelper.priorityButtonStyler(priority)}
@@ -53,9 +53,9 @@ export default function ItemSideBar({
             type="priority"
           />
         </ListItem>
-        <ListItem disableGutters>
+        {/* <ListItem disableGutters>
           <ItemTags tags={tags || []} />
-        </ListItem>
+        </ListItem> */}
       </List>
     </div>
   );

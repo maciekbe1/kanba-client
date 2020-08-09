@@ -17,14 +17,14 @@ export default function ItemInfo({ status, priority, date }) {
 
   return (
     <div className="item-info-container">
-      {isNil(priority) || priority.label === "Brak" ? null : (
-        <Tooltip title={`Priorytet: ${priority.label}`}>
+      {isNil(priority) || priority.label === "No value" ? null : (
+        <Tooltip title={`Priority: ${priority.label}`}>
           <Avatar className="item-icon priority-icon" style={priorityStyles}>
             {ItemHelper.priorityButtonStyler(priority)?.icon}
           </Avatar>
         </Tooltip>
       )}
-      {isNil(status) || status.label === "Brak" ? null : (
+      {isNil(status) || status.label === "No value" ? null : (
         <Tooltip title={`Status: ${status.label}`}>
           <Avatar className="item-icon status-icon" style={statusStyles}>
             {ItemHelper.statusButtonStyler(status)?.icon}

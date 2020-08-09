@@ -23,7 +23,7 @@ describe("render", () => {
     wrapper = setUp();
   });
   it("should create component with no card", () => {
-    const noCards = <div className="no-cards">Brak kart</div>;
+    const noCards = <div className="no-cards">No cards</div>;
     expect(wrapper.contains(noCards)).toEqual(true);
   });
 });

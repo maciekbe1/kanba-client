@@ -52,7 +52,7 @@ export default function Description({ content, itemID }: Props) {
 
   return (
     <div className="card-description">
-      <p className="card-description-title">Opis</p>
+      <p className="card-description-title">Description</p>
       {edit ? (
         <>
           <Editor
@@ -70,7 +70,7 @@ export default function Description({ content, itemID }: Props) {
           {editorContent ? (
             parse(editorContent)
           ) : (
-            <span style={{ color: "#cfcfcf" }}>Dodaj treść</span>
+            <span style={{ color: "#cfcfcf" }}>Add content</span>
           )}
         </div>
       )}

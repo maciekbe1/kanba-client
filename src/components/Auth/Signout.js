@@ -15,9 +15,9 @@ export default function Signout({ setAnchorEl }) {
     <GoogleLogout
       clientId={process.env.REACT_APP_GOOGLE_CLIENT}
       onLogoutSuccess={logoutHandler}
-      render={({ onClick }) => <MenuItem onClick={onClick}>Wyloguj</MenuItem>}
+      render={({ onClick }) => <MenuItem onClick={onClick}>Sign Out</MenuItem>}
     ></GoogleLogout>
   ) : (
-    <MenuItem onClick={logoutHandler}>Wyloguj</MenuItem>
+    <MenuItem onClick={logoutHandler}>Sign Out</MenuItem>
   );
 }

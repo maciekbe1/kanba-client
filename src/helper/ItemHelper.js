@@ -26,7 +26,7 @@ export default {
         text: "default"
       };
       const icon = null;
-      return new StyledInfo(color, icon, 0, "Brak");
+      return new StyledInfo(color, icon, 0, "No value");
     }
     switch (status.value) {
       case 0: {
@@ -36,7 +36,7 @@ export default {
           text: "default"
         };
         const icon = null;
-        return new StyledInfo(color, icon, 0, "Brak");
+        return new StyledInfo(color, icon, 0, "No value");
       }
       case 1: {
         const color = {
@@ -79,12 +79,12 @@ export default {
     };
     if (isNil(priority)) {
       const icon = null;
-      return new StyledInfo(color, icon, 0, "Brak");
+      return new StyledInfo(color, icon, 0, "No value");
     }
     switch (priority.value) {
       case 0: {
         const icon = null;
-        return new StyledInfo(color, icon, 0, "Brak");
+        return new StyledInfo(color, icon, 0, "No value");
       }
       case 1: {
         const icon = <ArrowUpwardIcon style={{ color: red[600] }} />;

@@ -18,10 +18,12 @@ import { CardsTypes, UserTypes } from "store/types";
 
 interface Props {
   onRemove: Function;
-  card: string;
+}
+interface MemoProps {
+  card: any;
+  onRemove: Function;
   index: number;
 }
-
 interface ReduxState {
   cardsReducer: CardsTypes;
   authReducer: UserTypes;
@@ -156,7 +158,7 @@ export default function DragDropComponent({ onRemove }: Props) {
   };
 
   return isEmpty(cards) ? (
-    <div className="no-cards">Brak kart</div>
+    <div className="no-cards">No cards</div>
   ) : (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="all-cards" type="CARD">
@@ -185,6 +187,11 @@ export default function DragDropComponent({ onRemove }: Props) {
     </DragDropContext>
   );
 }
-const InnerCard = memo(function InnerCard({ card, onRemove, index }: Props) {
+
+const InnerCard = memo(function InnerCard({
+  card,
+  onRemove,
+  index
+}: MemoProps) {
   return <Card card={JSON.parse(card)} index={index} onRemove={onRemove} />;
 });

@@ -50,7 +50,7 @@ export default function CreateCard({ setData, error, message, user }) {
         label="Tytuł"
         value={values.title}
         onChange={handleChange("title")}
-        helperText="* Wymagane"
+        helperText="* Require"
         name="title"
         type="text"
         variant="outlined"
@@ -61,7 +61,7 @@ export default function CreateCard({ setData, error, message, user }) {
       <TextField
         fullWidth
         id="standard-optional"
-        label="Opis"
+        label="Description"
         value={values.description}
         onChange={handleChange("description")}
         multiline

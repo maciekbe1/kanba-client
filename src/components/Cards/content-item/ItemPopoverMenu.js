@@ -6,14 +6,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { isNil } from "lodash";
 import ItemHelper from "helper/ItemHelper";
 
-import StatusButton from "components/Cards/card-item-content/ItemStatusButton";
+import StatusButton from "components/Cards/content-item/ItemStatusButton";
 
 export default function PopoverMenu({ array, elem, onItemChange, type }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [element, setElement] = useState({ value: 0, label: "Brak" });
+  const [element, setElement] = useState({ value: 0, label: "No value" });
 
   useEffect(() => {
-    setElement(isNil(elem) ? { value: 0, label: "Brak" } : elem);
+    setElement(isNil(elem) ? { value: 0, label: "No value" } : elem);
   }, [elem, setElement]);
 
   const handleClick = (event) => {
@@ -46,8 +46,10 @@ export default function PopoverMenu({ array, elem, onItemChange, type }) {
         open={Boolean(anchorEl)}
         onClose={() => elementChange(element)}
       >
-        <MenuItem onClick={() => elementChange({ value: 0, label: "Brak" })}>
-          Brak
+        <MenuItem
+          onClick={() => elementChange({ value: 0, label: "No value" })}
+        >
+          No value
         </MenuItem>
         {array.map((element) => {
           return (

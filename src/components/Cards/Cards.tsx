@@ -25,7 +25,7 @@ export default function Cards(): JSX.Element {
   useEffect(() => {
     fetchCards(dispatch, userID, setCardsLoaded);
   }, [dispatch, userID]);
-  return isCardsLoaded ? <CardsView /> : <div>Ładuję...</div>;
+  return isCardsLoaded ? <CardsView /> : <div>Loading...</div>;
 }
 
 function fetchCards(dispatch: any, userID: string, setCardsLoaded: any) {

@@ -1,1 +1,1 @@
-export const SESSION_MESSAGE = "Sesja wygasła, zaloguj się ponownie";
+export const SESSION_MESSAGE = "Your session has expired, please login again.";

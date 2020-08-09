@@ -66,9 +66,9 @@ export default function MiniDrawer(props) {
   }, [dispatch, user.token]);
 
   const tabs = [
-    { icon: <HomeIcon />, label: "Główna", to: "/" },
-    { icon: <PermDataSetting />, label: "Projekty", to: "/projects" },
-    { icon: <ViewDay />, label: "Karty", to: "/cards" }
+    { icon: <HomeIcon />, label: "Home", to: "/" },
+    { icon: <PermDataSetting />, label: "Projects", to: "/projects" },
+    { icon: <ViewDay />, label: "Cards", to: "/cards" }
   ];
   const tabValue = findIndex(tabs, function (item) {
     return item.to === pathname;
