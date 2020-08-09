@@ -10,10 +10,10 @@ import StatusButton from "components/Cards/content-item/ItemStatusButton";
 
 export default function PopoverMenu({ array, elem, onItemChange, type }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [element, setElement] = useState({ value: 0, label: "No value" });
+  const [element, setElement] = useState({ value: 0, label: "NO VALUE" });
 
   useEffect(() => {
-    setElement(isNil(elem) ? { value: 0, label: "No value" } : elem);
+    setElement(isNil(elem) ? { value: 0, label: "NO VALUE" } : elem);
   }, [elem, setElement]);
 
   const handleClick = (event) => {
@@ -47,9 +47,9 @@ export default function PopoverMenu({ array, elem, onItemChange, type }) {
         onClose={() => elementChange(element)}
       >
         <MenuItem
-          onClick={() => elementChange({ value: 0, label: "No value" })}
+          onClick={() => elementChange({ value: 0, label: "NO VALUE" })}
         >
-          No value
+          NO VALUE
         </MenuItem>
         {array.map((element) => {
           return (

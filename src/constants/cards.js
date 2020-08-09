@@ -3,13 +3,13 @@ export const CARDS_PROBLEM_MESSAGE =
 export const CARD_EXPANDED = "Expand";
 export const CARD_COLLAPSED = "Collapse";
 export const STATUSES = [
-  { value: 1, label: "To Do" },
-  { value: 2, label: "In Progress" },
-  { value: 3, label: "Done" }
+  { value: 1, label: "TO DO" },
+  { value: 2, label: "IN PROGRESS" },
+  { value: 3, label: "DONE" }
 ];
 
 export const PRIORITES = [
-  { value: 1, label: "High" },
-  { value: 2, label: "Middle" },
-  { value: 3, label: "Low" }
+  { value: 1, label: "HIGH" },
+  { value: 2, label: "MIDDLE" },
+  { value: 3, label: "LOW" }
 ];
