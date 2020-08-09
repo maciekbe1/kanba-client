@@ -82,7 +82,7 @@ export default function Attachments({ itemID, attachments }: Props) {
           </div>
         ))}
       </div>
-      {attachments?.length ? (
+      {attachments?.length && dialogIsOpen ? (
         <AttachmentDialog
           isOpen={dialogIsOpen}
           setDialogIsOpen={setDialogIsOpen}
