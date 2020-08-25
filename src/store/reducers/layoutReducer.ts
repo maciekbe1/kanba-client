@@ -1,7 +1,6 @@
 const INITIAL_DATA = {
   tabValue: 0,
   theme: false,
-  backdrop: false,
   bar: {
     type: null,
     message: null,
@@ -19,11 +18,6 @@ export default (state: any = INITIAL_DATA, action: any) => {
       return {
         ...state,
         theme: action.theme
-      };
-    case "BACKDROP":
-      return {
-        ...state,
-        backdrop: action.backdrop
       };
     case "BAR":
       return {

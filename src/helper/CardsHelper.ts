@@ -1,13 +1,13 @@
 import { find, remove } from "lodash";
 
-export const cardItemChange = (cards, result) => {
-  const reorder = (list, startIndex, endIndex) => {
+export const cardItemChange = (cards: any, result: any) => {
+  const reorder = (list: any, startIndex: any, endIndex: any) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
   };
-  cards.map((card) => {
+  cards.map((card: any) => {
     const data = reorder(
       card.list,
       result.source.index,
@@ -21,7 +21,7 @@ export const cardItemChange = (cards, result) => {
   return cards;
 };
 
-export const cardItemShared = (cards, result) => {
+export const cardItemShared = (cards: any, result: any) => {
   let start = find(cards, (o) => {
     return o._id === result.source.droppableId;
   });
@@ -34,19 +34,23 @@ export const cardItemShared = (cards, result) => {
   return { start, end, newCards: cards };
 };
 
-export const cardChange = (cards, result) => {
+export const cardChange = (cards: any, result: any) => {
   const [removed] = cards.splice(result.source.index, 1);
   cards.splice(result.destination.index, 0, removed);
   return cards;
 };
 
-export const cardItemsSelectedChange = (cards, result, selected) => {
+export const cardItemsSelectedChange = (
+  cards: any,
+  result: any,
+  selected: any
+) => {
   const destinationCard = cards.find(
-    (card) => card._id === result.destination.droppableId
+    (card: any) => card._id === result.destination.droppableId
   );
 
-  cards.forEach((card) => {
-    selected.forEach((s) => {
+  cards.forEach((card: any) => {
+    selected.forEach((s: any) => {
       remove(card.list, ["_id", s._id]);
       s.cardID = result.destination.droppableId;
     });
@@ -57,17 +61,21 @@ export const cardItemsSelectedChange = (cards, result, selected) => {
   return cards;
 };
 
-export const removeSelectedItems = (cards, selectedItems) => {
-  cards.forEach((card) => {
-    selectedItems.forEach((s) => {
+export const removeSelectedItems = (cards: any, selectedItems: any) => {
+  cards.forEach((card: any) => {
+    selectedItems.forEach((s: any) => {
       remove(card.list, ["_id", s._id]);
     });
   });
   return cards;
 };
 
-export const findCard = (cardID, cards) => {
+export const findCard = (cardID: any, cards: any) => {
   return find(cards, (o) => {
     return o._id === cardID;
   });
+};
+
+export const getCardByItemID = (itemID: string, cards: Array<any>): any => {
+  return find(cards, ({ list }) => find(list, ["_id", itemID]));
 };

@@ -15,8 +15,8 @@ export default function ItemFile({ file, onRemove }: Props) {
 
   return (
     <div className="attachment-file" {...eventHandlers}>
-      {file.mimetype.includes("image") ? (
-        <img src={file.fileLocation} alt="" />
+      {file.type.includes("image") ? (
+        <img src={file.content} alt="" />
       ) : (
         <InsertDriveFileIcon fontSize="large" />
       )}
@@ -32,7 +32,7 @@ const FileInfo = ({ file, onRemove }: any) => {
   };
   return (
     <div className="attachment-hover-container">
-      <div className="attachment-name">{file.fileName}</div>
+      <div className="attachment-name">{file.name}</div>
       <div className="attachment-size">
         <span>{filesize(file.size)}</span>
         <IconButton size="small" onClick={(e) => remove(e)}>

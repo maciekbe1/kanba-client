@@ -29,7 +29,7 @@ export default function ItemSideBar({
   return (
     <div style={{ width: "204px" }}>
       <List disablePadding>
-        <ListItem style={{ textAlign: "right" }} divider disableGutters>
+        <ListItem divider disableGutters>
           <ListItemText secondary="Created" />
           <ListItemText primary={moment(date).format("DD/MM/YYYY")} inset />
         </ListItem>

@@ -4,7 +4,8 @@ import CardMenu from "components/Cards/card-drag-drop/card-component/CardMenu";
 import {
   removeCard,
   updateCard,
-  closeItemContent
+  closeItemContent,
+  cancelNewContent
 } from "store/actions/cardsActions";
 import { useDispatch, useSelector } from "react-redux";
 import * as CardsService from "services/CardsService";
@@ -40,15 +41,20 @@ export default function Navbar({
     (state: RootState) => state.authReducer.token
   );
   const item = useSelector((state: any) => state.cardsReducer.itemContentData);
-
+  const isNewContentOpen = useSelector(
+    (state: any) => state.cardsReducer.isNewContentOpen
+  );
   const onRemoveCard = () => {
     onRemove({
-      dialogTitle: "Napewno chcesz usunac karte?",
+      dialogTitle: "Are you soure you want to delete this card?",
       dialogText: cardTitle,
       remove: () => {
         CardsService.removeCard(cardID, userID);
         if (item?.cardID === cardID) {
           dispatch(closeItemContent());
+        }
+        if (isNewContentOpen) {
+          dispatch(cancelNewContent());
         }
         dispatch(removeCard({ cardID }));
       }

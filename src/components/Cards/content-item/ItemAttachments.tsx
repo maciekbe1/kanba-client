@@ -1,92 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addAttachment, removeAttachment } from "store/actions/cardsActions";
+import { removeAttachment } from "store/actions/cardsActions";
 import { useDropzone } from "react-dropzone";
 
 import * as CardsService from "services/CardsService";
 
-import Button from "@material-ui/core/Button";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import IconButton from "@material-ui/core/IconButton";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
 import AttachmentDialog from "components/Cards/content-item/AttachmentDialog";
 
 import ItemFile from "components/Cards/content-item/ItemFile";
 
+import AttachmentHelper from "helper/AttachmentHelper";
 interface Props {
   itemID: string;
   attachments: Array<any>;
+  postAttachments: Function;
 }
 
-export default function Attachments({ itemID, attachments }: Props) {
-  const [, setPending] = useState(false);
+export default function Attachments({
+  itemID,
+  attachments,
+  postAttachments
+}: Props) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
+  const [files, setFiles] = useState<Array<any>>([]);
+
+  useEffect(() => {
+    setFiles(attachments);
+  }, [attachments]);
+
   const openDialog = (number: number) => {
     setIndex(number);
     setDialogIsOpen(true);
   };
+
   const dispatch = useDispatch();
-  //TODO -> set attachment state and controll it by hook
-  //what is when add attachment behind attachment as fast as
-  //the first newly added is not responsed yet
   const { getRootProps, getInputProps, open } = useDropzone({
     noClick: true,
     noKeyboard: true,
-    multiple: false,
+    multiple: true,
     onDrop: (acceptedFiles) => {
-      const formData = new FormData();
-      formData.append("file", acceptedFiles[0]);
-      formData.append("itemID", itemID);
-      setPending(true);
-      CardsService.addFileToItem(formData).then((res) => {
-        dispatch(
-          addAttachment({
-            itemID: res.data.itemID,
-            file: res.data.file
-          })
-        );
-        setPending(false);
-      });
+      const attachment = AttachmentHelper.attachmentURLCreator(acceptedFiles);
+      setFiles([...files, ...attachment]);
+      postAttachments([...files, ...attachment]);
     }
   });
 
-  const onRemove = (fileID: string, fileName: string) => {
-    setPending(true);
-    CardsService.removeFileFromItem(fileName, itemID, fileID)
-      .then(() => {
-        dispatch(removeAttachment({ itemID, fileID }));
-        setPending(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const onRemove = (fileID: string, name: string) => {
+    dispatch(removeAttachment({ itemID, fileID }));
+    CardsService.removeFileFromItem(name, itemID, fileID);
   };
 
   return (
     <div className="content-attachments-container">
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
-        <Button
-          size="small"
-          variant="contained"
-          color="default"
-          startIcon={<CloudUploadIcon />}
-          onClick={open}
-        >
-          Click or Drop
-        </Button>
+        <IconButton aria-label="delete" onClick={open}>
+          <AttachFileIcon />
+        </IconButton>
       </div>
       <div className="content-attachment-files">
-        {attachments?.map((file: any, k: number) => (
+        {files.map((file: any, k: number) => (
           <div key={k} onClick={() => openDialog(k)}>
             <ItemFile file={file} onRemove={onRemove} />
           </div>
         ))}
       </div>
-      {attachments?.length && dialogIsOpen ? (
+      {files.length && dialogIsOpen ? (
         <AttachmentDialog
           isOpen={dialogIsOpen}
           setDialogIsOpen={setDialogIsOpen}
-          attachments={attachments}
+          attachments={files}
           index={index}
         />
       ) : null}
