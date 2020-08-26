@@ -46,7 +46,7 @@ export default function Navbar({
   );
   const onRemoveCard = () => {
     onRemove({
-      dialogTitle: "Are you soure you want to delete this card?",
+      dialogTitle: "Are you sure you want to delete this card?",
       dialogText: cardTitle,
       remove: () => {
         CardsService.removeCard(cardID, userID);

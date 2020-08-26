@@ -49,7 +49,7 @@ export default function Description({ content, onSaveContent }: Props) {
             setEditorContent={setEditorContent}
             isEdit={edit}
           />
-          <EditorButtons save={save} cancel={onCancelContent} />
+          <EditorButtons onSave={save} cancel={onCancelContent} />
         </>
       ) : (
         <div

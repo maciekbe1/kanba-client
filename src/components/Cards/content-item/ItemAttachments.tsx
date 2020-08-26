@@ -28,7 +28,9 @@ export default function Attachments({
   const [files, setFiles] = useState<Array<any>>([]);
 
   useEffect(() => {
-    setFiles(attachments);
+    if (Array.isArray(attachments)) {
+      setFiles(attachments);
+    }
   }, [attachments]);
 
   const openDialog = (number: number) => {
@@ -62,13 +64,13 @@ export default function Attachments({
         </IconButton>
       </div>
       <div className="content-attachment-files">
-        {files.map((file: any, k: number) => (
+        {files?.map((file: any, k: number) => (
           <div key={k} onClick={() => openDialog(k)}>
             <ItemFile file={file} onRemove={onRemove} />
           </div>
         ))}
       </div>
-      {files.length && dialogIsOpen ? (
+      {files?.length && dialogIsOpen ? (
         <AttachmentDialog
           isOpen={dialogIsOpen}
           setDialogIsOpen={setDialogIsOpen}

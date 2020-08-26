@@ -27,7 +27,7 @@ export default function ItemSideBar({
   tags
 }: Props) {
   return (
-    <div style={{ width: "204px" }}>
+    <div>
       <List disablePadding>
         <ListItem divider disableGutters>
           <ListItemText secondary="Created" />

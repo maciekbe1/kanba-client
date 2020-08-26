@@ -1,7 +1,7 @@
 import { find, remove } from "lodash";
 
-export const cardItemChange = (cards: any, result: any) => {
-  const reorder = (list: any, startIndex: any, endIndex: any) => {
+export const cardItemChange = (cards: Array<any>, result: any) => {
+  const reorder = (list: Array<any>, startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -21,7 +21,7 @@ export const cardItemChange = (cards: any, result: any) => {
   return cards;
 };
 
-export const cardItemShared = (cards: any, result: any) => {
+export const cardItemShared = (cards: Array<any>, result: any) => {
   let start = find(cards, (o) => {
     return o._id === result.source.droppableId;
   });
@@ -34,16 +34,16 @@ export const cardItemShared = (cards: any, result: any) => {
   return { start, end, newCards: cards };
 };
 
-export const cardChange = (cards: any, result: any) => {
+export const cardChange = (cards: Array<any>, result: any) => {
   const [removed] = cards.splice(result.source.index, 1);
   cards.splice(result.destination.index, 0, removed);
   return cards;
 };
 
 export const cardItemsSelectedChange = (
-  cards: any,
+  cards: Array<any>,
   result: any,
-  selected: any
+  selected: Array<any>
 ) => {
   const destinationCard = cards.find(
     (card: any) => card._id === result.destination.droppableId
@@ -61,7 +61,10 @@ export const cardItemsSelectedChange = (
   return cards;
 };
 
-export const removeSelectedItems = (cards: any, selectedItems: any) => {
+export const removeSelectedItems = (
+  cards: Array<any>,
+  selectedItems: Array<any>
+) => {
   cards.forEach((card: any) => {
     selectedItems.forEach((s: any) => {
       remove(card.list, ["_id", s._id]);
@@ -70,7 +73,7 @@ export const removeSelectedItems = (cards: any, selectedItems: any) => {
   return cards;
 };
 
-export const findCard = (cardID: any, cards: any) => {
+export const findCard = (cardID: string, cards: Array<any>) => {
   return find(cards, (o) => {
     return o._id === cardID;
   });
