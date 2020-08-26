@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { removeAttachment } from "store/actions/cardsActions";
-import { useDropzone } from "react-dropzone";
 
-import * as CardsService from "services/CardsService";
+import { useDropzone } from "react-dropzone";
 
 import IconButton from "@material-ui/core/IconButton";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
@@ -13,15 +10,15 @@ import ItemFile from "components/Cards/content-item/ItemFile";
 
 import AttachmentHelper from "helper/AttachmentHelper";
 interface Props {
-  itemID: string;
+  onRemoveAttachment: Function;
   attachments: Array<any>;
-  postAttachments: Function;
+  onPostAttachments: Function;
 }
 
 export default function Attachments({
-  itemID,
   attachments,
-  postAttachments
+  onPostAttachments,
+  onRemoveAttachment
 }: Props) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
@@ -38,7 +35,6 @@ export default function Attachments({
     setDialogIsOpen(true);
   };
 
-  const dispatch = useDispatch();
   const { getRootProps, getInputProps, open } = useDropzone({
     noClick: true,
     noKeyboard: true,
@@ -46,13 +42,17 @@ export default function Attachments({
     onDrop: (acceptedFiles) => {
       const attachment = AttachmentHelper.attachmentURLCreator(acceptedFiles);
       setFiles([...files, ...attachment]);
-      postAttachments([...files, ...attachment]);
+      onPostAttachments(acceptedFiles);
     }
   });
 
-  const onRemove = (fileID: string, name: string) => {
-    dispatch(removeAttachment({ itemID, fileID }));
-    CardsService.removeFileFromItem(name, itemID, fileID);
+  const onRemoveFromView = (index: number) => {
+    try {
+      onRemoveAttachment(index);
+      setFiles(files.filter((item, i) => index !== i));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -66,7 +66,11 @@ export default function Attachments({
       <div className="content-attachment-files">
         {files?.map((file: any, k: number) => (
           <div key={k} onClick={() => openDialog(k)}>
-            <ItemFile file={file} onRemove={onRemove} />
+            <ItemFile
+              file={file}
+              onRemoveFromView={onRemoveFromView}
+              index={k}
+            />
           </div>
         ))}
       </div>

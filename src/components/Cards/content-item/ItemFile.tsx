@@ -7,10 +7,11 @@ import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 
 interface Props {
   file: any;
-  onRemove: Function;
+  onRemoveFromView: Function;
+  index: number;
 }
 
-export default function ItemFile({ file, onRemove }: Props) {
+export default function ItemFile({ file, onRemoveFromView, index }: Props) {
   const [hovered, eventHandlers] = useHover();
 
   return (
@@ -20,15 +21,21 @@ export default function ItemFile({ file, onRemove }: Props) {
       ) : (
         <InsertDriveFileIcon fontSize="large" />
       )}
-      {hovered ? <FileInfo file={file} onRemove={onRemove} /> : null}
+      {hovered ? (
+        <FileInfo
+          file={file}
+          onRemoveFromView={onRemoveFromView}
+          index={index}
+        />
+      ) : null}
     </div>
   );
 }
 
-const FileInfo = ({ file, onRemove }: any) => {
+const FileInfo = ({ file, onRemoveFromView, index }: any) => {
   const remove = (e: any) => {
     e.stopPropagation();
-    onRemove(file._id, file.storageName);
+    onRemoveFromView(index);
   };
   return (
     <div className="attachment-hover-container">

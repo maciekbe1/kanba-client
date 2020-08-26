@@ -3,7 +3,7 @@ export default class Content {
     attachments,
     cardID,
     cardTitle,
-    content,
+    description,
     date,
     labels,
     priority,
@@ -13,7 +13,7 @@ export default class Content {
     this.attachments = attachments;
     this.cardID = cardID;
     this.cardTitle = cardTitle;
-    this.content = content;
+    this.description = description;
     this.date = date;
     this.labels = labels;
     this.priority = priority;

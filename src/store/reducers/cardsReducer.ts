@@ -177,10 +177,8 @@ export default (state = INITIAL_DATA, action: any) => {
 
     case "REMOVE_ATTACHMENT": {
       const item = ItemHelper.findItem(action.payload.itemID, state.cardsState);
-      remove(
-        item.attachments,
-        (file: any) => file._id === action.payload.fileID
-      );
+      item.attachments.splice(action.payload.index, 1);
+
       return {
         ...state,
         cardsState: state.cardsState,

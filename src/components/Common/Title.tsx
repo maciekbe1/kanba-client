@@ -7,9 +7,9 @@ import { cloneDeep } from "lodash";
 interface Props {
   title: string;
   onTitleChange: Function;
-  onTitleEdit?: Function;
+  isDefaultEdit?: boolean;
 }
-export default function Title({ title, onTitleChange, onTitleEdit }: Props) {
+export default function Title({ title, onTitleChange, isDefaultEdit }: Props) {
   const [value, setValue] = useState("");
   const [editable, setEditable] = useState(false);
 
@@ -20,13 +20,20 @@ export default function Title({ title, onTitleChange, onTitleEdit }: Props) {
   }, [title]);
 
   useEffect(() => {
-    if (onTitleEdit) {
-      onTitleEdit(ref);
+    if (isDefaultEdit) {
+      defaultEdit();
     }
     // eslint-disable-next-line
   }, []);
 
   useOutsideEvent(ref);
+
+  const defaultEdit = () => {
+    ref.current.contentEditable = true;
+    ref.current.focus();
+    setEditable(true);
+    document.execCommand("selectAll", false, undefined);
+  };
 
   const onMouseDown = (e: any) => {
     e.stopPropagation();

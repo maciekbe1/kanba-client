@@ -1,6 +1,7 @@
 .title-component {
   position: relative;
   word-break: break-word;
+  width: fit-content;
   .title {
     &:hover {
       cursor: pointer;

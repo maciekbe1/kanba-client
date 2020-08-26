@@ -53,18 +53,12 @@ export default function NewContent() {
     );
   };
 
-  const onSaveContent = (editorContent: any) => {
+  const onSaveDescription = (editorValue: any) => {
     dispatch(
       updateNewItem({
-        content: editorContent
+        description: editorValue
       })
     );
-  };
-
-  const onTitleEdit = (ref: any) => {
-    ref.current.contentEditable = true;
-    ref.current.focus();
-    document.execCommand("selectAll", false, undefined);
   };
 
   const createCardItem = async () => {
@@ -108,8 +102,12 @@ export default function NewContent() {
       });
   };
 
-  const postAttachments = (acceptedFiles: Array<any>) => {
+  const onPostAttachments = (acceptedFiles: Array<any>) => {
     setFiles([...acceptedFiles, ...files]);
+  };
+
+  const onRemoveAttachment = (index: number) => {
+    setFiles(files.filter((item, i) => index !== i));
   };
 
   return (
@@ -143,7 +141,7 @@ export default function NewContent() {
                 <Title
                   title={itemContentData.title}
                   onTitleChange={onItemChange}
-                  onTitleEdit={onTitleEdit}
+                  isDefaultEdit={true}
                 />
               }
               secondary={itemContentData.cardTitle}
@@ -156,9 +154,9 @@ export default function NewContent() {
         </div>
         <div className="flex space-between">
           <Attachments
-            itemID={itemContentData._id}
             attachments={itemContentData.attachments}
-            postAttachments={postAttachments}
+            onPostAttachments={onPostAttachments}
+            onRemoveAttachment={onRemoveAttachment}
           />
 
           <ItemSiteBar
@@ -170,8 +168,8 @@ export default function NewContent() {
           />
         </div>
         <Description
-          content={itemContentData.content}
-          onSaveContent={onSaveContent}
+          description={itemContentData.description}
+          onSaveDescription={onSaveDescription}
         />
       </Card>
       <Backdrop open={open} className={classes.backdrop}>
