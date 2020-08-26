@@ -1,6 +1,9 @@
 @import "./content-item/content-item";
 
 .card-component {
+  .MuiCardContent-root:last-child {
+    padding-bottom: 16px;
+  }
   .card-navbar-component {
     width: 100%;
     display: flex;

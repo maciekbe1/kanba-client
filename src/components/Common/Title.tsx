@@ -1,22 +1,34 @@
 import React, { useState, useRef, useEffect } from "react";
-import Typography from "@material-ui/core/Typography";
+
 import Button from "@material-ui/core/Button";
 import { Done, Clear } from "@material-ui/icons";
 import { cloneDeep } from "lodash";
 
-export default function Title({ title, onTitleChange }) {
-  const [value, setValue] = useState();
+interface Props {
+  title: string;
+  onTitleChange: Function;
+  onTitleEdit?: Function;
+}
+export default function Title({ title, onTitleChange, onTitleEdit }: Props) {
+  const [value, setValue] = useState("");
   const [editable, setEditable] = useState(false);
 
-  const ref = useRef();
+  const ref = useRef<any>(null);
 
   useEffect(() => {
     setValue(title);
   }, [title]);
 
+  useEffect(() => {
+    if (onTitleEdit) {
+      onTitleEdit(ref);
+    }
+    // eslint-disable-next-line
+  }, []);
+
   useOutsideEvent(ref);
 
-  const onMouseDown = (e) => {
+  const onMouseDown = (e: any) => {
     e.stopPropagation();
     ref.current.contentEditable = true;
     ref.current.focus();
@@ -24,7 +36,7 @@ export default function Title({ title, onTitleChange }) {
     setEditable(true);
   };
 
-  const onKeyPress = (e) => {
+  const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       ref.current.blur();
     }
@@ -41,7 +53,7 @@ export default function Title({ title, onTitleChange }) {
     }
   };
 
-  const onPaste = (e) => {
+  const onPaste = (e: any) => {
     e.preventDefault();
     const text = e.clipboardData.getData("text");
     document.execCommand("insertText", false, text);
@@ -60,17 +72,16 @@ export default function Title({ title, onTitleChange }) {
 
   return (
     <div className="title-component">
-      <Typography
+      <span
         ref={ref}
         onMouseDown={onMouseDown}
         onKeyPress={onKeyPress}
-        tabIndex="0"
         onBlur={onBlur}
         onPaste={onPaste}
         className="title"
       >
         {title}
-      </Typography>
+      </span>
       {editable ? (
         <div className="icons-wrapper">
           <Button
@@ -103,8 +114,8 @@ export default function Title({ title, onTitleChange }) {
   );
 }
 
-function useOutsideEvent(ref) {
-  function handleClickOutside(event) {
+function useOutsideEvent(ref: any) {
+  function handleClickOutside(event: any) {
     if (ref.current && !ref.current.contains(event.target)) {
       ref.current.setEditable = false;
       ref.current.blur();

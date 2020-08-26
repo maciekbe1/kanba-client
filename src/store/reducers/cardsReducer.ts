@@ -2,13 +2,16 @@ import { remove, set } from "lodash";
 import Card from "model/Card";
 import ItemHelper from "helper/ItemHelper";
 import * as CardsHelper from "helper/CardsHelper";
+import Content from "model/Content";
 
 const INITIAL_DATA = {
   isCardsLoaded: false,
   selectedItems: [],
   cardsState: [],
   isContentOpen: false,
-  itemContentData: null
+  isNewContentOpen: false,
+  itemContentData: {},
+  openItemCardName: null
 };
 
 export default (state = INITIAL_DATA, action: any) => {
@@ -77,7 +80,8 @@ export default (state = INITIAL_DATA, action: any) => {
 
       return {
         ...state,
-        cardsState: new Card(state.cardsState).cards
+        cardsState: new Card(state.cardsState).cards,
+        openItemCardName: action.payload.title
       };
     }
 
@@ -97,6 +101,12 @@ export default (state = INITIAL_DATA, action: any) => {
 
     case "OPEN_ITEM_CONTENT": {
       const item = ItemHelper.findItem(action.payload.itemID, state.cardsState);
+      const card = CardsHelper.getCardByItemID(
+        action.payload.itemID,
+        state.cardsState
+      );
+      item.cardTitle = card.title;
+
       return {
         ...state,
         isContentOpen: true,
@@ -112,6 +122,46 @@ export default (state = INITIAL_DATA, action: any) => {
       };
     }
 
+    case "OPEN_NEW_CONTENT": {
+      const card = CardsHelper.findCard(action.cardID, state.cardsState);
+      return {
+        ...state,
+        isNewContentOpen: true,
+        isContentOpen: false,
+        itemContentData: new Content(
+          [], //attachments
+          action.cardID,
+          card.title,
+          "", //content
+          Date.now(),
+          [], //labels
+          null, //priority
+          null, //status
+          "New Item" //title
+        )
+      };
+    }
+
+    case "UPDATE_NEW_ITEM": {
+      const name = Object.keys(action.payload)[0];
+      const value = Object.values(action.payload)[0];
+      const obj = state.itemContentData;
+
+      set(obj, [name], value);
+
+      return {
+        ...state,
+        itemContentData: obj
+      };
+    }
+    case "CANCEL_NEW_CONTENT": {
+      return {
+        ...state,
+        isNewContentOpen: false,
+        itemContentData: null
+      };
+    }
+
     case "ADD_ATTACHMENT": {
       const item = ItemHelper.findItem(action.payload.itemID, state.cardsState);
       item.hasOwnProperty("attachments")
@@ -120,7 +170,8 @@ export default (state = INITIAL_DATA, action: any) => {
 
       return {
         ...state,
-        cardsState: state.cardsState
+        cardsState: state.cardsState,
+        itemContentData: item
       };
     }
 
@@ -132,7 +183,8 @@ export default (state = INITIAL_DATA, action: any) => {
       );
       return {
         ...state,
-        cardsState: new Card(state.cardsState).cards
+        cardsState: state.cardsState,
+        itemContentData: item
       };
     }
     default:

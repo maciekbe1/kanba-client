@@ -125,22 +125,22 @@ export const removeCard = (cardID: string, userID: string) => {
   );
 };
 
-export const addFileToItem = (formData: any) => {
+export const addFileToItem = (files: any) => {
   return sendFile(
     `${process.env.REACT_APP_SERVER}/api/cards/upload-file`,
-    formData,
+    files,
     store.getState().authReducer.token
   );
 };
 
 export const removeFileFromItem = (
-  fileName: string,
+  name: string,
   itemID: string,
   fileID: string
 ) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/remove-file`,
-    { fileName, itemID, fileID },
+    { name, itemID, fileID },
     store.getState().authReducer.token
   );
 };

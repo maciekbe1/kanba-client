@@ -4,20 +4,15 @@ import EditorButtons from "components/Editor/EditorButtons";
 
 import parse from "react-html-parser";
 
-import { useDispatch } from "react-redux";
-import { updateItem } from "store/actions/cardsActions";
-import * as CardsService from "services/CardsService";
-
 interface Props {
   content: any;
-  itemID: string;
+  onSaveContent: Function;
 }
 
-export default function Description({ content, itemID }: Props) {
+export default function Description({ content, onSaveContent }: Props) {
   const [edit, setEdit] = useState(false);
   const [editorContent, setEditorContent] = useState("");
   const [memoContent, setMemoContent] = useState("");
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setEditorContent(content);
@@ -25,18 +20,12 @@ export default function Description({ content, itemID }: Props) {
     setEdit(false);
   }, [content]);
 
-  const onSaveContent = () => {
+  const save = () => {
     setEdit(!edit);
     if (editorContent !== memoContent) {
       setMemoContent(editorContent);
-      CardsService.updateItem(itemID, "content", editorContent);
-      dispatch(
-        updateItem({
-          itemID: itemID,
-          content: editorContent
-        })
-      );
     }
+    onSaveContent(editorContent);
   };
 
   const onCancelContent = () => {
@@ -60,7 +49,7 @@ export default function Description({ content, itemID }: Props) {
             setEditorContent={setEditorContent}
             isEdit={edit}
           />
-          <EditorButtons save={onSaveContent} cancel={onCancelContent} />
+          <EditorButtons onSave={save} cancel={onCancelContent} />
         </>
       ) : (
         <div

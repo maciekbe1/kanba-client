@@ -40,13 +40,9 @@ export default function FullScreenDialog({
   const theme = useTheme();
 
   const save = () => {
-    var file = new File(
-      [attachments[index].fileName],
-      attachments[index].fileName,
-      {
-        type: attachments[index].mimetype
-      }
-    );
+    var file = new File([attachments[index].name], attachments[index].name, {
+      type: attachments[index].type
+    });
     FileSaver.saveAs(file);
     handleClose();
   };
@@ -75,7 +71,7 @@ export default function FullScreenDialog({
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            {attachments[index].fileName}
+            {attachments[index].name}
           </Typography>
           <span style={{ marginRight: "10px" }}>
             {filesize(attachments[index].size)}
@@ -87,8 +83,8 @@ export default function FullScreenDialog({
       </AppBar>
 
       <div className="dialog-photo">
-        {attachments[index].mimetype.includes("image") ? (
-          <img src={attachments[index].fileLocation} alt="" />
+        {attachments[index].type.includes("image") ? (
+          <img src={attachments[index].content} alt="" />
         ) : (
           <InsertDriveFileIcon fontSize="large" />
         )}

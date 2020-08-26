@@ -67,3 +67,17 @@ export const removeAttachment = (payload: any) => ({
   type: "REMOVE_ATTACHMENT",
   payload
 });
+
+export const openNewContent = (cardID: string) => ({
+  type: "OPEN_NEW_CONTENT",
+  cardID
+});
+
+export const cancelNewContent = () => ({
+  type: "CANCEL_NEW_CONTENT"
+});
+
+export const updateNewItem = (payload: any) => ({
+  type: "UPDATE_NEW_ITEM",
+  payload
+});
