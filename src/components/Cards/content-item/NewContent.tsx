@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  updateNewItem,
+  updateItemContent,
   cancelNewContent,
   createItem,
   addAttachment,
@@ -47,7 +47,7 @@ export default function NewContent() {
 
   const onItemChange = (element: any, type: any) => {
     dispatch(
-      updateNewItem({
+      updateItemContent({
         [type]: element
       })
     );
@@ -55,7 +55,7 @@ export default function NewContent() {
 
   const onSaveDescription = (editorValue: any) => {
     dispatch(
-      updateNewItem({
+      updateItemContent({
         description: editorValue
       })
     );
@@ -104,7 +104,7 @@ export default function NewContent() {
 
   const onPostAttachments = (acceptedFiles: Array<any>) => {
     dispatch(
-      updateNewItem({
+      updateItemContent({
         attachments: acceptedFiles
       })
     );
@@ -115,7 +115,7 @@ export default function NewContent() {
       (item: any, i: number) => index !== i
     );
     dispatch(
-      updateNewItem({
+      updateItemContent({
         attachments: newAttachments
       })
     );
