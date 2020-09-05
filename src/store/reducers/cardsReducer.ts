@@ -109,6 +109,7 @@ export default (state = INITIAL_DATA, action: any) => {
       return {
         ...state,
         isContentOpen: true,
+        isNewContentOpen: false,
         itemContentData: item
       };
     }
@@ -117,7 +118,7 @@ export default (state = INITIAL_DATA, action: any) => {
       return {
         ...state,
         isContentOpen: false,
-        itemContentData: null
+        itemContentData: {}
       };
     }
 
@@ -156,7 +157,7 @@ export default (state = INITIAL_DATA, action: any) => {
       return {
         ...state,
         isNewContentOpen: false,
-        itemContentData: null
+        itemContentData: {}
       };
     }
 

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { useDispatch, useSelector } from "react-redux";
-import { openItemContent, cancelNewContent } from "store/actions/cardsActions";
+import { openItemContent } from "store/actions/cardsActions";
 
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import ItemCheckbox from "components/Cards/card-drag-drop/item-component/ItemCheckbox";
@@ -23,7 +23,6 @@ export default function DndItem({ item, index }) {
         e.target.classList.contains("item-title-text") ||
         e.target.classList.contains("card-item-action")
       ) {
-        dispatch(cancelNewContent());
         dispatch(openItemContent({ itemID: item._id }));
       }
     },
