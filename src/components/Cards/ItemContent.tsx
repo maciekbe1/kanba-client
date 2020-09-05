@@ -39,6 +39,7 @@ export default function ItemContent() {
 function ContentView() {
   const [width, setWidth] = useState(0);
   const dispatch = useDispatch();
+
   const item = useSelector((state: any) => state.cardsReducer.itemContentData);
 
   const onItemChange = (element: any, type: string) => {
@@ -139,6 +140,7 @@ function ContentView() {
             attachments={item.attachments}
             onPostAttachments={onPostAttachments}
             onRemoveAttachment={onRemoveAttachment}
+            isNew={false}
           />
           <ItemSiteBar
             date={item.date}
