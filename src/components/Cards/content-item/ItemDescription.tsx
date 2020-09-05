@@ -5,32 +5,32 @@ import EditorButtons from "components/Editor/EditorButtons";
 import parse from "react-html-parser";
 
 interface Props {
-  content: any;
-  onSaveContent: Function;
+  description: any;
+  onSaveDescription: Function;
 }
 
-export default function Description({ content, onSaveContent }: Props) {
+export default function Description({ description, onSaveDescription }: Props) {
   const [edit, setEdit] = useState(false);
-  const [editorContent, setEditorContent] = useState("");
-  const [memoContent, setMemoContent] = useState("");
+  const [editorValue, setEditorValue] = useState("");
+  const [memoValue, setMemoValue] = useState("");
 
   useEffect(() => {
-    setEditorContent(content);
-    setMemoContent(content);
+    setEditorValue(description);
+    setMemoValue(description);
     setEdit(false);
-  }, [content]);
+  }, [description]);
 
   const save = () => {
     setEdit(!edit);
-    if (editorContent !== memoContent) {
-      setMemoContent(editorContent);
+    if (editorValue !== memoValue) {
+      setMemoValue(editorValue);
     }
-    onSaveContent(editorContent);
+    onSaveDescription(editorValue);
   };
 
-  const onCancelContent = () => {
+  const onCancel = () => {
     setEdit(!edit);
-    setEditorContent(memoContent);
+    setEditorValue(memoValue);
   };
 
   const onSetEdit = (e: any) => {
@@ -45,19 +45,19 @@ export default function Description({ content, onSaveContent }: Props) {
       {edit ? (
         <>
           <Editor
-            content={editorContent ? editorContent : ""}
-            setEditorContent={setEditorContent}
+            editorValue={editorValue ? editorValue : ""}
+            setEditorValue={setEditorValue}
             isEdit={edit}
           />
-          <EditorButtons onSave={save} cancel={onCancelContent} />
+          <EditorButtons onSave={save} onCancel={onCancel} />
         </>
       ) : (
         <div
           className="card-description-textbox w-100"
           onClick={(e) => onSetEdit(e)}
         >
-          {editorContent ? (
-            parse(editorContent)
+          {editorValue ? (
+            parse(editorValue)
           ) : (
             <span style={{ color: "#cfcfcf" }}>Add content</span>
           )}

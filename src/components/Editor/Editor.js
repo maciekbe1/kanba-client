@@ -2,11 +2,11 @@ import React from "react";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "ckeditor5-build-classic-plus";
 
-export default function Editor({ content, setEditorContent, isEdit }) {
+export default function Editor({ editorValue, setEditorValue, isEdit }) {
   return (
     <CKEditor
       editor={ClassicEditor}
-      data={content}
+      data={editorValue}
       config={editorConfiguration}
       onInit={(editor) => {
         if (isEdit) {
@@ -15,7 +15,7 @@ export default function Editor({ content, setEditorContent, isEdit }) {
       }}
       onChange={(event, editor) => {
         const data = editor.getData();
-        setEditorContent(data);
+        setEditorValue(data);
       }}
     />
   );

@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   updateItem,
   closeItemContent,
-  addAttachment
+  addAttachment,
+  removeAttachment
 } from "store/actions/cardsActions";
 
 import * as CardsService from "services/CardsService";
@@ -38,6 +39,7 @@ export default function ItemContent() {
 function ContentView() {
   const [width, setWidth] = useState(0);
   const dispatch = useDispatch();
+
   const item = useSelector((state: any) => state.cardsReducer.itemContentData);
 
   const onItemChange = (element: any, type: string) => {
@@ -54,17 +56,17 @@ function ContentView() {
     dispatch(closeItemContent());
   };
 
-  const saveContent = (editorContent: string) => {
-    CardsService.updateItem(item._id, "content", editorContent);
+  const onSaveDescription = (editorValue: string) => {
+    CardsService.updateItem(item._id, "description", editorValue);
     dispatch(
       updateItem({
         itemID: item._id,
-        content: editorContent
+        description: editorValue
       })
     );
   };
 
-  const postAttachments = (acceptedFiles: Array<any>) => {
+  const onPostAttachments = (acceptedFiles: Array<any>) => {
     let fileArray: any[] = [];
     acceptedFiles.forEach((file: any) => {
       const formData = new FormData();
@@ -72,6 +74,7 @@ function ContentView() {
       formData.append("itemID", item._id);
       fileArray.push(formData);
     });
+
     axios.all(
       fileArray.map(async (file) => {
         return await CardsService.addFileToItem(file).then((res) => {
@@ -85,7 +88,14 @@ function ContentView() {
       })
     );
   };
-
+  const onRemoveAttachment = (index: number) => {
+    const file = item.attachments[index];
+    CardsService.removeFileFromItem(file.storageName, item._id, file._id).then(
+      () => {
+        dispatch(removeAttachment({ itemID: item._id, index }));
+      }
+    );
+  };
   return (
     <Resizable
       defaultSize={{
@@ -127,9 +137,10 @@ function ContentView() {
         </div>
         <div className="flex space-between">
           <Attachments
-            itemID={item._id}
             attachments={item.attachments}
-            postAttachments={postAttachments}
+            onPostAttachments={onPostAttachments}
+            onRemoveAttachment={onRemoveAttachment}
+            isNew={false}
           />
           <ItemSiteBar
             date={item.date}
@@ -139,7 +150,10 @@ function ContentView() {
             tags={item.labels || null}
           />
         </div>
-        <Description content={item.content} onSaveContent={saveContent} />
+        <Description
+          description={item.description}
+          onSaveDescription={onSaveDescription}
+        />
       </Card>
     </Resizable>
   );

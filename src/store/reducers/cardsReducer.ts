@@ -66,7 +66,6 @@ export default (state = INITIAL_DATA, action: any) => {
       const value = Object.values(action.payload)[1];
       const obj = ItemHelper.findItem(action.payload.itemID, state.cardsState);
       set(obj, [name], value);
-
       return {
         ...state,
         cardsState: new Card(state.cardsState).cards
@@ -146,12 +145,10 @@ export default (state = INITIAL_DATA, action: any) => {
       const name = Object.keys(action.payload)[0];
       const value = Object.values(action.payload)[0];
       const obj = state.itemContentData;
-
       set(obj, [name], value);
-
       return {
         ...state,
-        itemContentData: obj
+        itemContentData: Object.assign({}, state.itemContentData, obj)
       };
     }
     case "CANCEL_NEW_CONTENT": {
@@ -170,21 +167,19 @@ export default (state = INITIAL_DATA, action: any) => {
 
       return {
         ...state,
-        cardsState: state.cardsState,
-        itemContentData: item
+        cardsState: new Card(state.cardsState).cards,
+        itemContentData: Object.assign({}, state.itemContentData, item)
       };
     }
 
     case "REMOVE_ATTACHMENT": {
       const item = ItemHelper.findItem(action.payload.itemID, state.cardsState);
-      remove(
-        item.attachments,
-        (file: any) => file._id === action.payload.fileID
-      );
+      item.attachments.splice(action.payload.index, 1);
+
       return {
         ...state,
-        cardsState: state.cardsState,
-        itemContentData: item
+        cardsState: new Card(state.cardsState).cards,
+        itemContentData: Object.assign({}, state.itemContentData, item)
       };
     }
     default:

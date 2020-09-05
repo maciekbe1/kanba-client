@@ -37,7 +37,7 @@ export default function NewContent() {
   const { itemContentData } = useSelector((state: any) => state.cardsReducer);
   const classes = useStyles();
   const [width, setWidth] = useState(0);
-  const [files, setFiles] = useState<Array<any>>([]);
+
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -53,18 +53,12 @@ export default function NewContent() {
     );
   };
 
-  const onSaveContent = (editorContent: any) => {
+  const onSaveDescription = (editorValue: any) => {
     dispatch(
       updateNewItem({
-        content: editorContent
+        description: editorValue
       })
     );
-  };
-
-  const onTitleEdit = (ref: any) => {
-    ref.current.contentEditable = true;
-    ref.current.focus();
-    document.execCommand("selectAll", false, undefined);
   };
 
   const createCardItem = async () => {
@@ -77,7 +71,7 @@ export default function NewContent() {
         dispatch(createItem(responseItem.data.item));
 
         let array: Array<any> = [];
-        files.forEach((file: any) => {
+        itemContentData.attachments.forEach((file: any) => {
           const formData = new FormData();
           formData.append("file", file);
           formData.append("itemID", responseItem.data.item._id);
@@ -108,8 +102,23 @@ export default function NewContent() {
       });
   };
 
-  const postAttachments = (acceptedFiles: Array<any>) => {
-    setFiles([...acceptedFiles, ...files]);
+  const onPostAttachments = (acceptedFiles: Array<any>) => {
+    dispatch(
+      updateNewItem({
+        attachments: acceptedFiles
+      })
+    );
+  };
+
+  const onRemoveAttachment = (index: number) => {
+    const newAttachments = itemContentData.attachments.filter(
+      (item: any, i: number) => index !== i
+    );
+    dispatch(
+      updateNewItem({
+        attachments: newAttachments
+      })
+    );
   };
 
   return (
@@ -143,7 +152,7 @@ export default function NewContent() {
                 <Title
                   title={itemContentData.title}
                   onTitleChange={onItemChange}
-                  onTitleEdit={onTitleEdit}
+                  isDefaultEdit={true}
                 />
               }
               secondary={itemContentData.cardTitle}
@@ -156,9 +165,10 @@ export default function NewContent() {
         </div>
         <div className="flex space-between">
           <Attachments
-            itemID={itemContentData._id}
             attachments={itemContentData.attachments}
-            postAttachments={postAttachments}
+            onPostAttachments={onPostAttachments}
+            onRemoveAttachment={onRemoveAttachment}
+            isNew={true}
           />
 
           <ItemSiteBar
@@ -170,8 +180,8 @@ export default function NewContent() {
           />
         </div>
         <Description
-          content={itemContentData.content}
-          onSaveContent={onSaveContent}
+          description={itemContentData.description}
+          onSaveDescription={onSaveDescription}
         />
       </Card>
       <Backdrop open={open} className={classes.backdrop}>
