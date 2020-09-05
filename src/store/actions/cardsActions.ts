@@ -77,7 +77,7 @@ export const cancelNewContent = () => ({
   type: "CANCEL_NEW_CONTENT"
 });
 
-export const updateNewItem = (payload: any) => ({
-  type: "UPDATE_NEW_ITEM",
+export const updateItemContent = (payload: any) => ({
+  type: "UPDATE_ITEM_CONTENT",
   payload
 });

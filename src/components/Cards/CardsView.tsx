@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import DragDropComponent from "components/Cards/card-drag-drop/DragDropComponent";
+import CardsDragDrop from "components/Cards/card-drag-drop/CardsDragDrop";
 import RemoveDialog from "components/Cards/card-dialogs/RemoveDialog";
 import SideDial from "components/Cards/card-dialogs/SideDial";
 import ItemContent from "components/Cards/ItemContent";
@@ -25,7 +25,7 @@ export default function CardsView() {
 
   return (
     <Container maxWidth="xl" style={{ display: "flex" }}>
-      <DragDropComponent onRemove={onRemove} />
+      <CardsDragDrop onRemove={onRemove} />
       <ItemContent />
       <RemoveDialog open={dialog} onClose={onClose} data={data} />
       <InnerSideDial onRemoveItems={onRemove} />

@@ -141,16 +141,17 @@ export default (state = INITIAL_DATA, action: any) => {
       };
     }
 
-    case "UPDATE_NEW_ITEM": {
-      const name = Object.keys(action.payload)[0];
-      const value = Object.values(action.payload)[0];
+    case "UPDATE_ITEM_CONTENT": {
+      const objKey = Object.keys(action.payload)[0];
+      const objValue = Object.values(action.payload)[0];
       const obj = state.itemContentData;
-      set(obj, [name], value);
+      set(obj, [objKey], objValue);
       return {
         ...state,
         itemContentData: Object.assign({}, state.itemContentData, obj)
       };
     }
+
     case "CANCEL_NEW_CONTENT": {
       return {
         ...state,

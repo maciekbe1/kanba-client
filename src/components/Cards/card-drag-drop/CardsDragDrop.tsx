@@ -11,7 +11,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setCards,
   updateCard,
-  setSelectedItems
+  setSelectedItems,
+  updateItemContent
 } from "store/actions/cardsActions";
 import { isEmpty } from "lodash";
 import { CardsTypes, UserTypes } from "store/types";
@@ -37,6 +38,7 @@ export default function DragDropComponent({ onRemove }: Props) {
     (state: ReduxState) => state.cardsReducer.cardsState
   );
   const userID = useSelector((state: ReduxState) => state.authReducer.data._id);
+  const { itemContentData } = useSelector((state: any) => state.cardsReducer);
 
   const onDragEnd = (result: any) => {
     let newData = cloneDeep(cards);
@@ -97,6 +99,19 @@ export default function DragDropComponent({ onRemove }: Props) {
           selectedItems
         );
         dispatch(setCards({ cards: newCards }));
+        if (
+          Object.keys(itemContentData).length !== 0 &&
+          itemContentData._id === result.draggableId
+        ) {
+          dispatch(
+            updateItemContent({
+              cardTitle: CardsHelper.findCard(
+                result.destination.droppableId,
+                newCards
+              ).title
+            })
+          );
+        }
       }
     } else if (
       result.type === "LIST" &&
@@ -128,6 +143,20 @@ export default function DragDropComponent({ onRemove }: Props) {
             cards: newCards
           })
         );
+
+        if (
+          Object.keys(itemContentData).length !== 0 &&
+          itemContentData._id === result.draggableId
+        ) {
+          dispatch(
+            updateItemContent({
+              cardTitle: CardsHelper.findCard(
+                result.destination.droppableId,
+                newCards
+              ).title
+            })
+          );
+        }
       } catch (error) {
         console.log(error);
       }
