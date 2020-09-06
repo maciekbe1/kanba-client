@@ -27,6 +27,9 @@
     transition: margin 0.15s ease-in-out 0s;
     .card-item-container {
       cursor: pointer;
+      .item-title-text {
+        word-break: break-word;
+      }
       .card-item-icons {
         padding: 5px;
         border-radius: 50%;
