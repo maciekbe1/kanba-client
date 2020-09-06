@@ -3,6 +3,7 @@
   word-break: break-word;
   width: fit-content;
   .title {
+    display: block;
     &:hover {
       cursor: pointer;
       background-color: #e5e5e5;
