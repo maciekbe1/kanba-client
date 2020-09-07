@@ -185,7 +185,7 @@ export default function NewContent() {
               secondary={itemContentData.cardTitle}
             />
           </List>
-          <div>
+          <div className="item-content-action">
             <Button onClick={createCardItem}>save</Button>
             <Button onClick={onClose}>Cancel</Button>
           </div>
