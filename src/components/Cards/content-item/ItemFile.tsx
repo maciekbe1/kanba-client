@@ -42,7 +42,7 @@ const FileInfo = ({ file, onRemoveFromView, index }: any) => {
       <div className="attachment-name">{file.name}</div>
       <div className="attachment-size">
         <span>{filesize(file.size)}</span>
-        <IconButton size="small" onClick={(e) => remove(e)}>
+        <IconButton size="small" color="secondary" onClick={(e) => remove(e)}>
           <ClearIcon fontSize="small" />
         </IconButton>
       </div>

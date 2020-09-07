@@ -76,7 +76,7 @@ export default function FullScreenDialog({
           <span style={{ marginRight: "10px" }}>
             {filesize(attachments[index].size)}
           </span>
-          <Button autoFocus onClick={save} variant="outlined">
+          <Button color="inherit" onClick={save} variant="outlined">
             Save
           </Button>
         </Toolbar>

@@ -4,6 +4,7 @@
   width: fit-content;
   .title {
     display: block;
+    border: 3px solid transparent;
     &:hover {
       cursor: pointer;
       background-color: #e5e5e5;
@@ -14,7 +15,7 @@
     }
     &:focus {
       background-color: #fff;
-      border: 2px solid #1565c0;
+      border: 3px solid #1565c0;
       color: #333232;
       border-radius: 5px;
       padding: 0 5px;

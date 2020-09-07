@@ -24,6 +24,8 @@ import Description from "components/Cards/content-item/ItemDescription";
 import Attachments from "components/Cards/content-item/ItemAttachments";
 import ItemSiteBar from "components/Cards/content-item/ItemSideBar";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { useSnackbar } from "notistack";
+import { isEmpty } from "lodash";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,7 +39,7 @@ export default function NewContent() {
   const { itemContentData } = useSelector((state: any) => state.cardsReducer);
   const classes = useStyles();
   const [width, setWidth] = useState(0);
-
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -63,46 +65,78 @@ export default function NewContent() {
 
   const createCardItem = async () => {
     setOpen(true);
+    let response: any;
     return await CardsService.createItem(
       itemContentData.cardID,
       itemContentData
     )
       .then((responseItem) => {
         dispatch(createItem(responseItem.data.item));
-
+        response = responseItem.data.item;
+      })
+      .then(() => {
         let array: Array<any> = [];
         itemContentData.attachments.forEach((file: any) => {
           const formData = new FormData();
           formData.append("file", file);
-          formData.append("itemID", responseItem.data.item._id);
+          formData.append("itemID", response._id);
           array.push(formData);
         });
 
-        axios
-          .all(
-            array.map(async (file) => {
-              return await CardsService.addFileToItem(file).then((res) => {
-                dispatch(
-                  addAttachment({
-                    itemID: res.data.itemID,
-                    file: res.data.file
-                  })
-                );
+        if (!isEmpty(itemContentData.attachments))
+          axios
+            .all(
+              array.map(async (file) => {
+                return await CardsService.addFileToItem(file).then((res) => {
+                  dispatch(
+                    addAttachment({
+                      itemID: res.data.itemID,
+                      file: res.data.file
+                    })
+                  );
+                });
+              })
+            )
+            .then(() => {
+              setOpen(false);
+              onClose();
+              dispatch(openItemContent({ itemID: response._id }));
+              enqueueSnackbar("Item successfully created", {
+                variant: "success",
+                preventDuplicate: true
               });
             })
-          )
-          .then(() => {
-            setOpen(false);
-            onClose();
-            dispatch(openItemContent({ itemID: responseItem.data.item._id }));
+            .catch((e) => {
+              enqueueSnackbar(e.response.data.message, {
+                variant: "error",
+                preventDuplicate: true
+              });
+            });
+        else {
+          setOpen(false);
+          onClose();
+          dispatch(openItemContent({ itemID: response._id }));
+          enqueueSnackbar("Item successfully created", {
+            variant: "success",
+            preventDuplicate: true
           });
+        }
       })
-      .catch((error) => {
-        console.log(error.response.data);
+      .catch((e) => {
+        enqueueSnackbar(e.response.data.message, {
+          variant: "error",
+          preventDuplicate: true
+        });
       });
   };
 
-  const onPostAttachments = (acceptedFiles: Array<any>) => {
+  const onPostAttachments = (acceptedFiles: Array<any>, error: Array<any>) => {
+    if (!isEmpty(error)) {
+      enqueueSnackbar(error[0].errors[0].message, {
+        variant: "error",
+        preventDuplicate: true
+      });
+    }
     dispatch(
       updateItemContent({
         attachments: acceptedFiles
@@ -128,17 +162,10 @@ export default function NewContent() {
         height: "auto"
       }}
       enable={{
-        top: false,
-        right: false,
-        bottom: false,
-        left: true,
-        topRight: false,
-        bottomRight: false,
-        bottomLeft: false,
-        topLeft: false
+        left: true
       }}
       minWidth="50%"
-      maxWidth="80%"
+      maxWidth="70%"
       className="item-content-wraper"
       onResizeStop={(e, direction, ref, d) => {
         setWidth(width + d.width);

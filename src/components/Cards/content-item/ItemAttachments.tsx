@@ -2,13 +2,14 @@ import React, { useState } from "react";
 
 import { useDropzone } from "react-dropzone";
 
-import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import AttachmentDialog from "components/Cards/content-item/AttachmentDialog";
 
 import ItemFile from "components/Cards/content-item/ItemFile";
 
 import AttachmentHelper from "helper/AttachmentHelper";
+import { useSnackbar } from "notistack";
 
 interface Props {
   onRemoveAttachment: Function;
@@ -25,6 +26,7 @@ export default function Attachments({
 }: Props) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
+  const { enqueueSnackbar } = useSnackbar();
 
   const openAttachmentDialog = (number: number) => {
     setIndex(number);
@@ -35,13 +37,13 @@ export default function Attachments({
     noClick: true,
     noKeyboard: true,
     multiple: true,
-    onDrop: (acceptedFiles) => {
+    maxSize: 15728640,
+    onDrop: (acceptedFiles, error) => {
       const attachment = AttachmentHelper.attachmentURLCreator(acceptedFiles);
-
       if (isNew) {
-        onPostAttachments([...attachments, ...attachment]);
+        onPostAttachments([...attachments, ...attachment], error);
       } else {
-        onPostAttachments(attachment);
+        onPostAttachments(attachment, error);
       }
     }
   });
@@ -50,7 +52,10 @@ export default function Attachments({
     try {
       onRemoveAttachment(index);
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(error, {
+        variant: "error",
+        preventDuplicate: true
+      });
     }
   };
 
@@ -58,9 +63,9 @@ export default function Attachments({
     <div className="content-attachments-container">
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
-        <IconButton aria-label="delete" onClick={open}>
+        <Button onClick={open} variant="contained">
           <AttachFileIcon />
-        </IconButton>
+        </Button>
       </div>
       <div className="content-attachment-files">
         {attachments?.map((file: any, k: number) => (
