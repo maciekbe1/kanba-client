@@ -35,13 +35,14 @@ export default function Attachments({
     noClick: true,
     noKeyboard: true,
     multiple: true,
-    onDrop: (acceptedFiles) => {
+    maxSize: 15728640,
+    onDrop: (acceptedFiles, error) => {
       const attachment = AttachmentHelper.attachmentURLCreator(acceptedFiles);
-
+      console.log(error);
       if (isNew) {
-        onPostAttachments([...attachments, ...attachment]);
+        onPostAttachments([...attachments, ...attachment], error);
       } else {
-        onPostAttachments(attachment);
+        onPostAttachments(attachment, error);
       }
     }
   });

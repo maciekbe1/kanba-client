@@ -1,9 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import Drawer from "./Drawer";
 import AppBar from "./AppBar";
 import Bar from "components/Layouts/Bar";
 import ReactGA from "react-ga";
+
+import { SnackbarProvider } from "notistack";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+
 import "../../assets/styles/global.scss";
 
 interface Props {
@@ -24,13 +29,30 @@ export default function Layout({ isAuth, children }: Props): JSX.Element {
   useEffect(() => {
     initializeReactGA();
   }, []);
-
+  const notistackRef = useRef<any>(null);
+  const onClickDismiss = (key: any) => () => {
+    notistackRef.current.closeSnackbar(key);
+  };
   if (isAuth) {
     return (
-      <Drawer>
-        <Bar />
-        {children}
-      </Drawer>
+      <SnackbarProvider
+        maxSnack={3}
+        ref={notistackRef}
+        action={(key) => (
+          <IconButton
+            color="default"
+            size="small"
+            onClick={onClickDismiss(key)}
+          >
+            <CloseIcon />
+          </IconButton>
+        )}
+      >
+        <Drawer>
+          <Bar />
+          {children}
+        </Drawer>
+      </SnackbarProvider>
     );
   } else {
     return (

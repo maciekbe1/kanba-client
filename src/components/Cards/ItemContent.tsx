@@ -3,7 +3,6 @@ import { Resizable } from "re-resizable";
 import Card from "@material-ui/core/Card";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import { List, ListItemText } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -21,6 +20,8 @@ import Attachments from "components/Cards/content-item/ItemAttachments";
 import ItemSiteBar from "components/Cards/content-item/ItemSideBar";
 import NewContent from "./content-item/NewContent";
 import axios from "axios";
+import { useSnackbar } from "notistack";
+import { isEmpty } from "lodash";
 
 export default function ItemContent() {
   const isContentOpen = useSelector(
@@ -39,7 +40,7 @@ export default function ItemContent() {
 function ContentView() {
   const [width, setWidth] = useState(0);
   const dispatch = useDispatch();
-
+  const { enqueueSnackbar } = useSnackbar();
   const item = useSelector((state: any) => state.cardsReducer.itemContentData);
 
   const onItemChange = (element: any, type: string) => {
@@ -66,7 +67,13 @@ function ContentView() {
     );
   };
 
-  const onPostAttachments = (acceptedFiles: Array<any>) => {
+  const onPostAttachments = (acceptedFiles: Array<any>, error: Array<any>) => {
+    if (!isEmpty(error)) {
+      enqueueSnackbar(error[0].errors[0].message, {
+        variant: "error",
+        preventDuplicate: true
+      });
+    }
     let fileArray: any[] = [];
     acceptedFiles.forEach((file: any) => {
       const formData = new FormData();
@@ -74,19 +81,32 @@ function ContentView() {
       formData.append("itemID", item._id);
       fileArray.push(formData);
     });
-
-    axios.all(
-      fileArray.map(async (file) => {
-        return await CardsService.addFileToItem(file).then((res) => {
-          dispatch(
-            addAttachment({
-              itemID: res.data.itemID,
-              file: res.data.file
-            })
-          );
-        });
-      })
-    );
+    if (!isEmpty(fileArray))
+      axios
+        .all(
+          fileArray.map(async (file) => {
+            return await CardsService.addFileToItem(file).then((res) => {
+              dispatch(
+                addAttachment({
+                  itemID: res.data.itemID,
+                  file: res.data.file
+                })
+              );
+            });
+          })
+        )
+        .then(() => {
+          enqueueSnackbar("File successfully added", {
+            variant: "success",
+            preventDuplicate: true
+          });
+        })
+        .catch((e) =>
+          enqueueSnackbar(e.response.data.message, {
+            variant: "error",
+            preventDuplicate: true
+          })
+        );
   };
   const onRemoveAttachment = (index: number) => {
     const file = item.attachments[index];
@@ -103,17 +123,10 @@ function ContentView() {
         height: "auto"
       }}
       enable={{
-        top: false,
-        right: false,
-        bottom: false,
-        left: true,
-        topRight: false,
-        bottomRight: false,
-        bottomLeft: false,
-        topLeft: false
+        left: true
       }}
       minWidth="50%"
-      maxWidth="80%"
+      maxWidth="70%"
       className="item-content-wraper"
       onResizeStop={(e, direction, ref, d) => {
         setWidth(width + d.width);
@@ -129,11 +142,9 @@ function ContentView() {
               secondary={item.cardTitle}
             />
           </List>
-          <Tooltip title="Close" placement="top">
-            <IconButton color="default" onClick={onClose}>
-              <CloseIcon />
-            </IconButton>
-          </Tooltip>
+          <IconButton color="default" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
         </div>
         <div className="flex space-between">
           <Attachments
