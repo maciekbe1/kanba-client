@@ -9,6 +9,7 @@ import AttachmentDialog from "components/Cards/content-item/AttachmentDialog";
 import ItemFile from "components/Cards/content-item/ItemFile";
 
 import AttachmentHelper from "helper/AttachmentHelper";
+import { useSnackbar } from "notistack";
 
 interface Props {
   onRemoveAttachment: Function;
@@ -25,6 +26,7 @@ export default function Attachments({
 }: Props) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
+  const { enqueueSnackbar } = useSnackbar();
 
   const openAttachmentDialog = (number: number) => {
     setIndex(number);
@@ -38,7 +40,6 @@ export default function Attachments({
     maxSize: 15728640,
     onDrop: (acceptedFiles, error) => {
       const attachment = AttachmentHelper.attachmentURLCreator(acceptedFiles);
-      console.log(error);
       if (isNew) {
         onPostAttachments([...attachments, ...attachment], error);
       } else {
@@ -51,7 +52,10 @@ export default function Attachments({
     try {
       onRemoveAttachment(index);
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(error, {
+        variant: "error",
+        preventDuplicate: true
+      });
     }
   };
 
