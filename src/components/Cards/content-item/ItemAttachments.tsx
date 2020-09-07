@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useDropzone } from "react-dropzone";
 
-import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import AttachmentDialog from "components/Cards/content-item/AttachmentDialog";
 
@@ -59,9 +59,9 @@ export default function Attachments({
     <div className="content-attachments-container">
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
-        <IconButton aria-label="delete" onClick={open}>
+        <Button onClick={open} variant="contained">
           <AttachFileIcon />
-        </IconButton>
+        </Button>
       </div>
       <div className="content-attachment-files">
         {attachments?.map((file: any, k: number) => (
