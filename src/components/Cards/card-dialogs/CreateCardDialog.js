@@ -46,7 +46,6 @@ export default function CreateCard({ setData, error, message, user }) {
         fullWidth
         required
         error={error}
-        id="standard-required"
         label="Tytuł"
         value={values.title}
         onChange={handleChange("title")}

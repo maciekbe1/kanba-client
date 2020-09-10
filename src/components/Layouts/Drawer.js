@@ -47,15 +47,15 @@ export default function MiniDrawer(props) {
   const user = useSelector((state) => state.authReducer);
   useEffect(() => {
     dispatch(setBar({ type: null, message: null, active: false }));
-    const check = () => {
-      UserService.getMeService(user.token)
-        .then()
-        .catch((err) => {
-          dispatch(
-            setBar({ type: "error", message: SESSION_MESSAGE, active: true })
-          );
-          dispatch(signOut());
-        });
+    const check = async () => {
+      try {
+        await UserService.getMeService();
+      } catch (error) {
+        dispatch(
+          setBar({ type: "error", message: SESSION_MESSAGE, active: true })
+        );
+        dispatch(signOut());
+      }
     };
     window.addEventListener("visibilitychange", check);
     check();
@@ -63,7 +63,7 @@ export default function MiniDrawer(props) {
       window.removeEventListener("visibilitychange", check);
       check();
     };
-  }, [dispatch, user.token]);
+  }, [dispatch]);
 
   const tabs = [
     { icon: <HomeIcon />, label: "Home", to: "/" },

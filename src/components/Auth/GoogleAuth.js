@@ -10,14 +10,12 @@ export default function GoogleAuth() {
 
   const responseGoogle = (response) => {
     const id_token = response.getAuthResponse().id_token;
-    UserService.signInGoogleService(id_token).then((res) => {
-      const token = res.data;
-      UserService.getMeService(token).then((res) => {
+    UserService.signInGoogleService(id_token).then(() => {
+      UserService.getMeService().then((res) => {
         dispatch(
           signIn({
             isAuth: true,
             data: res.data,
-            token,
             byGoogle: true
           })
         );

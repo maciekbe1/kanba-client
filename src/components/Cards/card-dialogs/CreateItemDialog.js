@@ -52,7 +52,6 @@ export default function CreateItem({ setData, error, message }) {
           fullWidth
           required
           error={error}
-          id="standard-required"
           label="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}

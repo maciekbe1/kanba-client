@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React from "react";
 import Title from "components/Common/Title";
 import CardMenu from "components/Cards/card-drag-drop/card-component/CardMenu";
@@ -24,7 +25,7 @@ interface Props {
   provided: any;
 }
 
-export default function Navbar({
+export default function CardNavbar({
   cardID,
   listLength,
   cardTitle,
@@ -37,9 +38,7 @@ export default function Navbar({
   const userID: string = useSelector(
     (state: RootState) => state.authReducer.data._id
   );
-  const token: string = useSelector(
-    (state: RootState) => state.authReducer.token
-  );
+
   const item = useSelector((state: any) => state.cardsReducer.itemContentData);
   const isNewContentOpen = useSelector(
     (state: any) => state.cardsReducer.isNewContentOpen
@@ -66,7 +65,6 @@ export default function Navbar({
       updateCard({
         cardID,
         title: title,
-        token,
         index
       })
     );
@@ -77,7 +75,6 @@ export default function Navbar({
       updateCard({
         cardID,
         expand: !cardExpand,
-        token,
         index
       })
     );

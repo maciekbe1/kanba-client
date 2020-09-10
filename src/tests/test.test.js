@@ -1,9 +1,14 @@
 import React from "react";
 import Enzyme, { shallow, mount } from "enzyme";
-import CardsDragDrop from "components/Cards/card-drag-drop/CardsDragDrop";
 import Adapter from "enzyme-adapter-react-16";
 import { Provider } from "react-redux";
 import { storeFactory } from "store/testUtils";
+import { createStore } from "redux";
+import rootReducer from "store/reducers/index";
+
+import { wait, updateWrapper } from "helper/testHelper";
+
+import CardsDragDrop from "components/Cards/card-drag-drop/CardsDragDrop";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -16,15 +21,13 @@ const setUp = () => {
   );
   return wrapper;
 };
-
-describe("render", () => {
+describe("simple test", () => {
   let wrapper;
   beforeEach(() => {
     wrapper = setUp();
   });
-  it("should create component with no card", () => {
-    const noCards = <div className="no-cards">No cards</div>;
-    expect(wrapper.contains(noCards)).toEqual(true);
+  it("<test />", () => {
+    console.log(wrapper.debug());
+    expect(wrapper);
   });
-  it("should create card", () => {});
 });
