@@ -7,14 +7,15 @@ export const signInService = (email, password) => {
   });
 };
 
-export const getMeService = token => {
-  return API.requestToken(
+export const getMeService = () => {
+  return API.request(
     `${process.env.REACT_APP_SERVER}/api/users/me`,
-    token
+    null,
+    "get"
   );
 };
 
-export const signInGoogleService = token => {
+export const signInGoogleService = (token) => {
   return API.request(`${process.env.REACT_APP_SERVER}/api/auth/googleSignIn`, {
     token
   });

@@ -1,24 +1,14 @@
 import axios from "axios";
 import { isNil } from "lodash";
 
-export function request(url, data, token, method = "post") {
-  if (isNil(data) && isNil(token))
+export function request(url, data, method = "post") {
+  if (isNil(data))
     return axios({
       method: method,
       url: url,
       headers: {
         "Content-Type": "application/json"
       }
-    });
-  if (!isNil(token))
-    return axios({
-      method: method,
-      url: url,
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": token
-      },
-      data: data
     });
   return axios({
     method: method,
@@ -29,22 +19,11 @@ export function request(url, data, token, method = "post") {
     data: data
   });
 }
-export function requestToken(url, token, data = null) {
-  if (isNil(data))
-    return axios({
-      method: "get",
-      url: url,
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": token
-      }
-    });
-}
-export function sendFile(url, data, token) {
+
+export function sendFile(url, data) {
   return axios.post(url, data, {
     headers: {
-      "Content-Type": "multipart/form-data",
-      "x-auth-token": token
+      "Content-Type": "multipart/form-data"
     }
   });
 }

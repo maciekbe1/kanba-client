@@ -1,7 +1,7 @@
 const INITIAL_DATA = {
   isAuth: false,
   data: null,
-  token: null
+  byGoogle: false
 };
 export default (state: any = INITIAL_DATA, action: any) => {
   switch (action.type) {
@@ -10,14 +10,14 @@ export default (state: any = INITIAL_DATA, action: any) => {
         ...state,
         isAuth: action.isAuth,
         data: action.data,
-        token: action.token
+        byGoogle: action.byGoogle
       };
     case "SIGNOUT_USER":
       return {
         ...state,
         isAuth: false,
         data: null,
-        token: null
+        byGoogle: false
       };
     default:
       return state;

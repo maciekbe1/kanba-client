@@ -1,28 +1,20 @@
 import { request, sendFile } from "api/API";
-import store from "store/store";
 
 export const getCards = (userID: string) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/get-user-cards`,
-    { userID },
-    store.getState().authReducer.token
-  );
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/get-user-cards`, {
+    userID
+  });
 };
 
 export const createCard = (data: any) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/create-card`,
-    data,
-    store.getState().authReducer.token
-  );
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/create-card`, data);
 };
 
 export const createItem = (cardID: string, item: any) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/create-card-item`,
-    { cardID, item },
-    store.getState().authReducer.token
-  );
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/create-card-item`, {
+    cardID,
+    item
+  });
 };
 
 export const updateCard = (
@@ -31,66 +23,46 @@ export const updateCard = (
   type: string,
   name: string
 ) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
-    {
-      card: { [name]: card[name] },
-      cardID,
-      type
-    },
-    store.getState().authReducer.token
-  );
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/update-card`, {
+    card: { [name]: card[name] },
+    cardID,
+    type
+  });
 };
 
 export const cardItemChange = (result: any) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
-    {
-      card: {
-        destination: result.destination.index,
-        itemID: result.draggableId,
-        cardID: result.destination.droppableId
-      },
-      type: "inside_list"
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/update-card`, {
+    card: {
+      destination: result.destination.index,
+      itemID: result.draggableId,
+      cardID: result.destination.droppableId
     },
-    store.getState().authReducer.token
-  );
+    type: "inside_list"
+  });
 };
 export const updateItem = (itemID: string, key: string, value: any) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/update-item`,
-    {
-      itemID,
-      item: { [key]: value }
-    },
-    store.getState().authReducer.token
-  );
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/update-item`, {
+    itemID,
+    item: { [key]: value }
+  });
 };
 export const cardItemShared = (start: any, end: any, result: any) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/update-card`,
-    {
-      card: {
-        start: start._id,
-        end: end._id,
-        destination: result.destination.index,
-        draggableId: result.draggableId
-      },
-      type: "all_lists"
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/update-card`, {
+    card: {
+      start: start._id,
+      end: end._id,
+      destination: result.destination.index,
+      draggableId: result.draggableId
     },
-    store.getState().authReducer.token
-  );
+    type: "all_lists"
+  });
 };
 
 export const removeCardItem = (cardID: string, itemID: string) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/remove-card-item`,
-    {
-      cardID,
-      itemID
-    },
-    store.getState().authReducer.token
-  );
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/remove-card-item`, {
+    cardID,
+    itemID
+  });
 };
 
 export const updateManyItems = (
@@ -104,32 +76,28 @@ export const updateManyItems = (
       destination,
       selectedItems,
       position
-    },
-    store.getState().authReducer.token
+    }
   );
 };
 
 export const removeSelectedItems = (selected: Array<any>) => {
   return request(
     `${process.env.REACT_APP_SERVER}/api/cards/remove-many-items`,
-    { selected },
-    store.getState().authReducer.token
+    { selected }
   );
 };
 
 export const removeCard = (cardID: string, userID: string) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/remove-card`,
-    { cardID, userID },
-    store.getState().authReducer.token
-  );
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/remove-card`, {
+    cardID,
+    userID
+  });
 };
 
 export const addFileToItem = (files: any) => {
   return sendFile(
     `${process.env.REACT_APP_SERVER}/api/cards/upload-file`,
-    files,
-    store.getState().authReducer.token
+    files
   );
 };
 
@@ -138,9 +106,9 @@ export const removeFileFromItem = (
   itemID: string,
   fileID: string
 ) => {
-  return request(
-    `${process.env.REACT_APP_SERVER}/api/cards/remove-file`,
-    { name, itemID, fileID },
-    store.getState().authReducer.token
-  );
+  return request(`${process.env.REACT_APP_SERVER}/api/cards/remove-file`, {
+    name,
+    itemID,
+    fileID
+  });
 };

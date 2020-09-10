@@ -89,7 +89,7 @@ export default function SideDial({ onRemoveItems }: Props) {
           setError={setError}
           activator={({ setOpen }: any) => (
             <SpeedDial
-              ariaLabel="create"
+              ariaLabel="create-card"
               onClick={() => setOpen(true)}
               className={`${classes.speedDial} ${classes.speedDialAdd}`}
               open={false}

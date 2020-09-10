@@ -7,7 +7,6 @@ interface LoginUserAction {
   type: typeof SIGNIN_USER;
   isAuth: boolean;
   data: any;
-  token: string;
   byGoogle: boolean;
 }
 interface CardsLoadedAction {

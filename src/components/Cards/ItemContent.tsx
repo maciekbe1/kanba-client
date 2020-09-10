@@ -142,7 +142,11 @@ function ContentView() {
               secondary={item.cardTitle}
             />
           </List>
-          <IconButton color="default" onClick={onClose}>
+          <IconButton
+            color="default"
+            onClick={onClose}
+            className="item-content-action"
+          >
             <CloseIcon />
           </IconButton>
         </div>

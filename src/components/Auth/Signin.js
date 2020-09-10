@@ -59,25 +59,24 @@ function Signin() {
     setLoading(true);
     UserService.signInService(values.email, values.password)
       .then((res) => {
-        const token = res.data;
-        UserService.getMeService(token).then((res) => {
+        UserService.getMeService().then((res) => {
           dispatch(
             signIn({
               isAuth: true,
               data: res.data,
-              token,
               byGoogle: false
             })
           );
         });
       })
       .catch((err) => {
+        console.log(err.response.data);
         setError(true);
         setLoading(false);
         try {
           setMessage(err.response.data);
         } catch (error) {
-          setMessage("Coś poszło nie tak, spróbuj później");
+          setMessage("Something goes wrong, try it leater");
         }
       });
   };
